@@ -42,6 +42,7 @@ Last updated: 2026-06-30
 - Removed the duplicate `deploy/acolomba-site/` site copy and made the repository root the live site source.
 - Updated resume build scripts to refresh the root-level DOCX downloads used by the live site.
 - Chose `acolomba_bot` as the clean Telegram bot username for the site, replacing the old dummlight/dummylight bot identity.
+- Created and started the clean `@acolomba_bot` Telegram bot, then redeployed the temporary Worker with its token.
 
 ## Blocked
 
@@ -59,7 +60,6 @@ Last updated: 2026-06-30
 ## Queued
 
 - Enable HTTPS enforcement in GitHub Pages after GitHub finishes issuing the certificate for `acolomba.site`.
-- Create the clean Telegram bot in BotFather with display name `acolomba` and username `acolomba_bot`, then replace the Worker `TELEGRAM_BOT_TOKEN`.
 - Claim or redeploy the temporary Cloudflare Worker endpoint under Antonio's Cloudflare account so message-box delivery remains durable.
 - Build a second, very plain immediate-cash resume for customer support, sales, operations, temp, warehouse, and admin roles.
 - Build a visual-production/AI-image-QA resume for the fastest realistic buyer group.

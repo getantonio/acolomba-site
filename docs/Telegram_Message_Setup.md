@@ -62,7 +62,7 @@ Then push the site again.
 The form is currently wired to:
 
 ```text
-https://antonio-telegram-message.pine-porter.workers.dev
+https://antonio-telegram-message.gravel-starflower.workers.dev
 ```
 
-This was created as a temporary Cloudflare Worker. Claim or redeploy it under Antonio's Cloudflare account for a durable production endpoint.
+This was created as a temporary Cloudflare Worker using the clean `@acolomba_bot` token. Claim or redeploy it under Antonio's Cloudflare account for a durable production endpoint.
