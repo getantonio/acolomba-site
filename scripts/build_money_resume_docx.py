@@ -2,9 +2,11 @@ from docx import Document
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Inches, Pt, RGBColor
+from shutil import copyfile
 
 
 OUT = "docs/Antonio_Colomba_Money_Resume.docx"
+SITE_OUT = "Antonio_Colomba_Money_Resume.docx"
 
 INK = "1F2933"
 MUTED = "5B6673"
@@ -191,4 +193,6 @@ for school, location, detail in schools:
     add_text(edu_detail, detail, size=8.55, color=MUTED)
 
 doc.save(OUT)
+copyfile(OUT, SITE_OUT)
 print(OUT)
+print(SITE_OUT)

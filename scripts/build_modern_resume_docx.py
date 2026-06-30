@@ -3,9 +3,11 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Inches, Pt, RGBColor
+from shutil import copyfile
 
 
 OUT = "docs/Antonio_Colomba_Modern_Resume.docx"
+SITE_OUT = "Antonio_Colomba_Modern_Resume.docx"
 
 INK = "202833"
 MUTED = "66717F"
@@ -223,4 +225,6 @@ for item in [
     add_bullet(item, size=9.0, left=0.4, after=3)
 
 doc.save(OUT)
+copyfile(OUT, SITE_OUT)
 print(OUT)
+print(SITE_OUT)
