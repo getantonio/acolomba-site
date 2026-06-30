@@ -97,7 +97,6 @@
     }
 
     .message-form input,
-    .message-form select,
     .message-form textarea {
       width: 100%;
       border: 1px solid var(--rule);
@@ -108,6 +107,41 @@
       font-size: 16px;
       line-height: 1.35;
       padding: 10px 11px;
+    }
+
+    .reply-method {
+      border: 0;
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .reply-method legend {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 0;
+    }
+
+    .reply-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+    }
+
+    .message-form .reply-option {
+      align-items: center;
+      display: flex;
+      gap: 6px;
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .message-form .reply-option input {
+      accent-color: var(--blue);
+      margin: 0;
+      width: auto;
     }
 
     .message-form input[type="file"] {
@@ -182,15 +216,23 @@
           Name
           <input name="name" autocomplete="name" required>
         </label>
-        <label>
-          Reply by
-          <select name="replyMethod" required>
-            <option value="">Choose one</option>
-            <option value="Email">Email</option>
-            <option value="Phone">Phone</option>
-            <option value="Telegram">Telegram</option>
-          </select>
-        </label>
+        <fieldset class="reply-method">
+          <legend>Reply by</legend>
+          <div class="reply-options">
+            <label class="reply-option">
+              <input type="radio" name="replyMethod" value="Email" required>
+              Email
+            </label>
+            <label class="reply-option">
+              <input type="radio" name="replyMethod" value="Phone" required>
+              Phone
+            </label>
+            <label class="reply-option">
+              <input type="radio" name="replyMethod" value="Telegram" required>
+              Telegram
+            </label>
+          </div>
+        </fieldset>
         <label>
           Contact detail
           <input name="replyTo" autocomplete="off" required>
