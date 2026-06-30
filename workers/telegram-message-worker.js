@@ -1,14 +1,26 @@
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
+const allowedOrigins = new Set([
+  "http://acolomba.site",
+  "https://acolomba.site",
+  "http://www.acolomba.site",
+  "https://www.acolomba.site",
+]);
 
-function json(body, status = 200) {
+function corsHeaders(request) {
+  const origin = request.headers.get("Origin");
+  const allowOrigin = allowedOrigins.has(origin) ? origin : "https://acolomba.site";
+
+  return {
+    "Access-Control-Allow-Origin": allowOrigin,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+}
+
+function json(request, body, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
-      ...corsHeaders,
+      ...corsHeaders(request),
       "Content-Type": "application/json",
     },
   });
@@ -58,15 +70,15 @@ function attachmentMethod(file) {
 export default {
   async fetch(request, env) {
     if (request.method === "OPTIONS") {
-      return new Response(null, { headers: corsHeaders });
+      return new Response(null, { headers: corsHeaders(request) });
     }
 
     if (request.method !== "POST") {
-      return json({ error: "Method not allowed" }, 405);
+      return json(request, { error: "Method not allowed" }, 405);
     }
 
     if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) {
-      return json({ error: "Telegram delivery is not configured" }, 500);
+      return json(request, { error: "Telegram delivery is not configured" }, 500);
     }
 
     let body;
@@ -86,7 +98,7 @@ export default {
         body = await request.json();
       }
     } catch {
-      return json({ error: "Invalid message payload" }, 400);
+      return json(request, { error: "Invalid message payload" }, 400);
     }
 
     const name = clean(body.name, 120);
@@ -95,11 +107,11 @@ export default {
     const page = clean(body.page, 300);
 
     if (!name || !replyTo || !message) {
-      return json({ error: "Name, reply contact, and message are required" }, 400);
+      return json(request, { error: "Name, reply contact, and message are required" }, 400);
     }
 
-    if (attachment && attachment.size > 15 * 1024 * 1024) {
-      return json({ error: "Attachment is too large" }, 413);
+    if (attachment && attachment.size > 10 * 1024 * 1024) {
+      return json(request, { error: "Attachment is too large" }, 413);
     }
 
     const text = [
@@ -140,9 +152,9 @@ export default {
     }
 
     if (!telegramResponse.ok) {
-      return json({ error: "Telegram rejected the message" }, 502);
+      return json(request, { error: "Telegram rejected the message" }, 502);
     }
 
-    return json({ ok: true });
+    return json(request, { ok: true });
   },
 };

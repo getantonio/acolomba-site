@@ -190,7 +190,7 @@
           <textarea name="message" required></textarea>
         </label>
         <label>
-          Photo or audio clip
+          Photo or audio clip, 10 MB max
           <input name="attachment" type="file" accept="image/*,audio/*">
         </label>
         <button type="submit">Send to @getantonio</button>
@@ -207,6 +207,13 @@
       event.preventDefault();
 
       const formData = new FormData(messageForm);
+      const attachment = formData.get("attachment");
+
+      if (attachment instanceof File && attachment.size > 10 * 1024 * 1024) {
+        status.textContent = "Attachment must be 10 MB or smaller.";
+        return;
+      }
+
       formData.set("page", window.location.href);
 
       button.disabled = true;
