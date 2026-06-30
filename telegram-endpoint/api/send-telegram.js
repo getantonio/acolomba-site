@@ -19,6 +19,13 @@ function clean(value, maxLength) {
   return String(value || "").trim().slice(0, maxLength);
 }
 
+function cleanReplyMethod(value) {
+  const replyMethod = clean(value, 40);
+  const allowed = new Set(["Email", "Phone", "Telegram"]);
+
+  return allowed.has(replyMethod) ? replyMethod : "";
+}
+
 export default async function handler(req, res) {
   setCors(req, res);
 
@@ -38,19 +45,21 @@ export default async function handler(req, res) {
   }
 
   const name = clean(req.body?.name, 120);
+  const replyMethod = cleanReplyMethod(req.body?.replyMethod);
   const replyTo = clean(req.body?.replyTo, 180);
   const message = clean(req.body?.message, 2500);
   const page = clean(req.body?.page, 300);
 
-  if (!name || !replyTo || !message) {
-    return res.status(400).json({ error: "Name, reply contact, and message are required" });
+  if (!name || !replyMethod || !replyTo || !message) {
+    return res.status(400).json({ error: "Name, reply method, reply contact, and message are required" });
   }
 
   const text = [
     "acolomba.site message",
     "",
     `Name: ${name}`,
-    `Reply: ${replyTo}`,
+    `Reply by: ${replyMethod}`,
+    `Reply detail: ${replyTo}`,
     page ? `Page: ${page}` : "",
     "",
     message,

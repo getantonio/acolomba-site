@@ -97,6 +97,7 @@
     }
 
     .message-form input,
+    .message-form select,
     .message-form textarea {
       width: 100%;
       border: 1px solid var(--rule);
@@ -182,8 +183,17 @@
           <input name="name" autocomplete="name" required>
         </label>
         <label>
-          Email, phone, or Telegram
-          <input name="replyTo" autocomplete="email" required>
+          Reply by
+          <select name="replyMethod" required>
+            <option value="">Choose one</option>
+            <option value="Email">Email</option>
+            <option value="Phone">Phone</option>
+            <option value="Telegram">Telegram</option>
+          </select>
+        </label>
+        <label>
+          Contact detail
+          <input name="replyTo" autocomplete="off" required>
         </label>
         <label>
           Message

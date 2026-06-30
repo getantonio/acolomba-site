@@ -67,6 +67,13 @@ function attachmentMethod(file) {
   return null;
 }
 
+function cleanReplyMethod(value) {
+  const replyMethod = clean(value, 40);
+  const allowed = new Set(["Email", "Phone", "Telegram"]);
+
+  return allowed.has(replyMethod) ? replyMethod : "";
+}
+
 export default {
   async fetch(request, env) {
     if (request.method === "OPTIONS") {
@@ -102,12 +109,13 @@ export default {
     }
 
     const name = clean(body.name, 120);
+    const replyMethod = cleanReplyMethod(body.replyMethod);
     const replyTo = clean(body.replyTo, 180);
     const message = clean(body.message, 2500);
     const page = clean(body.page, 300);
 
-    if (!name || !replyTo || !message) {
-      return json(request, { error: "Name, reply contact, and message are required" }, 400);
+    if (!name || !replyMethod || !replyTo || !message) {
+      return json(request, { error: "Name, reply method, reply contact, and message are required" }, 400);
     }
 
     if (attachment && attachment.size > 10 * 1024 * 1024) {
@@ -118,7 +126,8 @@ export default {
       "acolomba.site message",
       "",
       `Name: ${name}`,
-      `Reply: ${replyTo}`,
+      `Reply by: ${replyMethod}`,
+      `Reply detail: ${replyTo}`,
       page ? `Page: ${page}` : "",
       "",
       message,
