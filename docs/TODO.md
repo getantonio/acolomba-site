@@ -45,9 +45,11 @@ Last updated: 2026-06-30
 - Chose `acolomba_bot` as the clean Telegram bot username for the site, replacing the old dummlight/dummylight bot identity.
 - Created and started the clean `@acolomba_bot` Telegram bot, then redeployed the temporary Worker with its token.
 - Added optional photo and audio attachments to the message form.
+- Created a CUNY / city-school program list covering tech, cybersecurity, business, digital media, online SPS options, and ASAP support.
 
 ## Blocked
 
+- Deploying the updated Telegram Worker for photo/audio uploads is blocked until Wrangler is logged into Antonio's Cloudflare account or an API token is available.
 - Final resume claims, metrics, and role targeting are blocked until Antonio provides real background details:
   - exact dates for freelance work
   - whether old client names are okay to publish
@@ -61,6 +63,7 @@ Last updated: 2026-06-30
 
 ## Queued
 
+- 2026-06-30 [Next] Research SUNY school/program options Antonio could enter for Summer 2026 if still feasible or Fall 2026, including loan/aid implications and realistic application timing.
 - Enable HTTPS enforcement in GitHub Pages after GitHub finishes issuing the certificate for `acolomba.site`.
 - Claim or redeploy the temporary Cloudflare Worker endpoint under Antonio's Cloudflare account so message-box delivery remains durable.
 - Build a second, very plain immediate-cash resume for customer support, sales, operations, temp, warehouse, and admin roles.
