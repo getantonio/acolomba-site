@@ -109,6 +109,10 @@
       padding: 10px 11px;
     }
 
+    .message-form input[type="file"] {
+      padding: 8px 9px;
+    }
+
     .message-form textarea {
       min-height: 176px;
       resize: vertical;
@@ -185,6 +189,10 @@
           Message
           <textarea name="message" required></textarea>
         </label>
+        <label>
+          Photo or audio clip
+          <input name="attachment" type="file" accept="image/*,audio/*">
+        </label>
         <button type="submit">Send to @getantonio</button>
         <p class="message-status" role="status" aria-live="polite"></p>
       </form>
@@ -199,12 +207,7 @@
       event.preventDefault();
 
       const formData = new FormData(messageForm);
-      const payload = {
-        name: formData.get("name").toString().trim(),
-        replyTo: formData.get("replyTo").toString().trim(),
-        message: formData.get("message").toString().trim(),
-        page: window.location.href,
-      };
+      formData.set("page", window.location.href);
 
       button.disabled = true;
       status.textContent = "Sending...";
@@ -212,8 +215,7 @@
       try {
         const response = await fetch(messageForm.dataset.endpoint.trim(), {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+          body: formData,
         });
 
         if (!response.ok) {

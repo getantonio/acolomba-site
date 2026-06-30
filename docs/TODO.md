@@ -44,6 +44,7 @@ Last updated: 2026-06-30
 - Updated resume build scripts to refresh the root-level DOCX downloads used by the live site.
 - Chose `acolomba_bot` as the clean Telegram bot username for the site, replacing the old dummlight/dummylight bot identity.
 - Created and started the clean `@acolomba_bot` Telegram bot, then redeployed the temporary Worker with its token.
+- Added optional photo and audio attachments to the message form.
 
 ## Blocked
 
