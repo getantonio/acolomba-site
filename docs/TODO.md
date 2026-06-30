@@ -38,6 +38,7 @@ Last updated: 2026-06-30
 - Added a site message-box UI and Cloudflare Worker scaffold for sending form submissions to Telegram.
 - Wired the site message box to the temporary Cloudflare Worker endpoint and verified Telegram delivery.
 - Removed the unrequested visible Telegram and email links from the site contact headers.
+- Moved the message box onto a dedicated `message.html` page so it only appears from the top `Message` navigation.
 - Collapsed the split local/publish setup into one GitHub Pages repo: `getantonio/acolomba-site`.
 - Removed the duplicate `deploy/acolomba-site/` site copy and made the repository root the live site source.
 - Updated resume build scripts to refresh the root-level DOCX downloads used by the live site.
