@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v31";
+const CACHE_NAME = "sound-a-tude-v33-web-recorder-visible";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -36,6 +36,21 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
+
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put("./", copy));
+          return response;
+        })
+        .catch(() => caches.match(event.request).then((cachedResponse) => (
+          cachedResponse || caches.match("./")
+        )))
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => (

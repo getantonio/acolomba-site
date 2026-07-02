@@ -10,6 +10,24 @@ const nextLoop = document.querySelector("#nextLoop");
 const modeButtons = [...document.querySelectorAll(".mode-toggle button")];
 const voiceSelect = document.querySelector("#voiceSelect");
 const voiceStatus = document.querySelector("#voiceStatus");
+const openVoiceRecorderButton = document.querySelector("#openVoiceRecorderButton");
+const voiceRecorderDialog = document.querySelector("#voiceRecorderDialog");
+const closeVoiceRecorderButton = document.querySelector("#closeVoiceRecorderButton");
+const recorderCategorySelect = document.querySelector("#recorderCategorySelect");
+const recorderProgressText = document.querySelector("#recorderProgressText");
+const recorderProgressBar = document.querySelector("#recorderProgressBar");
+const recorderPositionText = document.querySelector("#recorderPositionText");
+const recorderPhraseState = document.querySelector("#recorderPhraseState");
+const recorderPhraseHandle = document.querySelector("#recorderPhraseHandle");
+const recorderPhraseTitle = document.querySelector("#recorderPhraseTitle");
+const recorderPhraseText = document.querySelector("#recorderPhraseText");
+const previousRecorderPhraseButton = document.querySelector("#previousRecorderPhraseButton");
+const recordPhraseButton = document.querySelector("#recordPhraseButton");
+const nextRecorderPhraseButton = document.querySelector("#nextRecorderPhraseButton");
+const playRecordedPhraseButton = document.querySelector("#playRecordedPhraseButton");
+const retakeRecordedPhraseButton = document.querySelector("#retakeRecordedPhraseButton");
+const recorderMessage = document.querySelector("#recorderMessage");
+const useRecordedVoiceButton = document.querySelector("#useRecordedVoiceButton");
 const volumeDownButton = document.querySelector("#volumeDownButton");
 const volumeControl = document.querySelector("#volumeControl");
 const volumeUpButton = document.querySelector("#volumeUpButton");
@@ -39,9 +57,13 @@ const openPlaylistButton = document.querySelector("#openPlaylistButton");
 const openPlayerButton = document.querySelector("#openPlayerButton");
 const consoleMeter = document.querySelector(".console-meter");
 const previewAudio = new Audio();
+const recorderPreviewAudio = new Audio();
 const PLAYLIST_STORAGE_KEY = "sound-a-tude-playlists-v2";
 const VOICE_STORAGE_KEY = "sound-a-tude-voice-v1";
 const PLAYBACK_STORAGE_KEY = "sound-a-tude-playback-v1";
+const RECORDED_VOICE_DB_NAME = "sound-a-tude-recorded-voices";
+const RECORDED_VOICE_STORE = "recordings";
+const BROWSER_RECORDED_VOICE_ID = "browser-my-voice-v001";
 const METER_BAR_COUNT = 56;
 
 const choices = {
@@ -477,6 +499,20 @@ const coreVoiceAliases = [
 ];
 
 const KOKORO_AUDIO_VERSION = "tail-space-20260702-v1";
+const RECORDED_AUDIO_VERSION = "recorded-v001";
+
+const recordedVoicePacks = [
+  // Add free/offline recorded packs after processing them with scripts/process_recorded_voice.py.
+  // { id: "antonio-v001", label: "Antonio", shortLabel: "Antonio", group: "Recorded" },
+];
+const browserRecordedPhraseUrls = new Map();
+let recordedVoiceDatabasePromise = null;
+let recorderCategory = "Confidence & Connection";
+let recorderIndex = 0;
+let mediaRecorder = null;
+let recorderStream = null;
+let recorderChunks = [];
+let isRecordingPhrase = false;
 
 function kokoroFilesByPhrase(voiceId) {
   return Object.fromEntries(phraseIds.map((phraseId) => [
@@ -485,7 +521,14 @@ function kokoroFilesByPhrase(voiceId) {
   ]));
 }
 
-const voiceOptions = [
+function recordedFilesByPhrase(voiceId) {
+  return Object.fromEntries(phraseIds.map((phraseId) => [
+    phraseId,
+    `assets/audio/voices/${voiceId}/${phraseId}-${voiceId}-take-v001.mp3?v=${RECORDED_AUDIO_VERSION}`,
+  ]));
+}
+
+const baseVoiceOptions = [
   ...coreVoiceAliases.map((voice) => ({
     id: voice.id,
     label: voice.label,
@@ -502,7 +545,16 @@ const voiceOptions = [
     status: "ready",
     filesByPhrase: kokoroFilesByPhrase(voice.id),
   })),
+  ...recordedVoicePacks.map((voice) => ({
+    id: voice.id,
+    label: voice.label,
+    shortLabel: voice.shortLabel,
+    group: voice.group,
+    status: "ready",
+    filesByPhrase: recordedFilesByPhrase(voice.id),
+  })),
 ];
+let voiceOptions = [...baseVoiceOptions];
 
 let currentMode = "loop";
 let activeVoiceId = localStorage.getItem(VOICE_STORAGE_KEY) || voiceOptions[0].id;
@@ -648,7 +700,7 @@ function renderVoiceOptions() {
     localStorage.setItem(VOICE_STORAGE_KEY, activeVoiceId);
   }
 
-  const voiceGroups = ["Core", "Female", "Male", "Binary"].map((group) => ({
+  const voiceGroups = ["Core", "Recorded", "Female", "Male", "Binary"].map((group) => ({
     group,
     voices: voiceOptions.filter((voice) => voice.group === group),
   })).filter(({ voices }) => voices.length);
@@ -676,6 +728,348 @@ function setVoice(voiceId) {
     audio.currentTime = 0;
     audio.play().catch(() => setPlayingState(false));
   }
+}
+
+function recordedKey(phraseId) {
+  return `${BROWSER_RECORDED_VOICE_ID}:${phraseId}`;
+}
+
+function openRecordedVoiceDatabase() {
+  if (recordedVoiceDatabasePromise) {
+    return recordedVoiceDatabasePromise;
+  }
+
+  recordedVoiceDatabasePromise = new Promise((resolve, reject) => {
+    const request = indexedDB.open(RECORDED_VOICE_DB_NAME, 1);
+
+    request.onupgradeneeded = () => {
+      const database = request.result;
+      if (!database.objectStoreNames.contains(RECORDED_VOICE_STORE)) {
+        database.createObjectStore(RECORDED_VOICE_STORE, { keyPath: "id" });
+      }
+    };
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+
+  return recordedVoiceDatabasePromise;
+}
+
+async function withRecordedVoiceStore(mode, action) {
+  const database = await openRecordedVoiceDatabase();
+  const transaction = database.transaction(RECORDED_VOICE_STORE, mode);
+  const store = transaction.objectStore(RECORDED_VOICE_STORE);
+  const request = action(store);
+
+  return new Promise((resolve, reject) => {
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+    transaction.onerror = () => reject(transaction.error);
+  });
+}
+
+async function loadBrowserRecordedPhrases() {
+  if (!("indexedDB" in window)) return;
+
+  const recordings = await withRecordedVoiceStore("readonly", (store) => store.getAll());
+
+  browserRecordedPhraseUrls.forEach((url) => URL.revokeObjectURL(url));
+  browserRecordedPhraseUrls.clear();
+
+  recordings
+    .filter((recording) => recording?.voiceId === BROWSER_RECORDED_VOICE_ID && recording.blob instanceof Blob)
+    .forEach((recording) => {
+      browserRecordedPhraseUrls.set(recording.phraseId, URL.createObjectURL(recording.blob));
+    });
+
+  syncBrowserRecordedVoiceOption();
+}
+
+async function saveBrowserRecordedPhrase(phraseId, blob) {
+  await withRecordedVoiceStore("readwrite", (store) => store.put({
+    id: recordedKey(phraseId),
+    voiceId: BROWSER_RECORDED_VOICE_ID,
+    phraseId,
+    blob,
+    type: blob.type,
+    updatedAt: new Date().toISOString(),
+  }));
+
+  const previousUrl = browserRecordedPhraseUrls.get(phraseId);
+  if (previousUrl) {
+    URL.revokeObjectURL(previousUrl);
+  }
+
+  browserRecordedPhraseUrls.set(phraseId, URL.createObjectURL(blob));
+  syncBrowserRecordedVoiceOption();
+}
+
+async function deleteBrowserRecordedPhrase(phraseId) {
+  await withRecordedVoiceStore("readwrite", (store) => store.delete(recordedKey(phraseId)));
+
+  const previousUrl = browserRecordedPhraseUrls.get(phraseId);
+  if (previousUrl) {
+    URL.revokeObjectURL(previousUrl);
+  }
+
+  browserRecordedPhraseUrls.delete(phraseId);
+  syncBrowserRecordedVoiceOption();
+}
+
+function recordedFilesByBrowserPhrase() {
+  return Object.fromEntries(browserRecordedPhraseUrls.entries());
+}
+
+function hasCompleteBrowserRecordedCategory(category) {
+  const phraseIdsForCategory = phraseLibraryChoices
+    .filter((choice) => choice.category === category)
+    .map((choice) => choice.phraseId);
+
+  return phraseIdsForCategory.length > 0
+    && phraseIdsForCategory.every((phraseId) => browserRecordedPhraseUrls.has(phraseId));
+}
+
+function hasAnyCompleteBrowserRecordedCategory() {
+  return mainCategories.some((category) => hasCompleteBrowserRecordedCategory(category.title));
+}
+
+function syncBrowserRecordedVoiceOption() {
+  const recordedOption = hasAnyCompleteBrowserRecordedCategory()
+    ? [{
+      id: BROWSER_RECORDED_VOICE_ID,
+      label: "My Voice",
+      shortLabel: "My Voice",
+      group: "Recorded",
+      status: "ready",
+      filesByPhrase: recordedFilesByBrowserPhrase(),
+    }]
+    : [];
+
+  voiceOptions = [...recordedOption, ...baseVoiceOptions];
+
+  if (!voiceOptions.some((voice) => voice.id === activeVoiceId)) {
+    activeVoiceId = voiceOptions[0].id;
+    localStorage.setItem(VOICE_STORAGE_KEY, activeVoiceId);
+  }
+
+  renderVoiceOptions();
+  updateVoiceStatus();
+}
+
+function recorderChoices() {
+  return phraseLibraryChoices.filter((choice) => choice.category === recorderCategory);
+}
+
+function recorderChoice() {
+  const choicesForRecorder = recorderChoices();
+  return choicesForRecorder[Math.min(Math.max(recorderIndex, 0), Math.max(choicesForRecorder.length - 1, 0))];
+}
+
+function recorderRecordedCount() {
+  return recorderChoices().filter((choice) => browserRecordedPhraseUrls.has(choice.phraseId)).length;
+}
+
+function isRecorderCategoryComplete() {
+  return hasCompleteBrowserRecordedCategory(recorderCategory);
+}
+
+function setRecorderMessage(message) {
+  if (recorderMessage) {
+    recorderMessage.textContent = message;
+  }
+}
+
+function renderRecorderCategoryOptions() {
+  if (!recorderCategorySelect) return;
+
+  recorderCategorySelect.innerHTML = mainCategories.map((category) => {
+    const selected = category.title === recorderCategory ? " selected" : "";
+    return `<option value="${escapeHTML(category.title)}"${selected}>${escapeHTML(category.title)}</option>`;
+  }).join("");
+}
+
+function renderVoiceRecorder() {
+  if (!voiceRecorderDialog) return;
+
+  const choicesForRecorder = recorderChoices();
+  const choice = recorderChoice();
+  if (!choice) return;
+
+  const recordedCount = recorderRecordedCount();
+  const totalCount = choicesForRecorder.length;
+  const isCurrentRecorded = browserRecordedPhraseUrls.has(choice.phraseId);
+  const isComplete = isRecorderCategoryComplete();
+  const progress = totalCount ? (recordedCount / totalCount) * 100 : 0;
+
+  renderRecorderCategoryOptions();
+  recorderProgressText.textContent = `${recordedCount} of ${totalCount} recorded`;
+  recorderProgressBar.style.setProperty("--recorded-progress", `${progress}%`);
+  recorderPositionText.textContent = `Phrase ${recorderIndex + 1} of ${totalCount}`;
+  recorderPhraseState.textContent = isCurrentRecorded ? "Recorded" : "Open";
+  recorderPhraseHandle.textContent = choice.title.split("-").slice(0, 2).join("-");
+  recorderPhraseTitle.textContent = choice.displayTitle;
+  recorderPhraseText.textContent = choice.phraseText;
+  previousRecorderPhraseButton.disabled = recorderIndex === 0;
+  nextRecorderPhraseButton.disabled = recorderIndex >= totalCount - 1;
+  playRecordedPhraseButton.disabled = !isCurrentRecorded;
+  retakeRecordedPhraseButton.disabled = !isCurrentRecorded;
+  recordPhraseButton.classList.toggle("is-recording", isRecordingPhrase);
+  recordPhraseButton.setAttribute("aria-label", isRecordingPhrase ? "Stop recording" : "Record phrase");
+  useRecordedVoiceButton.disabled = !isComplete;
+  useRecordedVoiceButton.textContent = isComplete ? "Use My Voice" : "Finish all phrases";
+}
+
+function stopRecorderStream() {
+  recorderStream?.getTracks().forEach((track) => track.stop());
+  recorderStream = null;
+}
+
+async function startBrowserPhraseRecording() {
+  const choice = recorderChoice();
+  if (!choice) return;
+
+  if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+    setRecorderMessage("This browser cannot record audio here.");
+    return;
+  }
+
+  audio.pause();
+  previewAudio.pause();
+  recorderPreviewAudio.pause();
+  setPlayingState(false);
+
+  try {
+    recorderStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(recorderStream);
+    recorderChunks = [];
+
+    mediaRecorder.addEventListener("dataavailable", (event) => {
+      if (event.data?.size) {
+        recorderChunks.push(event.data);
+      }
+    });
+
+    mediaRecorder.addEventListener("stop", async () => {
+      const blob = new Blob(recorderChunks, { type: mediaRecorder.mimeType || "audio/webm" });
+      isRecordingPhrase = false;
+      stopRecorderStream();
+
+      try {
+        await saveBrowserRecordedPhrase(choice.phraseId, blob);
+        setRecorderMessage(`Saved ${choice.phraseId}.`);
+      } catch {
+        setRecorderMessage("Could not save this recording.");
+      }
+
+      renderVoiceRecorder();
+    }, { once: true });
+
+    mediaRecorder.start();
+    isRecordingPhrase = true;
+    setRecorderMessage(`Recording ${choice.phraseId}.`);
+    renderVoiceRecorder();
+  } catch {
+    isRecordingPhrase = false;
+    stopRecorderStream();
+    setRecorderMessage("Microphone permission is needed to record your voice.");
+    renderVoiceRecorder();
+  }
+}
+
+function stopBrowserPhraseRecording() {
+  if (mediaRecorder && mediaRecorder.state !== "inactive") {
+    mediaRecorder.stop();
+    return;
+  }
+
+  isRecordingPhrase = false;
+  stopRecorderStream();
+  renderVoiceRecorder();
+}
+
+function toggleBrowserPhraseRecording() {
+  if (isRecordingPhrase) {
+    stopBrowserPhraseRecording();
+  } else {
+    startBrowserPhraseRecording();
+  }
+}
+
+function goToRecorderPhrase(delta) {
+  if (isRecordingPhrase) {
+    stopBrowserPhraseRecording();
+  }
+
+  recorderPreviewAudio.pause();
+  recorderIndex = Math.min(Math.max(recorderIndex + delta, 0), Math.max(recorderChoices().length - 1, 0));
+  renderVoiceRecorder();
+}
+
+async function playCurrentBrowserRecording() {
+  const choice = recorderChoice();
+  const file = choice ? browserRecordedPhraseUrls.get(choice.phraseId) : null;
+  if (!file) return;
+
+  if (!recorderPreviewAudio.paused) {
+    recorderPreviewAudio.pause();
+    recorderPreviewAudio.currentTime = 0;
+    return;
+  }
+
+  audio.pause();
+  previewAudio.pause();
+  setPlayingState(false);
+  recorderPreviewAudio.src = file;
+  recorderPreviewAudio.volume = audio.volume;
+  applyPlaybackTuningToMedia(recorderPreviewAudio, Number(speedControl.value) / 100);
+
+  try {
+    await recorderPreviewAudio.play();
+    setRecorderMessage(`Playing ${choice.phraseId}.`);
+  } catch {
+    setRecorderMessage("Could not play this recording.");
+  }
+}
+
+async function retakeCurrentBrowserRecording() {
+  const choice = recorderChoice();
+  if (!choice) return;
+
+  try {
+    await deleteBrowserRecordedPhrase(choice.phraseId);
+    setRecorderMessage(`Removed ${choice.phraseId}.`);
+  } catch {
+    setRecorderMessage("Could not remove this take.");
+  }
+
+  renderVoiceOptions();
+  renderVoiceRecorder();
+}
+
+function openVoiceRecorder() {
+  recorderCategory = activePhraseCategory();
+  recorderIndex = 0;
+  renderVoiceRecorder();
+  setRecorderMessage("");
+  voiceRecorderDialog?.showModal();
+}
+
+function closeVoiceRecorder() {
+  stopBrowserPhraseRecording();
+  recorderPreviewAudio.pause();
+  voiceRecorderDialog?.close();
+}
+
+function useBrowserRecordedVoice() {
+  if (!isRecorderCategoryComplete()) {
+    setRecorderMessage("Record every phrase in this category first.");
+    return;
+  }
+
+  syncBrowserRecordedVoiceOption();
+  setVoice(BROWSER_RECORDED_VOICE_ID);
+  closeVoiceRecorder();
 }
 
 function loadSavedPlaylistConfiguration() {
@@ -761,6 +1155,7 @@ function clampSelectedIndex() {
 function updateVolume() {
   audio.volume = Number(volumeControl.value) / 100;
   previewAudio.volume = audio.volume;
+  recorderPreviewAudio.volume = audio.volume;
 }
 
 updateVolume();
@@ -822,6 +1217,7 @@ function updatePlaybackTuning({ save = true } = {}) {
 
   applyPlaybackTuningToMedia(audio, speed);
   applyPlaybackTuningToMedia(previewAudio, speed);
+  applyPlaybackTuningToMedia(recorderPreviewAudio, speed);
 
   speedValue.textContent = `${speed.toFixed(2)}x`;
   pitchValue.textContent = pitchPreserved ? "Steady" : "Natural";
@@ -1629,6 +2025,24 @@ modeButtons.forEach((button) => {
 });
 
 voiceSelect?.addEventListener("change", () => setVoice(voiceSelect.value));
+openVoiceRecorderButton?.addEventListener("click", openVoiceRecorder);
+closeVoiceRecorderButton?.addEventListener("click", closeVoiceRecorder);
+recorderCategorySelect?.addEventListener("change", () => {
+  recorderCategory = recorderCategorySelect.value;
+  recorderIndex = 0;
+  recorderPreviewAudio.pause();
+  renderVoiceRecorder();
+});
+previousRecorderPhraseButton?.addEventListener("click", () => goToRecorderPhrase(-1));
+nextRecorderPhraseButton?.addEventListener("click", () => goToRecorderPhrase(1));
+recordPhraseButton?.addEventListener("click", toggleBrowserPhraseRecording);
+playRecordedPhraseButton?.addEventListener("click", playCurrentBrowserRecording);
+retakeRecordedPhraseButton?.addEventListener("click", retakeCurrentBrowserRecording);
+useRecordedVoiceButton?.addEventListener("click", useBrowserRecordedVoice);
+voiceRecorderDialog?.addEventListener("cancel", (event) => {
+  event.preventDefault();
+  closeVoiceRecorder();
+});
 volumeDownButton.addEventListener("click", () => adjustVolume(-5));
 volumeUpButton.addEventListener("click", () => adjustVolume(5));
 volumeControl.parentElement.addEventListener("pointerdown", startVolumeDrag);
@@ -1679,6 +2093,7 @@ speedControl.addEventListener("change", updatePlaybackTuning);
 pitchToggle.addEventListener("click", togglePitchMode);
 audio.addEventListener("loadedmetadata", () => updatePlaybackTuning({ save: false }));
 previewAudio.addEventListener("loadedmetadata", () => updatePlaybackTuning({ save: false }));
+recorderPreviewAudio.addEventListener("loadedmetadata", () => updatePlaybackTuning({ save: false }));
 audio.addEventListener("play", () => {
   primeAudioMeter();
   setPlayingState(true);
@@ -1689,6 +2104,9 @@ renderAudioMeter();
 applyAudioLooping();
 updateQueueButtons();
 renderVoiceOptions();
+loadBrowserRecordedPhrases().catch(() => {
+  syncBrowserRecordedVoiceOption();
+});
 renderPlaylistControls();
 renderWheel();
 renderPlaylistEditor();
