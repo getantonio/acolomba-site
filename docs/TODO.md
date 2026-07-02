@@ -85,6 +85,8 @@ Last updated: 2026-07-02
 - 2026-07-02 [Done] Changed retouching gallery page accents to charcoal text.
 - 2026-07-02 [Done] Applied site-wide 18% gray background and charcoal text/accent color to static pages.
 - 2026-07-02 [Done] Generated Higgsfield AI video states for retouching comparisons 02-09, including stronger realistic lume/timelapse reruns for watch images 08-09.
+- 2026-07-02 [Done] Made the retouching gallery show the after images as the default thumbnail state.
+- 2026-07-02 [Next] Add an `AI-2` retouching gallery state for a more extreme AI version with animation and a product example.
 - 2026-06-30 [Next] Research SUNY school/program options Antonio could enter for Summer 2026 if still feasible or Fall 2026, including loan/aid implications and realistic application timing.
 - Enable HTTPS enforcement in GitHub Pages after GitHub finishes issuing the certificate for `acolomba.site`.
 - Claim or redeploy the temporary Cloudflare Worker endpoint under Antonio's Cloudflare account so message-box delivery remains durable.

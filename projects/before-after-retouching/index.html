@@ -372,7 +372,7 @@
       <button class="arrow prev" type="button" aria-label="Previous image">&lt;</button>
       <div class="switches" aria-label="Choose image state">
         <button class="switch before-after-lightbox-toggle is-active" type="button" data-state="after">After</button>
-        <button class="switch ai-lightbox-toggle" type="button" data-state="ai" aria-pressed="false" disabled>AI modified</button>
+        <button class="switch ai-lightbox-toggle" type="button" data-state="ai" aria-pressed="false" disabled>AI-1</button>
       </div>
       <p class="lightbox-count">1 / 10</p>
       <button class="arrow next" type="button" aria-label="Next image">&gt;</button>
@@ -430,11 +430,11 @@
 
     function aiPlaceholderMarkup(number) {
       return `
-        <div class="ai-placeholder" aria-label="AI modified placeholder for comparison ${number}">
+        <div class="ai-placeholder" aria-label="AI-1 placeholder for comparison ${number}">
           <span class="ai-placeholder-inner">
             <span class="ai-kicker">Queued</span>
-            <span class="ai-title">AI Modified</span>
-            <span class="ai-note">Higgsfield variant will land here.</span>
+            <span class="ai-title">AI-1</span>
+            <span class="ai-note">First AI variant will land here.</span>
           </span>
         </div>
       `;
@@ -455,14 +455,14 @@
       }
       if (item.ai.type === "video") {
         return `
-          <button class="image-button" type="button" data-index="${Number(item.number) - 1}" data-state="ai" aria-label="Open image ${item.number} AI modified video">
+          <button class="image-button" type="button" data-index="${Number(item.number) - 1}" data-state="ai" aria-label="Open image ${item.number} AI-1 video">
             <video src="${item.ai.src}" poster="${item.ai.poster}" muted autoplay loop playsinline style="--ai-aspect: ${item.ai.width} / ${item.ai.height};"></video>
           </button>
         `;
       }
       return `
-        <button class="image-button" type="button" data-index="${Number(item.number) - 1}" data-state="ai" aria-label="Open image ${item.number} AI modified">
-          <img src="${item.ai.src}" alt="AI modified Higgsfield upscale for retouching comparison ${item.number}">
+        <button class="image-button" type="button" data-index="${Number(item.number) - 1}" data-state="ai" aria-label="Open image ${item.number} AI-1">
+          <img src="${item.ai.src}" alt="AI-1 retouching comparison ${item.number}">
         </button>
       `;
     }
@@ -477,7 +477,7 @@
             </figure>
             <div class="view-controls" aria-label="Choose state for image ${item.number}">
               <button class="view-control before-after-toggle is-active" type="button" aria-label="Show before image ${item.number}">Before</button>
-              ${item.ai ? '<button class="view-control ai-toggle" type="button" aria-pressed="false">AI modified</button>' : ""}
+              ${item.ai ? '<button class="view-control ai-toggle" type="button" aria-pressed="false">AI-1</button>' : ""}
             </div>
           </div>
         </article>
@@ -536,7 +536,7 @@
 
       if (state === "ai") {
         slot.innerHTML = aiMediaMarkup(item);
-        label.textContent = item.ai ? "AI modified" : "AI modified queued";
+        label.textContent = item.ai ? "AI-1" : "AI-1 queued";
         action.textContent = item.ai ? "Open" : "Pending";
       } else {
         slot.innerHTML = imageButtonMarkup(item, index, state);
@@ -559,7 +559,7 @@
         lightboxStage.innerHTML = `<video src="${item.ai.src}" poster="${item.ai.poster}" controls autoplay loop playsinline></video>`;
       } else {
         const imageSource = currentState === "ai" ? item.ai.src : item[currentState];
-        lightboxStage.innerHTML = `<img src="${imageSource}" alt="${currentState === "ai" ? "AI modified" : currentState} state for retouching comparison ${item.number}">`;
+        lightboxStage.innerHTML = `<img src="${imageSource}" alt="${currentState === "ai" ? "AI-1" : currentState} state for retouching comparison ${item.number}">`;
       }
       lightboxTitle.textContent = `Image ${item.number}`;
       lightboxCount.textContent = `${currentIndex + 1} / ${items.length}`;
