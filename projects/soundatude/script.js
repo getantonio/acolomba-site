@@ -29,8 +29,7 @@ const fileLoader = document.querySelector("#fileLoader");
 const playlistEditor = document.querySelector("#playlistEditor");
 const playlistTitle = document.querySelector("#playlistTitle");
 const playlistCount = document.querySelector("#playlistCount");
-const playlistCategory = document.querySelector("#playlistCategory");
-const mainCategoryTabs = document.querySelector("#mainCategoryTabs");
+const mainCategorySelect = document.querySelector("#mainCategorySelect");
 const selectAllButton = document.querySelector("#selectAllButton");
 const randomCountInput = document.querySelector("#randomCountInput");
 const randomSelectionButton = document.querySelector("#randomSelectionButton");
@@ -1163,20 +1162,13 @@ function renderPlaylistControls() {
     .join("");
 }
 
-function renderMainCategoryTabs() {
-  if (!mainCategoryTabs) return;
+function renderMainCategorySelect() {
+  if (!mainCategorySelect) return;
 
   const activePlaylist = currentPlaylist();
-  mainCategoryTabs.innerHTML = mainCategories.map((category) => {
+  mainCategorySelect.innerHTML = mainCategories.map((category) => {
     const isActive = activePlaylist.id === category.playlistId || activePlaylist.category === category.title;
-    return `
-      <button
-        type="button"
-        data-category-id="${escapeHTML(category.id)}"
-        class="${isActive ? "is-active" : ""}"
-        aria-pressed="${isActive}"
-      >${escapeHTML(category.title)}</button>
-    `;
+    return `<option value="${escapeHTML(category.id)}"${isActive ? " selected" : ""}>${escapeHTML(category.title)}</option>`;
   }).join("");
 }
 
@@ -1333,10 +1325,9 @@ function renderPlaylistEditor() {
     items: selectedChoices,
   };
 
-  playlistCategory.textContent = activePlaylist.category ?? "Attitude & Effort";
   playlistTitle.textContent = activePlaylist.name;
   playlistCount.textContent = `${activePlaylist.itemIds.length} file${activePlaylist.itemIds.length === 1 ? "" : "s"}`;
-  renderMainCategoryTabs();
+  renderMainCategorySelect();
   updatePhraseSetControls();
   playlistEditor.innerHTML = [
     renderPlaylistSection(selectedSection, activePlaylist, activeSet),
@@ -1672,11 +1663,7 @@ playlistEditor.addEventListener("click", (event) => {
   }
 });
 
-mainCategoryTabs?.addEventListener("click", (event) => {
-  const categoryButton = event.target.closest("[data-category-id]");
-  if (!categoryButton) return;
-  activateMainCategory(categoryButton.dataset.categoryId);
-});
+mainCategorySelect?.addEventListener("change", () => activateMainCategory(mainCategorySelect.value));
 
 previewAudio.addEventListener("ended", () => {
   previewingId = null;

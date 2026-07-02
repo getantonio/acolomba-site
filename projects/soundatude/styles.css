@@ -541,7 +541,7 @@ button:focus-visible {
   gap: 7px;
 }
 
-.playlist-category {
+.playlist-category-select {
   min-height: 34px;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -553,57 +553,55 @@ button:focus-visible {
   background: oklch(12% 0.015 235 / 0.45);
 }
 
-.playlist-category span {
+.playlist-category-select span {
   color: oklch(56% 0.018 98);
   font-size: 0.62rem;
   font-weight: 760;
   text-transform: uppercase;
 }
 
-.playlist-category strong {
-  overflow: hidden;
+.playlist-category-select select {
+  min-width: 0;
+  width: 100%;
+  border: 0;
   color: oklch(78% 0.025 92);
+  background: transparent;
+  font: inherit;
   font-size: 0.8rem;
   font-weight: 720;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.playlist-category-select {
+  position: relative;
+}
+
+.playlist-category-select::after {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid oklch(62% 0.026 246);
+  content: "";
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.playlist-category-select select {
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  grid-column: 2;
+  grid-row: 1;
+  padding-right: 18px;
 }
 
-.main-category-tabs {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
-}
-
-.main-category-tabs button {
-  min-height: 36px;
-  display: grid;
-  place-items: center;
-  padding: 0 7px;
-  border: 0;
-  border-radius: 9px;
-  background: oklch(12% 0.015 235 / 0.48);
-  color: oklch(62% 0.02 96);
-  cursor: pointer;
-  font-size: 0.62rem;
-  font-weight: 760;
-  line-height: 1.05;
-  text-align: center;
-  transition: background 160ms cubic-bezier(0.22, 1, 0.36, 1), color 160ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.main-category-tabs button:hover {
-  background: oklch(16% 0.02 238 / 0.72);
-  color: oklch(74% 0.026 94);
-}
-
-.main-category-tabs button.is-active {
-  background: oklch(22% 0.032 240 / 0.88);
-  color: oklch(80% 0.032 94);
-  box-shadow: inset 0 0 0 1px oklch(47% 0.033 248 / 0.5);
-}
-
-.main-category-tabs button:focus-visible {
+.playlist-category-select select:focus-visible {
   outline: 2px solid oklch(63% 0.05 240);
   outline-offset: 3px;
 }
