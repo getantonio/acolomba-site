@@ -72,9 +72,13 @@ const choices = {
   ],
 };
 
-const phraseIds = Object.freeze(Array.from({ length: 51 }, (_, index) => (
+const attitudeEffortPhraseIds = Object.freeze(Array.from({ length: 51 }, (_, index) => (
   `sat-p${String(index + 1).padStart(3, "0")}`
 )));
+const connectionPhraseIds = Object.freeze(Array.from({ length: 50 }, (_, index) => (
+  `sat-p${String(index + 152).padStart(3, "0")}`
+)));
+const phraseIds = Object.freeze([...attitudeEffortPhraseIds, ...connectionPhraseIds]);
 
 const phraseLibrary = [
   ["sat-p001", "Ready starts with one honest rep."],
@@ -128,6 +132,56 @@ const phraseLibrary = [
   ["sat-p049", "I turn I cannot into I will try, and I support that choice with real effort."],
   ["sat-p050", "I meet negative thoughts with courage, a positive attitude, and the willingness to do my best."],
   ["sat-p051", "I can change my inner voice, strengthen my attitude, and give earnest effort one moment at a time."],
+  ["sat-p152", "I can meet new people with kindness, confidence, and a steady belief that I belong."],
+  ["sat-p153", "I am brave enough to say hello and open enough to let real connection grow."],
+  ["sat-p154", "I bring warmth, respect, and confidence into the way I talk with others."],
+  ["sat-p155", "I can be myself and still make space for new friendships to form."],
+  ["sat-p156", "I choose to show up with a friendly attitude and a brave, open heart."],
+  ["sat-p157", "I am learning how to connect with others through kindness, listening, and steady courage."],
+  ["sat-p158", "I can start small conversations with confidence and let them grow naturally."],
+  ["sat-p159", "I trust that my kindness, humor, and effort can help people feel comfortable around me."],
+  ["sat-p160", "I am determined to keep showing up as someone friendly, respectful, and real."],
+  ["sat-p161", "I can look for common ground and build connection one honest moment at a time."],
+  ["sat-p162", "I speak with confidence, listen with care, and treat others with respect."],
+  ["sat-p163", "I can join in with courage and bring good energy to the people around me."],
+  ["sat-p164", "I am worthy of friendship, belonging, and people who appreciate the real me."],
+  ["sat-p165", "I can be patient while friendships grow and still stay confident in who I am."],
+  ["sat-p166", "I bring courage to introductions and kindness to every conversation."],
+  ["sat-p167", "I can make others feel seen by listening, smiling, and being present."],
+  ["sat-p168", "I choose connection over hiding and confidence over holding myself back."],
+  ["sat-p169", "I am becoming more comfortable starting conversations and sharing who I am."],
+  ["sat-p170", "I can offer kindness first and trust that good friendships can grow from small moments."],
+  ["sat-p171", "I carry myself with quiet confidence and invite connection through how I treat people."],
+  ["sat-p172", "I can be friendly without forcing anything, and open without changing who I am."],
+  ["sat-p173", "I am determined to practice friendship skills with patience, courage, and care."],
+  ["sat-p174", "I can ask thoughtful questions and listen closely to the answers."],
+  ["sat-p175", "I bring a confident smile, a kind voice, and a willing attitude into new spaces."],
+  ["sat-p176", "I can find my people by being honest, kind, and brave enough to connect."],
+  ["sat-p177", "I respect myself, respect others, and build friendships from that strong place."],
+  ["sat-p178", "I can share my thoughts with confidence and make room for others to share too."],
+  ["sat-p179", "I am allowed to take up space in a group with kindness and confidence."],
+  ["sat-p180", "I can choose friends who bring out my best and help me feel safe to be myself."],
+  ["sat-p181", "I bring steady determination to becoming a better friend and a more confident person."],
+  ["sat-p182", "I can connect through shared interests, simple questions, and genuine attention."],
+  ["sat-p183", "I believe my presence can add something good to the room."],
+  ["sat-p184", "I can practice being approachable by staying relaxed, kind, and open."],
+  ["sat-p185", "I am strong enough to be kind first and confident enough to keep trying."],
+  ["sat-p186", "I can build real friendships through trust, respect, laughter, and time."],
+  ["sat-p187", "I choose to notice opportunities to connect and take one brave step toward them."],
+  ["sat-p188", "I can bring positive energy without pretending to be anyone else."],
+  ["sat-p189", "I am learning that friendship grows best when I am patient, honest, and kind."],
+  ["sat-p190", "I can stand in my confidence while still being gentle with other people."],
+  ["sat-p191", "I bring courage to joining in and determination to keep growing socially."],
+  ["sat-p192", "I can make a good first move by being friendly, curious, and respectful."],
+  ["sat-p193", "I trust that the right friendships can grow as I keep being kind and real."],
+  ["sat-p194", "I can include others, welcome others, and help connection feel easier."],
+  ["sat-p195", "I am confident enough to be myself and caring enough to notice others."],
+  ["sat-p196", "I can keep my heart open while choosing friendships with respect and care."],
+  ["sat-p197", "I show courage when I reach out, listen well, and give friendship a chance."],
+  ["sat-p198", "I can grow more confident in groups by taking one calm, friendly step at a time."],
+  ["sat-p199", "I bring value to friendships by being loyal, thoughtful, and true to myself."],
+  ["sat-p200", "I am ready to connect with courage, speak with kindness, and belong as myself."],
+  ["sat-p201", "I choose confidence, determination, and genuine connection in the way I meet the world."],
 ];
 
 const phraseDisplayTitles = [
@@ -182,33 +236,118 @@ const phraseDisplayTitles = [
   "I Will Try",
   "Courage And Effort",
   "Change Inner Voice",
+  "Kind Belonging",
+  "Say Hello",
+  "Warm Respect",
+  "Be Myself",
+  "Friendly Heart",
+  "Listening Courage",
+  "Small Conversations",
+  "Comfortable Around Me",
+  "Friendly And Real",
+  "Common Ground",
+  "Speak And Listen",
+  "Join In",
+  "Worthy Of Friendship",
+  "Patient Friendships",
+  "Kind Introductions",
+  "Make Others Seen",
+  "Choose Connection",
+  "Share Who I Am",
+  "Kindness First",
+  "Quiet Confidence",
+  "Friendly Without Forcing",
+  "Friendship Skills",
+  "Thoughtful Questions",
+  "New Spaces",
+  "Find My People",
+  "Respect Builds",
+  "Share And Make Room",
+  "Take Up Space",
+  "Safe To Be Myself",
+  "Better Friend",
+  "Shared Interests",
+  "Add Good",
+  "Approachable",
+  "Kind First",
+  "Real Friendships",
+  "Brave Step",
+  "Positive Energy",
+  "Patient And Kind",
+  "Confident And Gentle",
+  "Growing Socially",
+  "Good First Move",
+  "Right Friendships",
+  "Include Others",
+  "Caring Confidence",
+  "Open Heart",
+  "Reach Out",
+  "Confident In Groups",
+  "Loyal And True",
+  "Belong As Myself",
+  "Meet The World",
 ];
 
 const phraseSubcategories = [
   {
     id: "readiness",
     title: "Readiness & next action",
-    phraseIds: phraseIds.slice(0, 10),
+    category: "Attitude & Effort",
+    phraseIds: attitudeEffortPhraseIds.slice(0, 10),
   },
   {
     id: "attitude-foundation",
     title: "Attitude foundation",
-    phraseIds: phraseIds.slice(10, 20),
+    category: "Attitude & Effort",
+    phraseIds: attitudeEffortPhraseIds.slice(10, 20),
   },
   {
     id: "challenge-response",
     title: "Challenge response",
-    phraseIds: phraseIds.slice(20, 31),
+    category: "Attitude & Effort",
+    phraseIds: attitudeEffortPhraseIds.slice(20, 31),
   },
   {
     id: "showing-up",
     title: "Showing up & growth",
-    phraseIds: phraseIds.slice(31, 41),
+    category: "Attitude & Effort",
+    phraseIds: attitudeEffortPhraseIds.slice(31, 41),
   },
   {
     id: "thought-reset",
     title: "Thought reset",
-    phraseIds: phraseIds.slice(41, 51),
+    category: "Attitude & Effort",
+    phraseIds: attitudeEffortPhraseIds.slice(41, 51),
+  },
+  {
+    id: "connection-starting",
+    title: "Starting connection",
+    category: "Confidence & Connection",
+    phraseIds: connectionPhraseIds.slice(0, 10),
+  },
+  {
+    id: "conversation-care",
+    title: "Conversation & care",
+    category: "Confidence & Connection",
+    phraseIds: connectionPhraseIds.slice(10, 20),
+  },
+  {
+    id: "friendship-growth",
+    title: "Friendship growth",
+    category: "Confidence & Connection",
+    phraseIds: connectionPhraseIds.slice(20, 30),
+  },
+  {
+    id: "belonging-energy",
+    title: "Belonging & energy",
+    category: "Confidence & Connection",
+    phraseIds: connectionPhraseIds.slice(30, 40),
+  },
+  {
+    id: "social-courage",
+    title: "Social courage",
+    category: "Confidence & Connection",
+    phraseIds: connectionPhraseIds.slice(40, 50),
   },
 ];
 const phraseSubcategoryByPhraseId = new Map(
@@ -234,8 +373,14 @@ function slugifyPhraseTitle(value) {
     .join("-");
 }
 
-function attitudeEffortHandle(index, title) {
-  return `ae-${String(index + 1).padStart(4, "0")}-${slugifyPhraseTitle(title)}`;
+function phraseHandle(phraseId, title) {
+  const connectionIndex = connectionPhraseIds.indexOf(phraseId);
+  if (connectionIndex >= 0) {
+    return `cc-${String(connectionIndex + 1).padStart(4, "0")}-${slugifyPhraseTitle(title)}`;
+  }
+
+  const attitudeEffortIndex = attitudeEffortPhraseIds.indexOf(phraseId);
+  return `ae-${String(attitudeEffortIndex + 1).padStart(4, "0")}-${slugifyPhraseTitle(title)}`;
 }
 
 const sourceCutGroups = [
@@ -271,12 +416,12 @@ const brianPhraseFiles = Object.fromEntries(
 
 const phraseLibraryChoices = phraseLibrary.map(([phraseId, title], index) => ({
   id: `loop-phrase-${phraseId}`,
-  title: attitudeEffortHandle(index, title),
+  title: phraseHandle(phraseId, title),
   displayTitle: phraseDisplayTitles[index],
   phraseText: title,
   file: brianPhraseFiles[phraseId],
   phraseId,
-  category: "Attitude & Effort",
+  category: phraseSubcategoryByPhraseId.get(phraseId)?.category ?? "Attitude & Effort",
   subcategory: phraseSubcategoryByPhraseId.get(phraseId)?.title ?? "Attitude & Effort",
   subcategoryId: phraseSubcategoryByPhraseId.get(phraseId)?.id ?? "attitude-effort",
   source: "phrase-library",
@@ -288,33 +433,15 @@ function phraseChoiceIdsForPhraseIds(ids) {
   return ids.map((phraseId) => `loop-phrase-${phraseId}`);
 }
 
-const categorySampleSets = {
-  "calm-focus": [
-    "sat-p006",
-    "sat-p009",
-    "sat-p013",
-    "sat-p025",
-    "sat-p028",
-    "sat-p037",
-    "sat-p045",
-    "sat-p047",
-  ],
-  "confidence-courage": [
-    "sat-p007",
-    "sat-p018",
-    "sat-p024",
-    "sat-p030",
-    "sat-p033",
-    "sat-p038",
-    "sat-p043",
-    "sat-p050",
-  ],
-};
+function phraseChoiceIdsForCategory(category) {
+  return phraseLibraryChoices
+    .filter((choice) => choice.category === category)
+    .map((choice) => choice.id);
+}
 
 const mainCategories = [
   { id: "attitude-effort", title: "Attitude & Effort", playlistId: "loop-phrase-library" },
-  { id: "calm-focus", title: "Calm & Focus", playlistId: "loop-calm-focus-sample" },
-  { id: "confidence-courage", title: "Confidence & Courage", playlistId: "loop-confidence-courage-sample" },
+  { id: "confidence-connection", title: "Confidence & Connection", playlistId: "loop-confidence-connection-library" },
 ];
 
 function displayTitleForChoice(choice) {
@@ -394,6 +521,10 @@ let activePlaylistIdByMode = {
   loop: "loop-starter",
   conversation: "conversation-starter",
 };
+const retiredBuiltInPlaylistIds = new Set([
+  "loop-calm-focus-sample",
+  "loop-confidence-courage-sample",
+]);
 let playlistsByMode = {
   loop: [
     {
@@ -412,19 +543,13 @@ let playlistsByMode = {
       id: "loop-phrase-library",
       name: "All 51",
       category: "Attitude & Effort",
-      itemIds: phraseLibraryChoices.map((choice) => choice.id),
+      itemIds: phraseChoiceIdsForPhraseIds(attitudeEffortPhraseIds),
     },
     {
-      id: "loop-calm-focus-sample",
-      name: "Calm Focus 8",
-      category: "Calm & Focus",
-      itemIds: phraseChoiceIdsForPhraseIds(categorySampleSets["calm-focus"]),
-    },
-    {
-      id: "loop-confidence-courage-sample",
-      name: "Confidence 8",
-      category: "Confidence & Courage",
-      itemIds: phraseChoiceIdsForPhraseIds(categorySampleSets["confidence-courage"]),
+      id: "loop-confidence-connection-library",
+      name: "All 50",
+      category: "Confidence & Connection",
+      itemIds: phraseChoiceIdsForPhraseIds(connectionPhraseIds),
     },
   ],
   conversation: [
@@ -571,7 +696,7 @@ function loadSavedPlaylistConfiguration() {
             ? playlist.itemIds.filter((itemId) => validIds.has(itemId))
             : [],
         }))
-        .filter((playlist) => playlist.itemIds.length);
+        .filter((playlist) => playlist.itemIds.length && !retiredBuiltInPlaylistIds.has(playlist.id));
 
       if (!normalizedPlaylists.length) return;
 
@@ -642,6 +767,35 @@ updateVolume();
 function adjustVolume(delta) {
   volumeControl.value = String(clamp(Number(volumeControl.value) + delta, 0, 100));
   updateVolume();
+}
+
+function setRangeFromPointer(range, clientX) {
+  const rect = range.getBoundingClientRect();
+  const min = Number(range.min) || 0;
+  const max = Number(range.max) || 100;
+  const step = Number(range.step) || 1;
+  const ratio = clamp((clientX - rect.left) / Math.max(rect.width, 1), 0, 1);
+  const steppedValue = Math.round((min + ratio * (max - min)) / step) * step;
+  range.value = String(clamp(steppedValue, min, max));
+}
+
+function handleVolumePointer(event) {
+  setRangeFromPointer(volumeControl, event.clientX);
+  updateVolume();
+}
+
+function startVolumeDrag(event) {
+  if (event.target.closest("button")) return;
+
+  event.preventDefault();
+  handleVolumePointer(event);
+  window.addEventListener("pointermove", handleVolumePointer);
+  window.addEventListener("pointerup", stopVolumeDrag, { once: true });
+  window.addEventListener("pointercancel", stopVolumeDrag, { once: true });
+}
+
+function stopVolumeDrag() {
+  window.removeEventListener("pointermove", handleVolumePointer);
 }
 
 function setPreservesPitch(media, shouldPreserve) {
@@ -1183,10 +1337,26 @@ function renderPlaylistEditor() {
   playlistTitle.textContent = activePlaylist.name;
   playlistCount.textContent = `${activePlaylist.itemIds.length} file${activePlaylist.itemIds.length === 1 ? "" : "s"}`;
   renderMainCategoryTabs();
+  updatePhraseSetControls();
   playlistEditor.innerHTML = [
     renderPlaylistSection(selectedSection, activePlaylist, activeSet),
     ...availableGroups.map((group) => renderPlaylistSection(group, activePlaylist, activeSet, { addable: true })),
   ].join("");
+}
+
+function activePhraseCategory() {
+  const category = currentPlaylist().category;
+  return mainCategories.some((candidate) => candidate.title === category) ? category : "Attitude & Effort";
+}
+
+function updatePhraseSetControls() {
+  if (!selectAllButton || !randomCountInput) return;
+
+  const category = activePhraseCategory();
+  const choiceIds = phraseChoiceIdsForCategory(category);
+  selectAllButton.textContent = category === "Confidence & Connection" ? "All 50" : "All 51";
+  randomCountInput.max = String(choiceIds.length);
+  randomCountInput.value = String(Math.min(Math.max(Number(randomCountInput.value) || 10, 1), choiceIds.length));
 }
 
 function togglePlaylistItem(itemId) {
@@ -1291,7 +1461,8 @@ function activateMainCategory(categoryId) {
 }
 
 function selectAllPhrases() {
-  activateLoopPlaylist("loop-phrase-library");
+  const category = activePhraseCategory();
+  activateLoopPlaylist(category === "Confidence & Connection" ? "loop-confidence-connection-library" : "loop-phrase-library");
 }
 
 function shuffledItems(items) {
@@ -1302,23 +1473,26 @@ function shuffledItems(items) {
 }
 
 function selectRandomPhrases() {
-  const count = Math.min(Math.max(Number(randomCountInput.value) || 10, 1), phraseLibraryChoiceIds.length);
+  const category = activePhraseCategory();
+  const choiceIds = phraseChoiceIdsForCategory(category);
+  const count = Math.min(Math.max(Number(randomCountInput.value) || 10, 1), choiceIds.length);
   randomCountInput.value = String(count);
 
-  let randomPlaylist = playlistsByMode.loop.find((playlist) => playlist.id === "loop-ae-random");
+  const randomPlaylistId = category === "Confidence & Connection" ? "loop-cc-random" : "loop-ae-random";
+  let randomPlaylist = playlistsByMode.loop.find((playlist) => playlist.id === randomPlaylistId);
   if (!randomPlaylist) {
     randomPlaylist = {
-      id: "loop-ae-random",
+      id: randomPlaylistId,
       name: `Random ${count}`,
-      category: "Attitude & Effort",
+      category,
       itemIds: [],
     };
     playlistsByMode.loop.push(randomPlaylist);
   }
 
   randomPlaylist.name = `Random ${count}`;
-  randomPlaylist.category = "Attitude & Effort";
-  randomPlaylist.itemIds = shuffledItems(phraseLibraryChoiceIds).slice(0, count);
+  randomPlaylist.category = category;
+  randomPlaylist.itemIds = shuffledItems(choiceIds).slice(0, count);
   activateLoopPlaylist(randomPlaylist.id);
 }
 
@@ -1464,6 +1638,7 @@ modeButtons.forEach((button) => {
 voiceSelect?.addEventListener("change", () => setVoice(voiceSelect.value));
 volumeDownButton.addEventListener("click", () => adjustVolume(-5));
 volumeUpButton.addEventListener("click", () => adjustVolume(5));
+volumeControl.parentElement.addEventListener("pointerdown", startVolumeDrag);
 repeatModeButton.addEventListener("click", cycleRepeatMode);
 shuffleButton.addEventListener("click", toggleShuffle);
 nextButton.addEventListener("click", skipToNextTrack);
