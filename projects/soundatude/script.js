@@ -19,8 +19,12 @@ const playlistTitle = document.querySelector("#playlistTitle");
 const playlistCount = document.querySelector("#playlistCount");
 const pageRail = document.querySelector(".page-rail");
 const pageDots = [...document.querySelectorAll(".page-dots span")];
+const openPlaylistButton = document.querySelector("#openPlaylistButton");
+const openPlayerButton = document.querySelector("#openPlayerButton");
+const consoleMeter = document.querySelector(".console-meter");
 const previewAudio = new Audio();
 const PLAYLIST_STORAGE_KEY = "sound-a-tude-playlists-v1";
+const METER_BAR_COUNT = 56;
 
 const choices = {
   loop: [
@@ -87,6 +91,13 @@ let scrollSettleTimer = null;
 let pageFrame = null;
 let queueMode = "single";
 let previewingId = null;
+let audioContext = null;
+let analyser = null;
+let meterSource = null;
+let meterData = null;
+let meterFrame = null;
+let meterBars = [];
+let meterLevels = [];
 
 loadSavedPlaylistConfiguration();
 
@@ -179,10 +190,109 @@ function updateVolume() {
 
 updateVolume();
 
+function idleMeterLevel(index) {
+  const phase = (index / METER_BAR_COUNT) * Math.PI * 4;
+  return 0.08 + Math.pow(Math.sin(phase) * 0.5 + 0.5, 2) * 0.08;
+}
+
+function renderAudioMeter() {
+  if (!consoleMeter) return;
+
+  consoleMeter.style.setProperty("--meter-bars", METER_BAR_COUNT);
+  meterLevels = Array.from({ length: METER_BAR_COUNT }, (_, index) => idleMeterLevel(index));
+  consoleMeter.innerHTML = meterLevels
+    .map((level) => `<span style="--level: ${level.toFixed(3)}"></span>`)
+    .join("");
+  meterBars = [...consoleMeter.querySelectorAll("span")];
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function primeAudioMeter() {
+  if (!consoleMeter || !window.AudioContext && !window.webkitAudioContext) return;
+
+  try {
+    if (!audioContext) {
+      const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
+      audioContext = new AudioContextConstructor();
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 2048;
+      analyser.smoothingTimeConstant = 0.68;
+      meterData = new Uint8Array(analyser.fftSize);
+      meterSource = audioContext.createMediaElementSource(audio);
+      meterSource.connect(analyser);
+      analyser.connect(audioContext.destination);
+    }
+
+    if (audioContext.state === "suspended") {
+      audioContext.resume();
+    }
+  } catch {
+    return;
+  }
+
+  startMeterAnimation();
+}
+
+function startMeterAnimation() {
+  if (meterFrame || !meterBars.length) return;
+  meterFrame = requestAnimationFrame(updateAudioMeter);
+}
+
+function updateAudioMeter() {
+  const hasLiveAudio = analyser && meterData && !audio.paused && !audio.ended;
+  const time = performance.now() / 1000;
+
+  if (hasLiveAudio) {
+    analyser.getByteTimeDomainData(meterData);
+  }
+
+  let highestLevel = 0;
+  const samplesPerBar = meterData ? Math.max(1, Math.floor(meterData.length / METER_BAR_COUNT)) : 1;
+
+  meterBars.forEach((bar, index) => {
+    let nextLevel = idleMeterLevel(index + time * 0.45);
+
+    if (hasLiveAudio) {
+      let sum = 0;
+      const sampleStart = index * samplesPerBar;
+      const sampleEnd = Math.min(sampleStart + samplesPerBar, meterData.length);
+
+      for (let sampleIndex = sampleStart; sampleIndex < sampleEnd; sampleIndex += 1) {
+        const centeredSample = (meterData[sampleIndex] - 128) / 128;
+        sum += centeredSample * centeredSample;
+      }
+
+      const rms = Math.sqrt(sum / Math.max(sampleEnd - sampleStart, 1));
+      nextLevel = clamp(0.08 + rms * 4.8, 0.08, 1);
+    }
+
+    const previousLevel = meterLevels[index] ?? nextLevel;
+    const smoothing = nextLevel > previousLevel ? 0.56 : 0.2;
+    const smoothedLevel = previousLevel + (nextLevel - previousLevel) * smoothing;
+
+    meterLevels[index] = smoothedLevel;
+    highestLevel = Math.max(highestLevel, smoothedLevel);
+    bar.style.setProperty("--level", smoothedLevel.toFixed(3));
+  });
+
+  if (hasLiveAudio || highestLevel > 0.18) {
+    meterFrame = requestAnimationFrame(updateAudioMeter);
+    return;
+  }
+
+  meterFrame = null;
+}
+
 function setPlayingState(isPlaying) {
   playerPanel.classList.toggle("is-playing", isPlaying);
   playButton.classList.toggle("is-playing", isPlaying);
   playButton.setAttribute("aria-label", isPlaying ? "Stop" : "Play");
+  if (isPlaying) {
+    startMeterAnimation();
+  }
 }
 
 function applyAudioLooping() {
@@ -209,6 +319,13 @@ function updatePageDots() {
   const pageIndex = Math.round(pageRail.scrollLeft / Math.max(pageRail.clientWidth, 1));
   pageDots.forEach((dot, index) => {
     dot.classList.toggle("is-active", index === pageIndex);
+  });
+}
+
+function goToPage(pageIndex) {
+  pageRail.scrollTo({
+    left: pageRail.clientWidth * pageIndex,
+    behavior: "smooth",
   });
 }
 
@@ -527,6 +644,7 @@ async function playQueuedTrack() {
 playButton.addEventListener("click", async () => {
   if (audio.paused) {
     try {
+      primeAudioMeter();
       await audio.play();
       setPlayingState(true);
     } catch {
@@ -536,6 +654,7 @@ playButton.addEventListener("click", async () => {
     audio.pause();
     audio.currentTime = 0;
     setPlayingState(false);
+    startMeterAnimation();
   }
 });
 
@@ -570,6 +689,8 @@ modeButtons.forEach((button) => {
 
 shuffleButton.addEventListener("click", () => setQueueMode("shuffle"));
 loopAllButton.addEventListener("click", () => setQueueMode("all"));
+openPlaylistButton.addEventListener("click", () => goToPage(1));
+openPlayerButton.addEventListener("click", () => goToPage(0));
 playlistSelect.addEventListener("change", () => switchPlaylist(playlistSelect.value));
 createPlaylistButton.addEventListener("click", createPlaylist);
 fileLoader.addEventListener("change", () => loadFiles(fileLoader.files));
@@ -603,7 +724,13 @@ pageRail.addEventListener("scroll", () => {
 
 volumeControl.addEventListener("input", updateVolume);
 volumeControl.addEventListener("change", updateVolume);
+audio.addEventListener("play", () => {
+  primeAudioMeter();
+  setPlayingState(true);
+});
+audio.addEventListener("pause", startMeterAnimation);
 
+renderAudioMeter();
 applyAudioLooping();
 updateQueueButtons();
 renderPlaylistControls();

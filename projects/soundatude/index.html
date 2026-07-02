@@ -15,6 +15,17 @@
     <main class="app-shell" aria-label="Sound-a-tude player">
       <div class="page-rail" aria-label="Swipe pages">
         <section class="player app-page" id="sample" aria-label="Audio loop player">
+          <button class="page-switch playlist-switch" id="openPlaylistButton" type="button" aria-label="Open playlist manager">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 7h10"></path>
+              <path d="M9 12h10"></path>
+              <path d="M9 17h10"></path>
+              <path d="M5 7h.01"></path>
+              <path d="M5 12h.01"></path>
+              <path d="M5 17h.01"></path>
+            </svg>
+          </button>
+
           <div class="brand-header" aria-label="Sound-a-tude">
             <span class="brand-line" aria-hidden="true"></span>
             <span class="brand-mark" aria-hidden="true">
@@ -32,20 +43,6 @@
 
         <section class="now-console" aria-label="Now playing">
           <div class="console-meter" aria-hidden="true">
-            <span style="--h: 34%"></span>
-            <span style="--h: 68%"></span>
-            <span style="--h: 42%"></span>
-            <span style="--h: 86%"></span>
-            <span style="--h: 52%"></span>
-            <span style="--h: 74%"></span>
-            <span style="--h: 38%"></span>
-            <span style="--h: 92%"></span>
-            <span style="--h: 57%"></span>
-            <span style="--h: 45%"></span>
-            <span style="--h: 79%"></span>
-            <span style="--h: 50%"></span>
-            <span style="--h: 64%"></span>
-            <span style="--h: 36%"></span>
           </div>
 
           <div class="loop-picker" id="loopPicker">
@@ -106,6 +103,12 @@
         </section>
 
         <section class="playlist-page app-page" aria-label="Playlist editor">
+          <button class="page-switch player-switch" id="openPlayerButton" type="button" aria-label="Back to player">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"></path>
+            </svg>
+          </button>
+
           <div class="brand-header compact" aria-label="Sound-a-tude playlist">
             <span class="brand-line" aria-hidden="true"></span>
             <p class="brand">Playlists</p>
