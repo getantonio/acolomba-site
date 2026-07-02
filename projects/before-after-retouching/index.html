@@ -122,12 +122,18 @@
       outline-offset: 4px;
     }
 
-    .image-button img {
+    .image-button img,
+    .image-button video {
       display: block;
       width: 100%;
       aspect-ratio: 1.12 / 1;
       object-fit: contain;
       background: var(--night);
+    }
+
+    .image-button video {
+      aspect-ratio: 1040 / 884;
+      object-fit: cover;
     }
 
     .ai-placeholder {
@@ -302,7 +308,8 @@
       place-items: center;
     }
 
-    .lightbox-stage img {
+    .lightbox-stage img,
+    .lightbox-stage video {
       display: block;
       max-width: 100%;
       max-height: 100%;
@@ -369,7 +376,6 @@
       <button class="close" type="button" aria-label="Close viewer">x</button>
     </div>
     <div class="lightbox-stage">
-      <img alt="">
     </div>
     <div class="lightbox-controls">
       <button class="arrow prev" type="button" aria-label="Previous image">&lt;</button>
@@ -391,13 +397,20 @@
         after: `images/image-${number}-after.webp`,
         beforeThumb: `images/image-${number}-before-thumb.webp`,
         afterThumb: `images/image-${number}-after-thumb.webp`,
-        ai: number === "10" ? `upscaled/image-${number}-after-higgsfield-4k.webp` : null
+        ai: number === "01" ? {
+          type: "video",
+          src: "video/image-01-ai-kling-720p.mp4",
+          poster: "images/image-01-after-thumb.webp"
+        } : number === "10" ? {
+          type: "image",
+          src: `upscaled/image-${number}-after-higgsfield-4k.webp`
+        } : null
       };
     });
 
     const gallery = document.querySelector(".gallery");
     const lightbox = document.querySelector(".lightbox");
-    const lightboxImage = lightbox.querySelector(".lightbox-stage img");
+    const lightboxStage = lightbox.querySelector(".lightbox-stage");
     const lightboxTitle = lightbox.querySelector(".lightbox-title");
     const lightboxCount = lightbox.querySelector(".lightbox-count");
     const lightboxBeforeAfterToggle = lightbox.querySelector(".before-after-lightbox-toggle");
@@ -428,13 +441,20 @@
       `;
     }
 
-    function aiImageMarkup(item) {
+    function aiMediaMarkup(item) {
       if (!item.ai) {
         return aiPlaceholderMarkup(item.number);
       }
+      if (item.ai.type === "video") {
+        return `
+          <button class="image-button" type="button" data-index="${Number(item.number) - 1}" data-state="ai" aria-label="Open image ${item.number} AI modified video">
+            <video src="${item.ai.src}" poster="${item.ai.poster}" muted autoplay loop playsinline></video>
+          </button>
+        `;
+      }
       return `
         <button class="image-button" type="button" data-index="${Number(item.number) - 1}" data-state="ai" aria-label="Open image ${item.number} AI modified">
-          <img src="${item.ai}" alt="AI modified Higgsfield upscale for retouching comparison ${item.number}">
+          <img src="${item.ai.src}" alt="AI modified Higgsfield upscale for retouching comparison ${item.number}">
         </button>
       `;
     }
@@ -503,7 +523,7 @@
       aiButton.setAttribute("aria-pressed", String(state === "ai"));
 
       if (state === "ai") {
-        slot.innerHTML = aiImageMarkup(item);
+        slot.innerHTML = aiMediaMarkup(item);
         label.textContent = item.ai ? "AI modified" : "AI modified queued";
         action.textContent = item.ai ? "Open" : "Pending";
       } else {
@@ -522,10 +542,13 @@
       if (currentState === "before" || currentState === "after") {
         lightboxBeforeAfterState = currentState;
       }
-      const imageSource = currentState === "ai" ? item.ai : item[currentState];
       const nextBeforeAfterState = lightboxBeforeAfterState === "before" ? "after" : "before";
-      lightboxImage.src = imageSource;
-      lightboxImage.alt = `${currentState === "ai" ? "AI modified" : currentState} state for retouching comparison ${item.number}`;
+      if (currentState === "ai" && item.ai.type === "video") {
+        lightboxStage.innerHTML = `<video src="${item.ai.src}" poster="${item.ai.poster}" controls autoplay loop muted playsinline></video>`;
+      } else {
+        const imageSource = currentState === "ai" ? item.ai.src : item[currentState];
+        lightboxStage.innerHTML = `<img src="${imageSource}" alt="${currentState === "ai" ? "AI modified" : currentState} state for retouching comparison ${item.number}">`;
+      }
       lightboxTitle.textContent = `Image ${item.number}`;
       lightboxCount.textContent = `${currentIndex + 1} / ${items.length}`;
       lightboxBeforeAfterToggle.textContent = nextBeforeAfterState === "before" ? "Before" : "After";
