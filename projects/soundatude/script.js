@@ -476,10 +476,12 @@ const coreVoiceAliases = [
   { id: "core-theo-v001", label: "Theo.", shortLabel: "Theo.", group: "Core", sourceVoiceId: "am_michael" },
 ];
 
+const KOKORO_AUDIO_VERSION = "tail-space-20260702-v1";
+
 function kokoroFilesByPhrase(voiceId) {
   return Object.fromEntries(phraseIds.map((phraseId) => [
     phraseId,
-    `assets/audio/voices/kokoro-${voiceId}-v001/${phraseId}-kokoro-${voiceId}-v001-take-v001.mp3`,
+    `assets/audio/voices/kokoro-${voiceId}-v001/${phraseId}-kokoro-${voiceId}-v001-take-v001.mp3?v=${KOKORO_AUDIO_VERSION}`,
   ]));
 }
 
