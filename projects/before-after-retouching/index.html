@@ -112,9 +112,10 @@
       display: block;
       width: 100%;
       padding: 0;
-      border: 1px solid var(--rule);
-      background: var(--night);
+      border: 0;
+      background: transparent;
       cursor: zoom-in;
+      overflow: hidden;
     }
 
     .image-button:focus-visible {
@@ -127,13 +128,19 @@
       display: block;
       width: 100%;
       aspect-ratio: 1.12 / 1;
-      object-fit: contain;
+      object-fit: cover;
       background: var(--night);
     }
 
     .image-button video {
       aspect-ratio: 1040 / 884;
       object-fit: cover;
+    }
+
+    .image-button[data-state="before"] img,
+    .image-button[data-state="after"] img {
+      transform: scale(1.12);
+      transform-origin: center;
     }
 
     .ai-placeholder {
@@ -544,7 +551,7 @@
       }
       const nextBeforeAfterState = lightboxBeforeAfterState === "before" ? "after" : "before";
       if (currentState === "ai" && item.ai.type === "video") {
-        lightboxStage.innerHTML = `<video src="${item.ai.src}" poster="${item.ai.poster}" controls autoplay loop muted playsinline></video>`;
+        lightboxStage.innerHTML = `<video src="${item.ai.src}" poster="${item.ai.poster}" controls autoplay loop playsinline></video>`;
       } else {
         const imageSource = currentState === "ai" ? item.ai.src : item[currentState];
         lightboxStage.innerHTML = `<img src="${imageSource}" alt="${currentState === "ai" ? "AI modified" : currentState} state for retouching comparison ${item.number}">`;
