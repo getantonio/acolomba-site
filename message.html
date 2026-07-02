@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Antonio Colomba | Message</title>
+  <style>
+    :root {
+      --paper: #707070;
+      --ink: #fbfaf7;
+      --muted: #fbfaf7;
+      --blue: #eef6ff;
+      --rule: rgba(251, 250, 247, 0.38);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    main {
+      width: min(100% - 44px, 960px);
+      margin: 0 auto;
+      padding: 22px 0 52px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .mark {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .links {
+      display: flex;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+    }
+
+    .message-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 0.75fr) minmax(280px, 1fr);
+      gap: 34px;
+      align-items: start;
+      padding: 56px 0 42px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--blue);
+      max-width: 360px;
+      font-size: clamp(30px, 4vw, 42px);
+      line-height: 1.05;
+    }
+
+    .message-panel p {
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.42;
+    }
+
+    .message-form {
+      display: grid;
+      gap: 12px;
+      padding-top: 7px;
+    }
+
+    .message-form label {
+      display: grid;
+      gap: 5px;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .message-form input,
+    .message-form textarea {
+      width: 100%;
+      border: 1px solid var(--rule);
+      border-radius: 0;
+      background: rgba(5, 7, 9, 0.18);
+      color: var(--ink);
+      font: inherit;
+      font-size: 16px;
+      line-height: 1.35;
+      padding: 10px 11px;
+    }
+
+    .reply-method {
+      border: 0;
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .reply-method legend {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 0;
+    }
+
+    .reply-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+    }
+
+    .message-form .reply-option {
+      align-items: center;
+      display: flex;
+      gap: 6px;
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .message-form .reply-option input {
+      accent-color: var(--blue);
+      margin: 0;
+      width: auto;
+    }
+
+    .message-form input[type="file"] {
+      padding: 8px 9px;
+    }
+
+    .message-form textarea {
+      min-height: 176px;
+      resize: vertical;
+    }
+
+    .message-form button {
+      justify-self: start;
+      border: 1px solid var(--blue);
+      background: var(--blue);
+      color: var(--paper);
+      cursor: pointer;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 9px 15px;
+    }
+
+    .message-form button:disabled {
+      cursor: wait;
+      opacity: 0.72;
+    }
+
+    .message-status {
+      min-height: 1.4em;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 760px) {
+      main {
+        width: min(100% - 30px, 960px);
+      }
+
+      nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .message-panel {
+        grid-template-columns: 1fr;
+        padding-top: 38px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav aria-label="Main navigation">
+      <a class="mark" href="antonio-colomba-bio.html">Antonio Colomba</a>
+      <div class="links">
+        <a href="operations-support-resume.html">Resume</a>
+        <a href="antonio-bio.html">Bio</a>
+        <a href="projects.html">Projects</a>
+        <a href="message.html">Message</a>
+      </div>
+    </nav>
+
+    <section class="message-panel" aria-labelledby="message-title">
+      <div>
+        <h1 id="message-title">Send a message</h1>
+        <p>Use this box for work inquiries, support roles, production coordination, or project follow-up.</p>
+      </div>
+
+      <form class="message-form" data-message-form data-endpoint="https://antonio-telegram-message.pine-porter.workers.dev">
+        <label>
+          Name
+          <input name="name" autocomplete="name" required>
+        </label>
+        <fieldset class="reply-method">
+          <legend>Reply by</legend>
+          <div class="reply-options">
+            <label class="reply-option">
+              <input type="radio" name="replyMethod" value="Email" required>
+              Email
+            </label>
+            <label class="reply-option">
+              <input type="radio" name="replyMethod" value="Phone" required>
+              Phone
+            </label>
+            <label class="reply-option">
+              <input type="radio" name="replyMethod" value="Telegram" required>
+              Telegram
+            </label>
+          </div>
+        </fieldset>
+        <label>
+          Contact detail
+          <input name="replyTo" autocomplete="off" required>
+        </label>
+        <label>
+          Message
+          <textarea name="message" required></textarea>
+        </label>
+        <label>
+          Photo or audio clip, 10 MB max
+          <input name="attachment" type="file" accept="image/*,audio/*">
+        </label>
+        <button type="submit">Send to @getantonio</button>
+        <p class="message-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+  <script>
+    const messageForm = document.querySelector("[data-message-form]");
+    const status = messageForm.querySelector(".message-status");
+    const button = messageForm.querySelector("button");
+
+    messageForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(messageForm);
+      const attachment = formData.get("attachment");
+
+      if (attachment instanceof File && attachment.size > 10 * 1024 * 1024) {
+        status.textContent = "Attachment must be 10 MB or smaller.";
+        return;
+      }
+
+      formData.set("page", window.location.href);
+
+      button.disabled = true;
+      status.textContent = "Sending...";
+
+      try {
+        const response = await fetch(messageForm.dataset.endpoint.trim(), {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Message failed");
+        }
+
+        messageForm.reset();
+        status.textContent = "Sent. Antonio will receive this in Telegram.";
+      } catch (error) {
+        status.textContent = "Could not send. Please try again.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
