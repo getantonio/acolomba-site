@@ -1052,13 +1052,13 @@ function openVoiceRecorder() {
   recorderIndex = 0;
   renderVoiceRecorder();
   setRecorderMessage("");
-  voiceRecorderDialog?.showModal();
+  goToPage(2);
 }
 
 function closeVoiceRecorder() {
   stopBrowserPhraseRecording();
   recorderPreviewAudio.pause();
-  voiceRecorderDialog?.close();
+  goToPage(0);
 }
 
 function useBrowserRecordedVoice() {
@@ -2039,10 +2039,6 @@ recordPhraseButton?.addEventListener("click", toggleBrowserPhraseRecording);
 playRecordedPhraseButton?.addEventListener("click", playCurrentBrowserRecording);
 retakeRecordedPhraseButton?.addEventListener("click", retakeCurrentBrowserRecording);
 useRecordedVoiceButton?.addEventListener("click", useBrowserRecordedVoice);
-voiceRecorderDialog?.addEventListener("cancel", (event) => {
-  event.preventDefault();
-  closeVoiceRecorder();
-});
 volumeDownButton.addEventListener("click", () => adjustVolume(-5));
 volumeUpButton.addEventListener("click", () => adjustVolume(5));
 volumeControl.parentElement.addEventListener("pointerdown", startVolumeDrag);

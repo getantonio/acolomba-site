@@ -9,7 +9,7 @@
     <link rel="canonical" href="https://acolomba.site/projects/soundatude/">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%23060607'/%3E%3Cpath d='M27 22v20l17-10z' fill='%23f2eee7'/%3E%3C/svg%3E">
-    <link rel="stylesheet" href="styles.css?v=web-recorder-visible-20260702-v2">
+    <link rel="stylesheet" href="styles.css?v=web-recorder-page-20260702-v3">
   </head>
   <body>
     <main class="app-shell" aria-label="Sound-a-tude player">
@@ -48,15 +48,6 @@
             <em id="voiceStatus">Voice ready</em>
           </label>
 
-          <button class="record-voice-button" id="openVoiceRecorderButton" type="button" aria-label="Record my voice">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"></path>
-              <path d="M19 11a7 7 0 0 1-14 0"></path>
-              <path d="M12 18v3"></path>
-              <path d="M8 21h8"></path>
-            </svg>
-            <span>Record My Voice</span>
-          </button>
         </div>
 
         <section class="now-console" aria-label="Now playing">
@@ -139,6 +130,14 @@
           </button>
 
           <div class="queue-controls skip-controls" aria-label="Skip options">
+            <button class="queue-button mic-page-button" id="openVoiceRecorderButton" type="button" aria-label="Record my voice">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"></path>
+                <path d="M19 11a7 7 0 0 1-14 0"></path>
+                <path d="M12 18v3"></path>
+                <path d="M8 21h8"></path>
+              </svg>
+            </button>
             <button class="queue-button" id="nextButton" type="button" aria-label="Next loop">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M5 5l8 7-8 7V5z"></path>
@@ -195,70 +194,71 @@
 
           <div class="playlist-editor" id="playlistEditor" aria-label="Available audio files"></div>
         </section>
+
+        <section class="recorder-page app-page" id="voiceRecorderDialog" aria-labelledby="voiceRecorderTitle">
+          <div class="voice-recorder-sheet">
+            <div class="voice-recorder-head">
+              <div>
+                <h2 id="voiceRecorderTitle">Record My Voice</h2>
+                <p id="recorderProgressText">0 of 50 recorded</p>
+              </div>
+              <button class="voice-recorder-close" id="closeVoiceRecorderButton" type="button" aria-label="Back to player">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+
+            <label class="recorder-category-select" for="recorderCategorySelect">
+              <select id="recorderCategorySelect" aria-label="Choose recording category"></select>
+            </label>
+
+            <div class="recorder-progress" aria-hidden="true">
+              <span id="recorderProgressBar"></span>
+            </div>
+
+            <div class="recorder-position">
+              <span id="recorderPositionText">Phrase 1 of 50</span>
+              <em id="recorderPhraseState">Open</em>
+            </div>
+
+            <section class="recorder-phrase-card" aria-label="Phrase to record">
+              <div>
+                <span id="recorderPhraseHandle">cc-0001-kind-belonging</span>
+                <em id="recorderPhraseTitle">Kind Belonging</em>
+              </div>
+              <p id="recorderPhraseText">I can meet new people with kindness, confidence, and a steady belief that I belong.</p>
+            </section>
+
+            <div class="recorder-controls">
+              <button class="recorder-round-button" id="previousRecorderPhraseButton" type="button" aria-label="Previous phrase">
+                <span aria-hidden="true">‹</span>
+              </button>
+              <button class="recorder-record-button" id="recordPhraseButton" type="button" aria-label="Record phrase">
+                <span aria-hidden="true"></span>
+              </button>
+              <button class="recorder-round-button" id="nextRecorderPhraseButton" type="button" aria-label="Next phrase">
+                <span aria-hidden="true">›</span>
+              </button>
+            </div>
+
+            <div class="recorder-secondary-controls">
+              <button id="playRecordedPhraseButton" type="button">Play</button>
+              <button id="retakeRecordedPhraseButton" type="button">Retake</button>
+            </div>
+
+            <p class="recorder-message" id="recorderMessage" aria-live="polite"></p>
+
+            <button class="recorder-use-button" id="useRecordedVoiceButton" type="button" disabled>Finish all phrases</button>
+          </div>
+        </section>
       </div>
 
       <div class="page-dots" aria-hidden="true">
         <span></span>
         <span></span>
+        <span></span>
       </div>
     </main>
 
-    <dialog class="voice-recorder-dialog" id="voiceRecorderDialog" aria-labelledby="voiceRecorderTitle">
-      <form method="dialog" class="voice-recorder-sheet">
-        <div class="voice-recorder-head">
-          <div>
-            <h2 id="voiceRecorderTitle">Record My Voice</h2>
-            <p id="recorderProgressText">0 of 50 recorded</p>
-          </div>
-          <button class="voice-recorder-close" id="closeVoiceRecorderButton" type="button" aria-label="Close recorder">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-
-        <label class="recorder-category-select" for="recorderCategorySelect">
-          <select id="recorderCategorySelect" aria-label="Choose recording category"></select>
-        </label>
-
-        <div class="recorder-progress" aria-hidden="true">
-          <span id="recorderProgressBar"></span>
-        </div>
-
-        <div class="recorder-position">
-          <span id="recorderPositionText">Phrase 1 of 50</span>
-          <em id="recorderPhraseState">Open</em>
-        </div>
-
-        <section class="recorder-phrase-card" aria-label="Phrase to record">
-          <div>
-            <span id="recorderPhraseHandle">cc-0001-kind-belonging</span>
-            <em id="recorderPhraseTitle">Kind Belonging</em>
-          </div>
-          <p id="recorderPhraseText">I can meet new people with kindness, confidence, and a steady belief that I belong.</p>
-        </section>
-
-        <div class="recorder-controls">
-          <button class="recorder-round-button" id="previousRecorderPhraseButton" type="button" aria-label="Previous phrase">
-            <span aria-hidden="true">‹</span>
-          </button>
-          <button class="recorder-record-button" id="recordPhraseButton" type="button" aria-label="Record phrase">
-            <span aria-hidden="true"></span>
-          </button>
-          <button class="recorder-round-button" id="nextRecorderPhraseButton" type="button" aria-label="Next phrase">
-            <span aria-hidden="true">›</span>
-          </button>
-        </div>
-
-        <div class="recorder-secondary-controls">
-          <button id="playRecordedPhraseButton" type="button">Play</button>
-          <button id="retakeRecordedPhraseButton" type="button">Retake</button>
-        </div>
-
-        <p class="recorder-message" id="recorderMessage" aria-live="polite"></p>
-
-        <button class="recorder-use-button" id="useRecordedVoiceButton" type="button" disabled>Finish all phrases</button>
-      </form>
-    </dialog>
-
-    <script src="script.js?v=web-recorder-visible-20260702-v2"></script>
+    <script src="script.js?v=web-recorder-page-20260702-v3"></script>
   </body>
 </html>
