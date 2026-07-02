@@ -424,8 +424,8 @@
     const lightboxBeforeAfterToggle = lightbox.querySelector(".before-after-lightbox-toggle");
     const lightboxAiToggle = lightbox.querySelector(".ai-lightbox-toggle");
     let currentIndex = 0;
-    let currentState = "before";
-    let lightboxBeforeAfterState = "before";
+    let currentState = "after";
+    let lightboxBeforeAfterState = "after";
     let lastFocused = null;
 
     function aiPlaceholderMarkup(number) {
@@ -470,13 +470,13 @@
     function comparisonMarkup(item, index) {
       return `
         <article class="comparison">
-          <div class="comparison-view" data-index="${index}" data-current-state="before">
+          <div class="comparison-view" data-index="${index}" data-current-state="after" data-before-after-state="after">
             <figure>
-              <div class="display-slot">${imageButtonMarkup(item, index, "before")}</div>
-              <figcaption><span class="state-label">Before</span><span class="state-action open-link">Open</span></figcaption>
+              <div class="display-slot">${imageButtonMarkup(item, index, "after")}</div>
+              <figcaption><span class="state-label">After</span><span class="state-action open-link">Open</span></figcaption>
             </figure>
             <div class="view-controls" aria-label="Choose state for image ${item.number}">
-              <button class="view-control before-after-toggle is-active" type="button" aria-label="Show after image ${item.number}">After</button>
+              <button class="view-control before-after-toggle is-active" type="button" aria-label="Show before image ${item.number}">Before</button>
               ${item.ai ? '<button class="view-control ai-toggle" type="button" aria-pressed="false">AI modified</button>' : ""}
             </div>
           </div>
@@ -549,7 +549,7 @@
     function updateLightbox() {
       const item = items[currentIndex];
       if (currentState === "ai" && !item.ai) {
-        currentState = "before";
+        currentState = "after";
       }
       if (currentState === "before" || currentState === "after") {
         lightboxBeforeAfterState = currentState;
