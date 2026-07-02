@@ -666,6 +666,19 @@ function activeVoice() {
   return voiceOptions.find((voice) => voice.id === activeVoiceId) ?? voiceOptions[0];
 }
 
+function baseOutputVolume() {
+  return Number(volumeControl.value) / 100;
+}
+
+function recordedVoiceOutputVolume(baseVolume = baseOutputVolume()) {
+  if (baseVolume <= 0) return 0;
+  return clamp(Math.max(baseVolume * 4, 0.72), 0, 1);
+}
+
+function outputVolumeForSource(source, baseVolume = baseOutputVolume()) {
+  return source?.isBrowserRecordedVoiceFile ? recordedVoiceOutputVolume(baseVolume) : baseVolume;
+}
+
 function resolveAudioSource(choice) {
   const voice = activeVoice();
   const voiceFile = choice.phraseId ? voice.filesByPhrase[choice.phraseId] : null;
@@ -673,6 +686,7 @@ function resolveAudioSource(choice) {
   return {
     file: voiceFile || choice.file,
     isVoiceFile: Boolean(voiceFile),
+    isBrowserRecordedVoiceFile: voice.id === BROWSER_RECORDED_VOICE_ID && Boolean(voiceFile),
     voice,
   };
 }
@@ -1021,7 +1035,7 @@ async function playCurrentBrowserRecording() {
   previewAudio.pause();
   setPlayingState(false);
   recorderPreviewAudio.src = file;
-  recorderPreviewAudio.volume = audio.volume;
+  recorderPreviewAudio.volume = recordedVoiceOutputVolume();
   applyPlaybackTuningToMedia(recorderPreviewAudio, Number(speedControl.value) / 100);
 
   try {
@@ -1153,9 +1167,13 @@ function clampSelectedIndex() {
 }
 
 function updateVolume() {
-  audio.volume = Number(volumeControl.value) / 100;
-  previewAudio.volume = audio.volume;
-  recorderPreviewAudio.volume = audio.volume;
+  const baseVolume = baseOutputVolume();
+  const currentChoice = currentChoices()[selectedIndexByMode[currentMode]];
+  audio.volume = currentChoice ? outputVolumeForSource(resolveAudioSource(currentChoice), baseVolume) : baseVolume;
+
+  const previewChoice = previewingId ? findChoice(previewingId) : null;
+  previewAudio.volume = previewChoice ? outputVolumeForSource(resolveAudioSource(previewChoice), baseVolume) : baseVolume;
+  recorderPreviewAudio.volume = recordedVoiceOutputVolume(baseVolume);
 }
 
 updateVolume();
@@ -1456,6 +1474,7 @@ function syncSelection({ scrollBehavior = "auto", center = true, updateAudio = t
   if (updateAudio) {
     updateAudioSource(resolveAudioSource(selectedChoice).file);
   }
+  updateVolume();
   updateVoiceStatus(selectedChoice);
   applyAudioLooping();
   updateLoopNeighbors();
@@ -1930,9 +1949,10 @@ async function playPreview(itemId) {
   setPlayingState(false);
   stopPreview();
   previewingId = itemId;
-  previewAudio.src = resolveAudioSource(choice).file;
+  const source = resolveAudioSource(choice);
+  previewAudio.src = source.file;
   updatePlaybackTuning({ save: false });
-  previewAudio.volume = audio.volume;
+  previewAudio.volume = outputVolumeForSource(source);
   previewAudio.currentTime = 0;
 
   try {

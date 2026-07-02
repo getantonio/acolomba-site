@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v34-web-recorder-page";
+const CACHE_NAME = "sound-a-tude-v35-web-recorder-volume";
 const APP_SHELL = [
   "./",
   "./index.html",
