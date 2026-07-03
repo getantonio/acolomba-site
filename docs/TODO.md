@@ -4,6 +4,8 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Updated the home Resume teaser text to General, Retouching, Freelance.
+- Cleaned up the Projects page hero typography and spacing so the intro reads less oversized.
 - Updated the Bio page Human Skills bullet to say repeated mark ups.
 - Refined the Bio page Personal Practice wording to include many physical activities.
 - Updated the Bio page Personal Practice section with running, martial arts, Muay Thai, and Brazilian jujitsu.
