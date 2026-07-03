@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Adjusted the contact page intro copy and mobile type sizing to avoid single-word wraps.
 - Updated the contact page intro to invite ideas, projects, opportunities, and what visitors are imagining.
 - Updated the contact page heading to Message Antonio with the waiting-to-hear project ideas line.
 - Updated the contact page intro line to mention thoughts and project ideas.
