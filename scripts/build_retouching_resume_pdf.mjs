@@ -89,6 +89,20 @@ try {
         line-height: 1.22 !important;
       }
 
+      .intro-section {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        border-top: 0 !important;
+      }
+
+      .intro-section h2 {
+        text-transform: none !important;
+      }
+
+      .intro-section .summary {
+        margin: 0 !important;
+      }
+
       section {
         grid-template-columns: 150px minmax(0, 1fr) !important;
         column-gap: 22px !important;
@@ -102,6 +116,11 @@ try {
       h2 {
         font-size: 12.2px !important;
         line-height: 1.02 !important;
+        padding-right: 10px !important;
+      }
+
+      .keep {
+        white-space: nowrap !important;
       }
 
       h3 {

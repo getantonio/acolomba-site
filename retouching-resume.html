@@ -56,6 +56,10 @@
       text-underline-offset: 4px;
     }
 
+    .keep {
+      white-space: nowrap;
+    }
+
     header {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 260px;
@@ -134,6 +138,21 @@
 
     section > h2 + * {
       margin-top: 0;
+    }
+
+    .intro-section {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .intro-section h2 {
+      text-transform: none;
+    }
+
+    .intro-section .summary {
+      max-width: none;
+      margin: 0;
     }
 
     h3 {
@@ -323,7 +342,6 @@
     <header>
       <div>
         <h1>Antonio<br>Colomba</h1>
-        <p class="subtitle">Retoucher</p>
       </div>
       <p class="contact">
         NYC / Remote<br>
@@ -336,18 +354,21 @@
       </p>
     </header>
 
-    <p class="summary">
-      High-end digital retoucher and visual production artist with agency, studio, commercial, and client-service experience.
-      Background includes detailed image correction, color matching, compositing, proofing, revision cycles, production quality control,
-      and deadline-driven creative delivery.
-    </p>
+    <section class="intro-section">
+      <h2>Retoucher</h2>
+      <p class="summary">
+        High-end digital retoucher and visual production artist with agency, studio, commercial, and client-service experience.
+        Background includes detailed image correction, color matching, compositing, proofing, revision cycles, production quality control,
+        and deadline-driven creative delivery.
+      </p>
+    </section>
 
     <section>
       <h2>Best Fit Roles</h2>
       <p class="fit">
         <strong>Retouching Artist</strong> | Senior Retoucher | Photo Retouching Lead |
         Retouching Supervisor | Photo Retouching Manager | Image Quality Control Specialist |
-        Visual Effects | Creative Production Coordinator
+        Visual Effects | <span class="keep">Creative Production Coordinator</span>
       </p>
     </section>
 
@@ -356,9 +377,9 @@
       <ul>
         <li>High-end photo retouching, visual finishing, compositing, color correction, proof matching, and image cleanup.</li>
         <li>Client-driven revision cycles, creative direction handoff, deadline pressure, and production quality control.</li>
-        <li>Practical visual judgment across photography, commercial art, VFX, animation, video, and digital production.</li>
+        <li>Practical visual judgment across photography, commercial art, VFX, animation, video, and <span class="keep">digital production.</span></li>
         <li>Comfortable reviewing images for consistency, accuracy, polish, brand standards, and production readiness.</li>
-        <li>Useful bridge into modern AI image QA, generative media review, asset cleanup, and visual workflow support.</li>
+        <li>Useful bridge into modern AI image QA, generative media review, asset cleanup, and <span class="keep">visual workflow support.</span></li>
       </ul>
     </section>
 
@@ -381,14 +402,14 @@
     </section>
 
     <section>
-      <h2>Professional Experience</h2>
+      <h2>Experience</h2>
 
       <h3>Freelance Engagements, High-End Digital Retoucher <small>NYC | dates to confirm</small></h3>
       <ul>
         <li>Delivered detailed visual finishing and retouching work for agency, studio, and commercial clients.</li>
-        <li>Worked with teams including McCann Erickson, Foam Digital, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young &amp; Rubicam Inc.</li>
+        <li>Worked with teams including McCann Erickson, Foam Digital, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and <span class="keep">Young &amp; Rubicam Inc.</span></li>
         <li>Managed image correction, color matching, compositing, proofing, revision cycles, client direction, and quality-control expectations.</li>
-        <li>Supported production teams by preparing polished images for commercial, creative, and presentation use.</li>
+        <li>Supported production teams by preparing polished images for commercial, creative, and <span class="keep">presentation use.</span></li>
       </ul>
 
       <h3>291 Digital, High-End Digital Retoucher <small>NYC | 12/2005 - 09/2006</small></h3>
@@ -405,7 +426,7 @@
     </section>
 
     <section>
-      <h2>Visual Production Skills</h2>
+      <h2>Skills</h2>
       <p class="tools">
         <strong>Skills:</strong> Photo retouching, color grade and matching, compositing, rotoscoping, 3D tracking,
         set extension, character animation, video editing, visual effects, proofing, client revisions, image QA,
