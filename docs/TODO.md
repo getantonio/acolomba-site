@@ -5,6 +5,7 @@ Last updated: 2026-07-03
 ## Completed
 
 - Linked the Token Factory & Exchange project title to the live TokenHub.dev / Token Factory site.
+- Changed internal project links to explicit `index.html` targets so local/file browsing opens the pages.
 - Added consistent web-version links across all Projects page entries.
 - Updated the Token Factory & Exchange project link to the unpaused Vercel deployment.
 - Updated the OpenRouter UI project link to the live Ember Studio Vercel deployment.
