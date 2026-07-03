@@ -5,6 +5,7 @@ Last updated: 2026-07-03
 ## Completed
 
 - Linked the Token Factory & Exchange project title to the live TokenHub.dev / Token Factory site.
+- Removed the acolomba.site GitHub Pages and Cloudflare Worker bullets from the Projects page.
 - Removed the remaining Projects page intro note and lead paragraph.
 - Removed the Projects page hero subtitle and changed the heading to Engineering Projects.
 - Updated the Bio page Current Interests throughline to mention fintech and fitting the future together.
