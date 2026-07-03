@@ -167,6 +167,7 @@ Last updated: 2026-07-03
 
 ## Queued
 
+- 2026-07-03 [Next] Review resume labeling/positioning around "Fast Resume | General Work Search | Support" and "Freelance Resume | General Work Search."
 - 2026-07-03 [Next] Continue filling the Mixed Media Portfolio with stronger selected samples: product sequence, audio clip, NFT/Web3 presentation, and process notes.
 - 2026-07-03 [Done] Reworked the Portfolio page into smaller clickable ID-card-style media frames with a general mixed-media viewer that can open simple work in a lightbox/popup and larger work on dedicated detail pages.
 - 2026-07-03 [Next] Use the GiftTree Photo Editor posting as a retouching/photo-editor targeting note: remote full-time, $90,000-$120,000, e-commerce/luxury/lifestyle retouching, high-resolution product and lifestyle photography for web, email, social, digital ads, and print.
