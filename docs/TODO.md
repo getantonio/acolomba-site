@@ -5,6 +5,7 @@ Last updated: 2026-07-03
 ## Completed
 
 - Linked the Token Factory & Exchange project title to the live TokenHub.dev / Token Factory site.
+- Removed the remaining Projects page intro note and lead paragraph.
 - Removed the Projects page hero subtitle and changed the heading to Engineering Projects.
 - Updated the Bio page Current Interests throughline to mention fintech and fitting the future together.
 - Updated the Bio page Current Interests copy to mention blockchain and token platforms.
