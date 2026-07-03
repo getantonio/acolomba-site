@@ -21,6 +21,9 @@ Last updated: 2026-07-03
 - Changed the Retouching Resume headline from "Retouching Artist | Visual Finishing | Production Lead" to "Retoucher."
 - Removed the role-targeting "Strong fit for..." sentence from the Retouching Resume intro.
 - Rebuilt the Main Resume PDF as a one-page, borderless-section PDF by compacting PDF-only styles and removing section divider rules from the generated output.
+- Removed the redundant top nav name from the Retouching Resume page and rebuilt the Retouching Resume PDF as a one-page, zero-margin PDF.
+- Rebuilt the Main Resume PDF with zero PDF margins so the gray resume background reaches the page edge while remaining one page.
+- Aligned resume PDF contact/date/location metadata into a consistent right-side column and balanced the Retouching Resume PDF to fill the one-page layout more fully, including a small body/info-text size bump without enlarging section headings.
 - Removed Customer Operations Associate, renamed Administrative Operations Assistant to Administrative Operations, and removed the two ticket/CRM/calm-communication Core Strengths bullets from the resume pages and downloads.
 - Fixed Brave/Chromium viewport background bleed on the static site pages by matching the root document background to the page paper and making the body fill the viewport.
 - Added a full-window dove splash screen to the landing page using the original first Higgsfield dove photo, with a 1.75-second fade-in/fade-out, subtle blur, zoom-in, counterclockwise rotation motion, and a 2-second white fallback if the image is unavailable.

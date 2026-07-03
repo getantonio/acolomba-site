@@ -53,10 +53,13 @@ try {
       }
 
       main {
-        padding: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+        padding: 0.5in !important;
       }
 
       header {
+        grid-template-columns: minmax(0, 69%) 155px !important;
         margin: 0 0 16px !important;
         gap: 28px !important;
       }
@@ -71,8 +74,10 @@ try {
       }
 
       .contact {
+        justify-self: start !important;
         font-size: 12px !important;
         line-height: 1.35 !important;
+        text-align: left !important;
       }
 
       .summary {
@@ -88,6 +93,8 @@ try {
         margin-top: 13px !important;
         padding-top: 0 !important;
         border-top: 0 !important;
+        break-inside: auto !important;
+        page-break-inside: auto !important;
       }
 
       h2 {
@@ -96,6 +103,11 @@ try {
       }
 
       h3 {
+        display: grid !important;
+        grid-template-columns: minmax(0, 60%) 155px !important;
+        column-gap: 14px !important;
+        justify-content: start !important;
+        align-items: baseline !important;
         margin: 10px 0 3px !important;
         font-size: 15px !important;
         line-height: 1.12 !important;
@@ -103,6 +115,8 @@ try {
 
       h3 small {
         font-size: 10.5px !important;
+        text-align: left !important;
+        white-space: nowrap !important;
       }
 
       ul {
@@ -122,6 +136,10 @@ try {
       }
 
       .school {
+        display: grid !important;
+        grid-template-columns: minmax(0, 60%) 155px !important;
+        column-gap: 14px !important;
+        align-items: baseline !important;
         font-size: 15px !important;
         line-height: 1.1 !important;
       }
@@ -133,7 +151,11 @@ try {
       }
 
       .school-location {
+        display: block !important;
+        min-width: 0 !important;
+        margin-left: 0 !important;
         font-size: 11.5px !important;
+        text-align: left !important;
       }
     `,
   });
@@ -143,12 +165,12 @@ try {
     format: "Letter",
     printBackground: true,
     margin: {
-      top: "0.22in",
-      right: "0.22in",
-      bottom: "0.22in",
-      left: "0.22in",
+      top: "0",
+      right: "0",
+      bottom: "0",
+      left: "0",
     },
-    scale: 0.82,
+    scale: 0.8,
   });
 } finally {
   await browser.close();
