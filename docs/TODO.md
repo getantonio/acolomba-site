@@ -61,6 +61,7 @@ Last updated: 2026-07-03
 - Renamed the primary public resume URL to `main-resume.html` and kept `operations-support-resume.html` as a compatibility redirect.
 - Added a bottom-of-page link from `main-resume.html` to `fast-resume.html`.
 - Captured the standing publish workflow: after every site update, push `main` to the live GitHub Pages repo.
+- Removed `Fast Resume` from the main resume nav and changed the bottom fast-resume pointer to a simple discrete text link.
 
 ## Blocked
 
