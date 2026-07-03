@@ -5,6 +5,7 @@ Last updated: 2026-07-03
 ## Completed
 
 - Linked the Token Factory & Exchange project title to the live TokenHub.dev / Token Factory site.
+- Updated the Bio page Current Interests throughline to mention fintech and fitting the future together.
 - Updated the Bio page Current Interests copy to mention blockchain and token platforms.
 - Updated the Bio page Current Interests copy to mention agentic-assisted workflows.
 - Removed the two explanatory Token Factory project bullets.
