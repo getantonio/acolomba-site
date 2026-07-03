@@ -22,6 +22,19 @@ GitHub Pages serves this repository from the root of `main`, so the live site fi
 
 Project notes, drafts, setup docs, and helper scripts live in `docs/`, `scripts/`, `workers/`, and `telegram-endpoint/`.
 
+## Domain Redirect
+
+`acolomba.com` uses Namecheap URL Redirect records to forward traffic to `https://acolomba.site/`.
+
+In Namecheap Advanced DNS for `acolomba.com`, add or update:
+
+| Type | Host | Value |
+| --- | --- | --- |
+| URL Redirect Record | `@` | `https://acolomba.site/` |
+| URL Redirect Record | `www` | `https://acolomba.site/` |
+
+Namecheap URL forwarding currently covers HTTP traffic. Direct HTTPS requests to `https://acolomba.com` or `https://www.acolomba.com` require a certificate-backed redirect service if that path needs to work too.
+
 ## Publish Workflow
 
 Use normal Git from this repo:

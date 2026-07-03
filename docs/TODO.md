@@ -4,6 +4,8 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Added the NFT Creation Project to the Projects page as a Web3 proof item for creator tools, marketplace operations, visual QA, and product support roles.
+- Configured Namecheap URL Redirect records so `http://acolomba.com/` and `http://www.acolomba.com/` forward to `https://acolomba.site/`.
 - Deployed the Sound-a-tude parity update to GitHub Pages via an explicit Pages workflow, switched the site from legacy branch publishing to workflow publishing, and verified the live project URL shows the new visual selector, conversation seek, recorder page, and avatar image assets.
 - Linked the Token Factory & Exchange project title to the live TokenHub.dev / Token Factory site.
 - Changed Sound-a-tude project wording from voice cloning to custom voice affirmation recorder.
@@ -148,6 +150,8 @@ Last updated: 2026-07-03
 
 ## Queued
 
+- 2026-07-03 [Next] Use the GiftTree Photo Editor posting as a retouching/photo-editor targeting note: remote full-time, $90,000-$120,000, e-commerce/luxury/lifestyle retouching, high-resolution product and lifestyle photography for web, email, social, digital ads, and print.
+- 2026-07-03 [Next] Add certificate-backed HTTPS forwarding for `https://acolomba.com/` and `https://www.acolomba.com/` if direct HTTPS on the `.com` domain needs to work.
 - 2026-07-02 [Done] Created the first Higgsfield image-to-video sample for retouching comparison 1 and wired `projects/before-after-retouching/video/image-01-ai-kling-720p.mp4` into the AI modified gallery state.
 - 2026-07-02 [Done] Cropped the detected black PDF-edge residue from comparison 10 and regenerated its thumbnails/upscaled variants.
 - 2026-07-02 [Done] Clipped the before/after gallery thumbnail media inside the frame so letterbox bars no longer show around image 01.
