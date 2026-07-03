@@ -4,7 +4,7 @@ NYC / Remote | (561) 271-1163 | getantonio@gmail.com
 
 ## Retoucher
 
-High-end digital retoucher and visual production artist with agency, studio, commercial, and client-service experience. Background includes detailed image correction, color matching, compositing, proofing, revision cycles, production quality control, and deadline-driven creative delivery. Strong fit for retouching artist, photo retouching lead, retouching supervisor, image QA, visual finishing, and creative production support roles.
+High-end digital retoucher and visual production artist with agency, studio, commercial, and client-service experience. Background includes detailed image correction, color matching, compositing, proofing, revision cycles, production quality control, and deadline-driven creative delivery.
 
 ## Best Fit Roles
 
