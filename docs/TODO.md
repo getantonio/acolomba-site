@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Renamed the nav label from Message to Contact while keeping the message page URL.
 - Tightened the home footer copy to combine AI content and AI agent workflows.
 - Updated the home Resume link description to say Main, retouching, freelance, versions.
 - Updated Digital Media Arts College education entries to note that DMAC is now part of Lynn University.
