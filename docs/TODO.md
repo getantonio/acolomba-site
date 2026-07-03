@@ -5,6 +5,7 @@ Last updated: 2026-07-03
 ## Completed
 
 - Linked the Token Factory & Exchange project title to the live TokenHub.dev / Token Factory site.
+- Restored Projects page readability with slightly larger serif text and clearer weights.
 - Refined the OpenRouter UI project copy around OpenRouter LLM API sourcing and generation flows.
 - Reduced Projects page typography weight, title scale, spacing, and link heaviness.
 - Renamed the Projects page AI Workflow Support entry to Agentic Workflow and added OpenRouter UI.
