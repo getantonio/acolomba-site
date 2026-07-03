@@ -5,6 +5,7 @@ Last updated: 2026-07-03
 ## Completed
 
 - Linked the Token Factory & Exchange project title to the live TokenHub.dev / Token Factory site.
+- Renamed the Projects page AI Workflow Support entry to Agentic Workflow and added OpenRouter UI.
 - Updated the acolomba.site project focus line on the Projects page.
 - Removed the acolomba.site GitHub Pages and Cloudflare Worker bullets from the Projects page.
 - Removed the remaining Projects page intro note and lead paragraph.
