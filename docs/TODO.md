@@ -5,6 +5,7 @@ Last updated: 2026-07-03
 ## Completed
 
 - Linked the Token Factory & Exchange project title to the live TokenHub.dev / Token Factory site.
+- Updated the Bio page Current Interests copy to mention agentic-assisted workflows.
 - Removed the two explanatory Token Factory project bullets.
 - Changed Token Factory project wording to pre-token-sales, Web3 education guides.
 - Updated the Token Factory & Exchange project focus copy with token creation, vesting, liquidity pools, Web3 education, marketing, and future management tools.
