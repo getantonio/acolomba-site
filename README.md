@@ -6,10 +6,13 @@ GitHub Pages serves this repository from the root of `main`, so the live site fi
 
 - `index.html`
 - `antonio-colomba-bio.html`
-- `operations-support-resume.html`
+- `main-resume.html`
+- `operations-support-resume.html` (redirect compatibility)
+- `fast-resume.html`
 - `antonio-resume.html` (legacy compatibility copy)
 - `antonio-bio.html`
 - `Antonio_Colomba_Operations_Support_Resume.docx`
+- `Antonio_Colomba_Fast_Resume.docx`
 - `Antonio_Colomba_Modern_Resume.docx`
 - `CNAME`
 
@@ -34,5 +37,6 @@ The build scripts write the working DOCX in `docs/` and also refresh the root-le
 
 ```bash
 python3 scripts/build_operations_support_resume_docx.py
+python3 scripts/build_fast_resume_docx.py
 python3 scripts/build_modern_resume_docx.py
 ```

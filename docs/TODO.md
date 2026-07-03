@@ -1,6 +1,6 @@
 # New Job Search TODO
 
-Last updated: 2026-07-02
+Last updated: 2026-07-03
 
 ## Completed
 
@@ -56,6 +56,9 @@ Last updated: 2026-07-02
 - Renamed the public immediate-work resume to `Operations Support Resume`, added a dedicated `operations-support-resume.html` page, and updated its DOCX download name.
 - Added Sound-a-tude under `projects/soundatude/` and linked it from the Projects page.
 - Refreshed `projects/soundatude/` with the latest Sound-a-tude build from `InnerCoachLoops`.
+- Split the broad fast general-work resume into `fast-resume.html` with its own matching DOCX download.
+- Reduced the main operations resume display and download typography so the name/title and headings read less oversized.
+- Renamed the primary public resume URL to `main-resume.html` and kept `operations-support-resume.html` as a compatibility redirect.
 
 ## Blocked
 
@@ -90,7 +93,7 @@ Last updated: 2026-07-02
 - 2026-06-30 [Next] Research SUNY school/program options Antonio could enter for Summer 2026 if still feasible or Fall 2026, including loan/aid implications and realistic application timing.
 - Enable HTTPS enforcement in GitHub Pages after GitHub finishes issuing the certificate for `acolomba.site`.
 - Claim or redeploy the temporary Cloudflare Worker endpoint under Antonio's Cloudflare account so message-box delivery remains durable.
-- Build a second, very plain immediate-cash resume for customer support, sales, operations, temp, warehouse, and admin roles.
+- 2026-07-02 [Done] Built a second fast general-work resume for customer support, sales, operations, temp, warehouse/inventory support, and admin roles.
 - Build a visual-production/AI-image-QA resume for the fastest realistic buyer group.
 - Build a tech/fintech bridge resume using creative production plus code projects.
 - Build an AI workflow / agent operations resume aimed at coordinator/support roles.
