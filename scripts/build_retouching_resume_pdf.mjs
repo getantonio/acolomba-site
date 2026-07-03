@@ -62,7 +62,7 @@ try {
 
       header {
         grid-template-columns: minmax(0, 69%) 145px !important;
-        margin: 0 0 18px !important;
+        margin: 0 0 26px !important;
         gap: 22px !important;
       }
 

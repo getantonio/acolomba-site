@@ -153,7 +153,7 @@ add_bullet(doc, "No formal fintech employment yet.")
 
 add_heading(doc, "Education")
 add_bullet(doc, "Digital Media Arts College, now part of Lynn University, M.F.A. Visual Effects Animation, Highest Academic Distinction.")
-add_bullet(doc, "Digital Media Arts College, now part of Lynn University, B.F.A. 3D Character Animation, Summa Cum Laude, First in Class 2015.")
+add_bullet(doc, "Digital Media Arts College, now part of Lynn University, B.F.A. 3D Character Animation, Summa Cum Laude.")
 add_bullet(doc, "CG Spectrum / RentAmentor, 3D Character Animation; Renaissance Center / 3D Buzz, 3D Animation; School of Visual Arts, Commercial Photography.")
 
 add_heading(doc, "Keyword Bank - Use Only If True")

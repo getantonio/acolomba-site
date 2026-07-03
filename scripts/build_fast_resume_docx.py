@@ -166,7 +166,7 @@ add_text(
 section_head("05", "Education", before=10)
 schools = [
     ("Digital Media Arts College, now part of Lynn University", "South Florida", "M.F.A. Visual Effects Animation, Highest Academic Distinction."),
-    ("Digital Media Arts College, now part of Lynn University", "South Florida", "B.F.A. 3D Character Animation, Summa Cum Laude, First in Class 2015."),
+    ("Digital Media Arts College, now part of Lynn University", "South Florida", "B.F.A. 3D Character Animation, Summa Cum Laude."),
     ("CG Spectrum / Rent-A-Mentor", "Remote", "3D Character Animation."),
     ("Renaissance Center / 3D Buzz", "Tennessee", "3D Animation."),
     ("School of Visual Arts", "NYC", "Commercial Photography."),

@@ -8,7 +8,7 @@ High-end digital retoucher and visual production artist with agency, studio, com
 
 ## Best Fit Roles
 
-Retouching Artist | Senior Retoucher | Photo Retouching Lead | Retouching Supervisor | Photo Retouching Manager | Image Quality Control Specialist | Visual Effects | Creative Production Coordinator
+Retouching Artist | Senior Retoucher | Photo Retouching Lead | Retouching Supervisor | Quality Control | Creative Production Coordinator
 
 ## Core Strengths
 
@@ -57,7 +57,7 @@ Digital Media Arts College, now part of Lynn University | South Florida
 M.F.A. Visual Effects Animation, Highest Academic Distinction.
 
 Digital Media Arts College, now part of Lynn University | South Florida  
-B.F.A. 3D Character Animation, Summa Cum Laude, First in Class 2015.
+B.F.A. 3D Character Animation, Summa Cum Laude.
 
 CG Spectrum / Rent-A-Mentor | Remote  
 3D Character Animation.

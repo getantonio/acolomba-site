@@ -4,6 +4,11 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Changed the home-page Projects menu link to read just "Projects" without the descriptive subline.
+- Shortened the Bio menu subline to "Background, positioning."
+- Removed the Projects item from the homepage-style side menu while keeping normal top navigation links.
+- Removed "Photo Retouching Manager" from the Retouching Resume best-fit roles list.
+- Simplified the Retouching Resume best-fit roles list to use "Quality Control" instead of the longer visual/image QA wording.
 - Added a right-justified Mixed Media Portfolio text link to the Projects page header and created `portfolio.html` as a working showcase for retouching, AI motion, audio/interface, and upcoming mixed-media samples.
 - Renamed the Projects page portfolio link to normal-sized "Portfolio" text and removed the large portfolio page heading/intro copy.
 - Changed the Portfolio page AI Image-to-Video Studies sample to image 04.
@@ -27,6 +32,7 @@ Last updated: 2026-07-03
 - Matched the Retouching Resume webpage to the PDF layout: Retoucher is now the inline intro label, Professional Experience was shortened to Experience, Skills was simplified, and awkward one-word wraps were tightened.
 - Removed the Portfolio proof-page line from the generated Retouching Resume PDF while keeping the webpage portfolio section available.
 - Added more space under the Retouching Resume PDF header and baseline-aligned section labels with their body text.
+- Removed class-rank wording from resume education entries and rebuilt the Main and Retouching PDFs.
 - Removed Customer Operations Associate, renamed Administrative Operations Assistant to Administrative Operations, and removed the two ticket/CRM/calm-communication Core Strengths bullets from the resume pages and downloads.
 - Fixed Brave/Chromium viewport background bleed on the static site pages by matching the root document background to the page paper and making the body fill the viewport.
 - Added a full-window dove splash screen to the landing page using the original first Higgsfield dove photo, with a 1.75-second fade-in/fade-out, subtle blur, zoom-in, counterclockwise rotation motion, and a 2-second white fallback if the image is unavailable.
