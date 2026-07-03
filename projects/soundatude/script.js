@@ -87,6 +87,20 @@ const DEFAULT_CUSTOM_RECORDED_CATEGORY = "My Affirmations";
 const NEW_CUSTOM_CATEGORY_VALUE = "__new-custom-recording-category__";
 const AVATAR_VIDEO_VERSION = "avatar-video-seedance-480p-v008";
 const METER_BAR_COUNT = 56;
+const RECORDER_AUDIO_CONSTRAINTS = {
+  echoCancellation: { ideal: true },
+  noiseSuppression: { ideal: true },
+  autoGainControl: { ideal: true },
+  channelCount: { ideal: 1 },
+  sampleRate: { ideal: 48000 },
+  sampleSize: { ideal: 16 },
+};
+const RECORDER_MIME_TYPES = [
+  "audio/webm;codecs=opus",
+  "audio/webm",
+  "audio/mp4",
+  "audio/aac",
+];
 const MALE_AVATAR_PHRASE_IDS = Object.freeze([
   "sat-p004",
   "sat-p006",
@@ -691,6 +705,8 @@ let recorderCustomPhraseQueue = [];
 let recorderCustomQueueIndex = 0;
 let mediaRecorder = null;
 let recorderStream = null;
+let recorderProcessedStream = null;
+let recorderAudioContext = null;
 let recorderChunks = [];
 let isRecordingPhrase = false;
 
@@ -1547,8 +1563,62 @@ function renderVoiceRecorder() {
 }
 
 function stopRecorderStream() {
+  recorderProcessedStream?.getTracks().forEach((track) => track.stop());
+  recorderProcessedStream = null;
   recorderStream?.getTracks().forEach((track) => track.stop());
   recorderStream = null;
+
+  if (recorderAudioContext && recorderAudioContext.state !== "closed") {
+    recorderAudioContext.close().catch(() => {});
+  }
+  recorderAudioContext = null;
+}
+
+function preferredRecorderMimeType() {
+  return RECORDER_MIME_TYPES.find((mimeType) => MediaRecorder.isTypeSupported?.(mimeType)) || "";
+}
+
+async function createFilteredRecorderStream(inputStream) {
+  const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextConstructor) return inputStream;
+
+  recorderAudioContext = new AudioContextConstructor();
+  if (recorderAudioContext.state === "suspended") {
+    await recorderAudioContext.resume();
+  }
+
+  const source = recorderAudioContext.createMediaStreamSource(inputStream);
+  const highPass = recorderAudioContext.createBiquadFilter();
+  const lowPass = recorderAudioContext.createBiquadFilter();
+  const compressor = recorderAudioContext.createDynamicsCompressor();
+  const gain = recorderAudioContext.createGain();
+  const destination = recorderAudioContext.createMediaStreamDestination();
+
+  highPass.type = "highpass";
+  highPass.frequency.value = 95;
+  highPass.Q.value = 0.7;
+
+  lowPass.type = "lowpass";
+  lowPass.frequency.value = 7200;
+  lowPass.Q.value = 0.6;
+
+  compressor.threshold.value = -32;
+  compressor.knee.value = 18;
+  compressor.ratio.value = 3;
+  compressor.attack.value = 0.006;
+  compressor.release.value = 0.22;
+
+  gain.gain.value = 1.18;
+
+  source
+    .connect(highPass)
+    .connect(lowPass)
+    .connect(compressor)
+    .connect(gain)
+    .connect(destination);
+
+  recorderProcessedStream = destination.stream;
+  return recorderProcessedStream;
 }
 
 function customRecordingTarget() {
@@ -1613,8 +1683,16 @@ async function startBrowserPhraseRecording() {
   recorderPreviewAudio.pause();
 
   try {
-    recorderStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(recorderStream);
+    recorderStream = await navigator.mediaDevices.getUserMedia({ audio: RECORDER_AUDIO_CONSTRAINTS });
+    let recordingStream = recorderStream;
+    try {
+      recordingStream = await createFilteredRecorderStream(recorderStream);
+    } catch (error) {
+      console.warn("Recorder audio filtering unavailable, using raw microphone input.", error);
+    }
+
+    const mimeType = preferredRecorderMimeType();
+    mediaRecorder = new MediaRecorder(recordingStream, mimeType ? { mimeType } : undefined);
     recorderChunks = [];
 
     mediaRecorder.addEventListener("dataavailable", (event) => {
