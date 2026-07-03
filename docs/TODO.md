@@ -59,6 +59,7 @@ Last updated: 2026-07-03
 - Split the broad fast general-work resume into `fast-resume.html` with its own matching DOCX download.
 - Reduced the main operations resume display and download typography so the name/title and headings read less oversized.
 - Renamed the primary public resume URL to `main-resume.html` and kept `operations-support-resume.html` as a compatibility redirect.
+- Added a bottom-of-page link from `main-resume.html` to `fast-resume.html`.
 
 ## Blocked
 
