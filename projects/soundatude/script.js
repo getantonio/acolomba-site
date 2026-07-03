@@ -925,9 +925,10 @@ function baseOutputVolume() {
   return Number(volumeControl.value) / 100;
 }
 
+const RECORDED_VOICE_VOLUME_BOOST = 1.8;
+
 function recordedVoiceOutputVolume(baseVolume = baseOutputVolume()) {
-  if (baseVolume <= 0) return 0;
-  return clamp(Math.max(baseVolume * 4, 0.72), 0, 1);
+  return clamp(baseVolume * RECORDED_VOICE_VOLUME_BOOST, 0, 1);
 }
 
 function outputVolumeForSource(source, baseVolume = baseOutputVolume()) {
