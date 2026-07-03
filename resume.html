@@ -3,14 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Antonio Colomba</title>
+  <title>Antonio Colomba | Resume</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23d1d1d1'/%3E%3Ctext x='32' y='41' text-anchor='middle' font-family='Georgia' font-size='28' font-weight='700' fill='%23202833'%3EAC%3C/text%3E%3C/svg%3E">
   <style>
     :root {
       --paper: #d1d1d1;
       --ink: #202833;
       --muted: #202833;
-      --blue: #202833;
-      --teal: #202833;
       --rule: rgba(32, 40, 51, 0.34);
     }
 
@@ -30,7 +29,7 @@
     main {
       width: min(100% - 44px, 960px);
       margin: 0 auto;
-      padding: 22px 0 30px;
+      padding: 22px 0 64px;
     }
 
     nav {
@@ -40,6 +39,7 @@
       gap: 24px;
       padding-bottom: 16px;
       border-bottom: 1px solid var(--rule);
+      color: var(--muted);
     }
 
     .mark {
@@ -51,7 +51,6 @@
     .links {
       display: flex;
       gap: 20px;
-      color: var(--muted);
       font-size: 15px;
     }
 
@@ -61,12 +60,12 @@
       text-underline-offset: 4px;
     }
 
-    .hero {
+    header {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 260px;
       gap: 40px;
       align-items: start;
-      padding: 34px 0 44px;
+      padding: 44px 0 34px;
     }
 
     h1 {
@@ -78,27 +77,11 @@
     }
 
     .subtitle {
-      max-width: 760px;
+      max-width: 720px;
       margin: 18px 0 0;
-      color: var(--blue);
       font-size: clamp(20px, 2.25vw, 27px);
       font-weight: 700;
       line-height: 1.12;
-    }
-
-    .summary {
-      max-width: 820px;
-      margin: 30px 0 0;
-      font-size: 19px;
-      line-height: 1.42;
-    }
-
-    .side {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      gap: 34px;
-      padding-top: 0;
     }
 
     .contact {
@@ -114,40 +97,32 @@
       font-size: 17px;
     }
 
-    .contact a {
-      color: var(--blue);
-      font-weight: 700;
-    }
-
-    .menu {
+    .resume-list {
       display: grid;
-      gap: 12px;
-      text-align: right;
+      margin-top: 10px;
+      border-top: 1px solid var(--rule);
     }
 
-    .menu a {
-      display: block;
-      padding: 14px 0;
-      border-top: 1px solid var(--rule);
-      color: var(--blue);
-      font-size: 20px;
-      font-weight: 700;
+    .resume-list a {
+      display: grid;
+      grid-template-columns: 310px minmax(0, 1fr);
+      gap: 36px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--rule);
       text-decoration: none;
     }
 
-    .menu span {
-      display: block;
-      margin-top: 3px;
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 400;
+    .resume-list strong {
+      font-size: clamp(24px, 3.4vw, 38px);
+      line-height: 0.98;
+      text-transform: uppercase;
     }
 
-    footer {
-      padding-top: 20px;
-      border-top: 1px solid var(--rule);
+    .resume-list span {
+      max-width: 560px;
       color: var(--muted);
-      font-size: 15px;
+      font-size: 19px;
+      line-height: 1.32;
     }
 
     @media (max-width: 760px) {
@@ -156,33 +131,31 @@
       }
 
       nav,
-      .hero {
+      header {
+        align-items: flex-start;
+        flex-direction: column;
         grid-template-columns: 1fr;
       }
 
-      nav {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .hero {
+      header {
         display: block;
-        padding: 38px 0 48px;
-      }
-
-      .summary,
-      .side {
-        margin-left: 0;
-      }
-
-      .side {
-        min-height: auto;
-        margin-top: 34px;
-        gap: 34px;
       }
 
       .contact {
+        margin-top: 28px;
         text-align: left;
+      }
+
+      .resume-list a {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      h1,
+      .subtitle,
+      .resume-list strong,
+      .resume-list span {
+        overflow-wrap: anywhere;
       }
     }
   </style>
@@ -199,32 +172,35 @@
       </div>
     </nav>
 
-    <section class="hero">
+    <header>
       <div>
-        <h1>Antonio<br>Colomba</h1>
-        <p class="subtitle">Operations Support Specialist |<br>Production Coordinator</p>
-        <p class="summary">
-          Photography, print, and visual production foundation, now applied to operations support,
-          Agentic engineering, AI agent workflows, AI content creation, generative media tools,
-          technical coordination, and organized project follow-through.
-        </p>
+        <h1>Resume</h1>
+        <p class="subtitle">Choose the version that fits the work.</p>
       </div>
+      <p class="contact">
+        <strong>NYC / Remote</strong>
+        (561) 271-1163
+      </p>
+    </header>
 
-      <aside class="side">
-        <p class="contact">
-          <strong>NYC / Remote</strong>
-          (561) 271-1163
-        </p>
-
-        <div class="menu" aria-label="Page links">
-          <a href="resume.html">Resume <span>Main, retouching, fast, and bio versions.</span></a>
-          <a href="antonio-bio.html">Bio <span>Background, positioning, current project work.</span></a>
-          <a href="projects.html">Projects <span>Selected work, proof assets, and build notes.</span></a>
-        </div>
-      </aside>
-    </section>
-
-    <footer>Available for management, operations, admin, production coordination, technical support, AI content workflows, and AI agent workflows.</footer>
+    <div class="resume-list" aria-label="Resume versions">
+      <a href="main-resume.html">
+        <strong>Main Resume</strong>
+        <span>Support, coordination, admin, and customer support version.</span>
+      </a>
+      <a href="retouching-resume.html">
+        <strong>Retouching Resume</strong>
+        <span>Older high-end retouching, visual finishing, and production work.</span>
+      </a>
+      <a href="fast-resume.html">
+        <strong>Fast Resume</strong>
+        <span>Broader general-work version for quick applications and temp roles.</span>
+      </a>
+      <a href="antonio-bio.html">
+        <strong>Bio</strong>
+        <span>Background, positioning, current project work.</span>
+      </a>
+    </div>
   </main>
 </body>
 </html>

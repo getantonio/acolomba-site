@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Added a single `resume.html` hub page linking to Main Resume, Retouching Resume, Fast Resume, and Bio, then removed scattered direct resume-version links from site navigation.
 - Created a separate old-work retouching resume page and PDF for high-end retouching, visual finishing, and supervisor/lead-track roles.
 
 - Extracted and rebuilt `/Users/getantonio/Desktop/ColombaBook8x8.pdf` into a non-interactive 20-page before/after PDF with no form buttons.

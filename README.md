@@ -6,6 +6,7 @@ GitHub Pages serves this repository from the root of `main`, so the live site fi
 
 - `index.html`
 - `antonio-colomba-bio.html`
+- `resume.html`
 - `main-resume.html`
 - `retouching-resume.html`
 - `operations-support-resume.html` (redirect compatibility)
