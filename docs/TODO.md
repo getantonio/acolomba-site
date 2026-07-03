@@ -4,6 +4,8 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Created a separate old-work retouching resume page and PDF for high-end retouching, visual finishing, and supervisor/lead-track roles.
+
 - Extracted and rebuilt `/Users/getantonio/Desktop/ColombaBook8x8.pdf` into a non-interactive 20-page before/after PDF with no form buttons.
 - Added the extracted before/after image gallery under `projects/before-after-retouching/` with a lightbox viewer and rebuilt PDF download.
 - Linked the before/after retouching gallery from `projects.html`.
@@ -98,7 +100,7 @@ Last updated: 2026-07-03
 - Enable HTTPS enforcement in GitHub Pages after GitHub finishes issuing the certificate for `acolomba.site`.
 - Claim or redeploy the temporary Cloudflare Worker endpoint under Antonio's Cloudflare account so message-box delivery remains durable.
 - 2026-07-02 [Done] Built a second fast general-work resume for customer support, sales, operations, temp, warehouse/inventory support, and admin roles.
-- Build a visual-production/AI-image-QA resume for the fastest realistic buyer group.
+- 2026-07-03 [Done] Built a separate old-work retouching resume page for retouching artist, lead, supervisor, image QA, and visual finishing roles.
 - Build a tech/fintech bridge resume using creative production plus code projects.
 - Build an AI workflow / agent operations resume aimed at coordinator/support roles.
 - Keep the modern resume to one page unless Antonio explicitly asks for a longer version.

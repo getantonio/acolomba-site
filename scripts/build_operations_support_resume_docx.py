@@ -109,14 +109,14 @@ add_text(contact, "NYC / Remote  |  (561) 271-1163  |  getantonio@gmail.com", si
 
 title = doc.add_paragraph()
 set_para(title, after=9, line=1.0)
-add_text(title, "Operations Support | Production Coordination | Customer Support", size=11.2, bold=True, color=BLUE)
+add_text(title, "Operations Support Specialist | Production Coordinator", size=11.2, bold=True, color=BLUE)
 add_rule(title)
 
 summary = doc.add_paragraph()
 set_para(summary, before=9, after=9, line=1.12)
 add_text(
     summary,
-    "Reliable, detail-oriented worker with a background in deadline-driven creative service production environments, client revisions, visual quality control, troubleshooting, AI content creation workflows, and agentic engineered technical projects. Strong fit for support, AI onboarding and adaptation of operations, admin, production coordination, temp, and technical support roles.",
+    "Reliable and detail-oriented with a background in deadline-driven creative art and service production environments, client revisions, visual quality control, troubleshooting, agentic workflows, and agentic engineered technical projects. Strong fit for support, AI onboarding and adaptation of operations, admin, production coordination, temp, and technical support roles.",
     size=9.2,
 )
 
@@ -125,7 +125,7 @@ set_para(fit, before=0, after=9, line=1.08, left=0.2)
 add_text(fit, "Best fit roles: ", size=8.6, bold=True, color=TEAL)
 add_text(
     fit,
-    "Customer Support Representative, Operations Assistant, Data Entry Clerk, Office Assistant, Production Coordinator, Technical Support Associate, Customer Success Coordinator, Onboarding Assistant, Temp Office Support.",
+    "Operations Manager, Production Coordinator, Technical Support Associate, Onboarding Coordinator, Operations Support Specialist, Customer Operations Associate, Production Support Coordinator, Administrative Operations Assistant.",
     size=8.5,
     color=MUTED,
 )

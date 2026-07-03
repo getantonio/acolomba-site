@@ -2,13 +2,13 @@
 
 NYC / Remote | (561) 271-1163 | getantonio@gmail.com
 
-## Operations Support | Production Coordination | Customer Support
+## Operations Support Specialist | Production Coordinator
 
-Reliable, detail-oriented worker with a background in deadline-driven creative service production environments, client revisions, visual quality control, troubleshooting, AI content creation workflows, and agentic engineered technical projects. Strong fit for support, AI onboarding and adaptation of operations, admin, production coordination, temp, and technical support roles.
+Reliable and detail-oriented with a background in deadline-driven creative art and service production environments, client revisions, visual quality control, troubleshooting, agentic workflows, and agentic engineered technical projects. Strong fit for support, AI onboarding and adaptation of operations, admin, production coordination, temp, and technical support roles.
 
 ## Best Fit Roles
 
-Customer Support Representative | Operations Assistant | Data Entry Clerk | Office Assistant | Production Coordinator | Technical Support Associate | Customer Success Coordinator | Onboarding Assistant | Temp Office Support
+Operations Manager | Production Coordinator | Technical Support Associate | Onboarding Coordinator | Operations Support Specialist | Customer Operations Associate | Production Support Coordinator | Administrative Operations Assistant
 
 ## Core Strengths
 

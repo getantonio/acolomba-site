@@ -3,15 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Antonio Colomba | Main Resume</title>
+  <title>Antonio Colomba | Retouching Resume</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23d1d1d1'/%3E%3Ctext x='32' y='41' text-anchor='middle' font-family='Georgia' font-size='28' font-weight='700' fill='%23202833'%3EAC%3C/text%3E%3C/svg%3E">
   <style>
     :root {
       --paper: #d1d1d1;
       --ink: #202833;
       --muted: #202833;
-      --blue: #202833;
-      --teal: #202833;
       --rule: rgba(32, 40, 51, 0.34);
     }
 
@@ -31,7 +29,7 @@
 
     main {
       width: calc(100% - 44px);
-      max-width: 920px;
+      max-width: 960px;
       margin: 0 auto;
       padding: 28px 0 74px;
     }
@@ -69,12 +67,12 @@
       margin: 0;
       font-size: clamp(40px, 6.4vw, 68px);
       line-height: 0.92;
+      letter-spacing: 0;
       text-transform: uppercase;
     }
 
     .subtitle {
       margin: 14px 0 0;
-      color: var(--blue);
       font-size: 23px;
       font-weight: 700;
       line-height: 1.08;
@@ -87,22 +85,17 @@
       text-align: right;
     }
 
-    .contact a:not(.download) {
-      color: var(--blue);
-      font-weight: 700;
-    }
-
-    .summary {
-      max-width: 690px;
-      margin: 0 0 34px 224px;
-      font-size: 18px;
-      line-height: 1.42;
+    .download-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 14px;
     }
 
     .download {
       display: inline-block;
       padding: 5px 11px;
-      border: 1px solid var(--blue);
+      border: 1px solid var(--ink);
       background: transparent;
       color: var(--ink);
       font-size: 12px;
@@ -111,11 +104,11 @@
       text-decoration: none;
     }
 
-    .download-row {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-top: 14px;
+    .summary {
+      max-width: 720px;
+      margin: 0 0 34px 224px;
+      font-size: 18px;
+      line-height: 1.42;
     }
 
     section {
@@ -129,7 +122,6 @@
 
     h2 {
       margin: 0;
-      color: var(--blue);
       font-size: 20px;
       line-height: 1.1;
       text-transform: uppercase;
@@ -170,13 +162,44 @@
       margin: 8px 0;
     }
 
-    .fit {
+    .fit,
+    .tools {
       color: var(--muted);
     }
 
     .fit strong,
     .tools strong {
-      color: var(--teal);
+      color: var(--ink);
+    }
+
+    .proof-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .proof-strip a {
+      display: block;
+      border-bottom: 1px solid var(--rule);
+      text-decoration: none;
+    }
+
+    .proof-strip img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      filter: grayscale(100%);
+    }
+
+    .proof-strip span {
+      display: block;
+      padding: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.25;
+      text-transform: uppercase;
     }
 
     .education-list {
@@ -212,10 +235,6 @@
       text-align: right;
     }
 
-    .resume-switch a {
-      font-weight: 400;
-    }
-
     @media (max-width: 760px) {
       main {
         width: calc(100% - 30px);
@@ -236,7 +255,6 @@
       }
 
       .summary,
-      .download,
       .download-row {
         margin-left: 0;
       }
@@ -268,6 +286,10 @@
         white-space: normal;
       }
 
+      .proof-strip {
+        grid-template-columns: 1fr;
+      }
+
       h1,
       .subtitle,
       p,
@@ -291,6 +313,7 @@
 
       nav,
       .download-row,
+      .proof-strip,
       .resume-switch {
         display: none;
       }
@@ -310,48 +333,71 @@
   <main>
     <nav>
       <strong>Antonio Colomba</strong>
-      <span><a href="antonio-colomba-bio.html">Home</a> | <a href="antonio-bio.html">Bio</a> | <a href="projects.html">Projects</a> | <a href="message.html">Message</a></span>
+      <span><a href="antonio-colomba-bio.html">Home</a> | <a href="main-resume.html">Main Resume</a> | <a href="antonio-bio.html">Bio</a> | <a href="projects.html">Projects</a> | <a href="message.html">Message</a></span>
     </nav>
 
     <header>
       <div>
         <h1>Antonio<br>Colomba</h1>
-        <p class="subtitle">Operations Support Specialist | Production Coordinator</p>
+        <p class="subtitle">Retouching Artist | Visual Finishing | Production Lead</p>
       </div>
       <p class="contact">
         NYC / Remote<br>
         (561) 271-1163<br>
+        getantonio@gmail.com<br>
         <span class="download-row">
-          <a class="download" href="Antonio_Colomba_Main_Resume.pdf">PDF</a>
-          <a class="download" href="Antonio_Colomba_Operations_Support_Resume.docx">DOC</a>
+          <a class="download" href="Antonio_Colomba_Retouching_Resume.pdf">PDF</a>
+          <a class="download" href="projects/before-after-retouching/">Portfolio</a>
         </span>
       </p>
     </header>
 
     <p class="summary">
-      Reliable and detail-oriented with a background in deadline-driven creative art and service production environments,
-      client revisions, visual quality control, troubleshooting, agentic workflows, and agentic engineered technical projects.
-      Strong fit for support, AI onboarding and adaptation of operations, admin, production coordination,
-      temp, and technical support roles.
+      High-end digital retoucher and visual production artist with agency, studio, commercial, and client-service experience.
+      Background includes detailed image correction, color matching, compositing, proofing, revision cycles, production quality control,
+      and deadline-driven creative delivery. Strong fit for retouching artist, photo retouching lead, retouching supervisor,
+      image QA, visual finishing, and creative production support roles.
     </p>
 
     <section>
       <h2>Best Fit Roles</h2>
       <p class="fit">
-        <strong>Operations Manager</strong> | Production Coordinator | Technical Support Associate |
-        Onboarding Coordinator | Operations Support Specialist | Customer Operations Associate |
-        Production Support Coordinator | Administrative Operations Assistant
+        <strong>Retouching Artist</strong> | Senior Retoucher | Photo Retouching Lead |
+        Retouching Supervisor | Photo Retouching Manager | Image Quality Control Specialist |
+        Visual Effects Artist | Creative Production Coordinator
       </p>
     </section>
 
     <section>
       <h2>Core Strengths</h2>
       <ul>
-        <li>Calm written communication, organized follow-up, and careful handling of details.</li>
-        <li>Client/project background with revisions, deadline pressure, quality checks, proofing, and production standards.</li>
-        <li>Comfortable learning software tools, troubleshooting issues, documenting process, and following structured workflows.</li>
-        <li>Ready to support ticket handling, research, CRM updates, data entry, checklists, file organization, customer communication, and AI content workflows.</li>
+        <li>High-end photo retouching, visual finishing, compositing, color correction, proof matching, and image cleanup.</li>
+        <li>Client-driven revision cycles, creative direction handoff, deadline pressure, and production quality control.</li>
+        <li>Practical visual judgment across photography, commercial art, VFX, animation, video, and digital production.</li>
+        <li>Comfortable reviewing images for consistency, accuracy, polish, brand standards, and production readiness.</li>
+        <li>Useful bridge into modern AI image QA, generative media review, asset cleanup, and visual workflow support.</li>
       </ul>
+    </section>
+
+    <section>
+      <h2>Portfolio Proof</h2>
+      <div>
+        <p class="fit">Selected before/after retouching examples are available as a visual proof page.</p>
+        <div class="proof-strip" aria-label="Selected retouching examples">
+          <a href="projects/before-after-retouching/">
+            <img src="projects/before-after-retouching/images/image-01-after-thumb.webp" alt="Retouched portrait sample">
+            <span>Portrait finishing</span>
+          </a>
+          <a href="projects/before-after-retouching/">
+            <img src="projects/before-after-retouching/images/image-06-after-thumb.webp" alt="Retouched product sample">
+            <span>Commercial cleanup</span>
+          </a>
+          <a href="projects/before-after-retouching/">
+            <img src="projects/before-after-retouching/images/image-10-after-thumb.webp" alt="Retouched product detail sample">
+            <span>Product detail</span>
+          </a>
+        </div>
+      </div>
     </section>
 
     <section>
@@ -362,35 +408,32 @@
         <li>Delivered detailed visual finishing and retouching work for agency, studio, and commercial clients.</li>
         <li>Worked with teams including Foam Digital, McCann Erickson, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young &amp; Rubicam Inc.</li>
         <li>Managed image correction, color matching, compositing, proofing, revision cycles, client direction, and quality-control expectations.</li>
+        <li>Supported production teams by preparing polished images for commercial, creative, and presentation use.</li>
       </ul>
 
       <h3>291 Digital, High-End Digital Retoucher <small>NYC | 12/2005 - 09/2006</small></h3>
-      <p>Performed color correction and proof matching for high-end retouching projects requiring precision and consistency.</p>
+      <ul>
+        <li>Performed color correction and proof matching for high-end retouching projects requiring precision and consistency.</li>
+        <li>Supported prestigious client work with careful attention to image quality, visual continuity, and delivery standards.</li>
+      </ul>
 
       <h3>FCB World Wide, High-End Digital Retoucher <small>NYC | 09/2000 - 09/2001</small></h3>
-      <p>Produced high-resolution art, visual effects, retouching, color correction, and creative compositions.</p>
-    </section>
-
-    <section>
-      <h2>Current Project Work</h2>
-      <h3>Agentic Engineered Technical Projects <small>local/private</small></h3>
       <ul>
-        <li>Built and organized local crypto, token, trading, AI content creation, and workflow projects with AI-assisted tools.</li>
-        <li>Practiced troubleshooting, reading documentation, organizing tasks, testing flows, and turning messy ideas into usable workflows.</li>
+        <li>Produced high-resolution art, visual effects, retouching, color correction, and creative compositions.</li>
+        <li>Supported commercial creative production with detail-focused image finishing and visual problem-solving.</li>
       </ul>
     </section>
 
     <section>
-      <h2>Work Readiness</h2>
-      <p>
-        Available for entry-level support, operations, admin, production coordination, customer success,
-        technical support, and temp assignments. Open to in-person, hybrid, remote, temporary, contract,
-        part-time, or full-time work.
+      <h2>Visual Production Skills</h2>
+      <p class="tools">
+        <strong>Skills:</strong> Photo retouching, color grade and matching, compositing, rotoscoping, 3D tracking,
+        set extension, character animation, video editing, visual effects, proofing, client revisions, image QA,
+        production file handling, AI image review, generative media workflows.
       </p>
       <p class="tools">
-        <strong>Tools:</strong> Photoshop, InDesign, Premiere, After Effects, Nuke, Maya, Houdini, Mac,
-        Windows, Linux, troubleshooting, documentation, spreadsheets, AI-assisted workflows, Higgsfield,
-        generative media workflows, Next.js, TypeScript, Python basics, crypto/product research.
+        <strong>Tools:</strong> Photoshop, InDesign, Premiere, After Effects, Nuke, Maya, Houdini, 3DEqualizer,
+        Boujou, Unreal Engine, Vex, Python, MEL scripting, Mac, Windows, Linux.
       </p>
     </section>
 
@@ -420,7 +463,7 @@
       </div>
     </section>
 
-    <p class="resume-switch"><a href="retouching-resume.html">retouching resume</a> &nbsp; <a href="fast-resume.html">fast resume</a></p>
+    <p class="resume-switch"><a href="main-resume.html">main resume</a> &nbsp; <a href="fast-resume.html">fast resume</a></p>
   </main>
 </body>
 </html>

@@ -7,11 +7,13 @@ GitHub Pages serves this repository from the root of `main`, so the live site fi
 - `index.html`
 - `antonio-colomba-bio.html`
 - `main-resume.html`
+- `retouching-resume.html`
 - `operations-support-resume.html` (redirect compatibility)
 - `fast-resume.html`
 - `antonio-resume.html` (legacy compatibility copy)
 - `antonio-bio.html`
 - `Antonio_Colomba_Main_Resume.pdf`
+- `Antonio_Colomba_Retouching_Resume.pdf`
 - `Antonio_Colomba_Operations_Support_Resume.docx`
 - `Antonio_Colomba_Fast_Resume.docx`
 - `Antonio_Colomba_Modern_Resume.docx`
@@ -43,4 +45,5 @@ python3 scripts/build_operations_support_resume_docx.py
 python3 scripts/build_fast_resume_docx.py
 python3 scripts/build_modern_resume_docx.py
 node scripts/build_main_resume_pdf.mjs
+node scripts/build_retouching_resume_pdf.mjs
 ```
