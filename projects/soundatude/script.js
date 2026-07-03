@@ -26,6 +26,9 @@ const recorderCustomCategorySelect = document.querySelector("#recorderCustomCate
 const recorderNewCategoryField = document.querySelector("#recorderNewCategoryField");
 const recorderCustomCategoryInput = document.querySelector("#recorderCustomCategoryInput");
 const recorderCustomPhraseInput = document.querySelector("#recorderCustomPhraseInput");
+const recorderPhraseFileInput = document.querySelector("#recorderPhraseFileInput");
+const clearPhraseQueueButton = document.querySelector("#clearPhraseQueueButton");
+const deleteCustomCategoryButton = document.querySelector("#deleteCustomCategoryButton");
 const recorderProgressText = document.querySelector("#recorderProgressText");
 const recorderProgressBar = document.querySelector("#recorderProgressBar");
 const recorderPositionText = document.querySelector("#recorderPositionText");
@@ -684,6 +687,8 @@ let recorderCustomCategory = DEFAULT_CUSTOM_RECORDED_CATEGORY;
 let recorderCustomNewCategory = "";
 let recorderCustomPhrase = "";
 let recorderCustomLastPhraseId = null;
+let recorderCustomPhraseQueue = [];
+let recorderCustomQueueIndex = 0;
 let mediaRecorder = null;
 let recorderStream = null;
 let recorderChunks = [];
@@ -1088,9 +1093,14 @@ async function withRecordedVoiceStore(mode, action) {
   const request = action(store);
 
   return new Promise((resolve, reject) => {
-    request.onsuccess = () => resolve(request.result);
+    let result;
+    request.onsuccess = () => {
+      result = request.result;
+    };
     request.onerror = () => reject(request.error);
+    transaction.oncomplete = () => resolve(result);
     transaction.onerror = () => reject(transaction.error);
+    transaction.onabort = () => reject(transaction.error);
   });
 }
 
@@ -1201,13 +1211,22 @@ function customLastChoice() {
     ?? null;
 }
 
+function customChoiceForPhrase(category, phraseText) {
+  const normalizedPhraseText = normalizeWhitespace(phraseText);
+  if (!normalizedPhraseText) return null;
+
+  return customRecordedChoices.find((choice) => (
+    choice.category === category && normalizeWhitespace(choice.phraseText) === normalizedPhraseText
+  )) ?? null;
+}
+
 function pendingCustomChoice() {
   const phraseText = currentCustomPhraseText();
   const category = currentCustomRecorderCategory() || DEFAULT_CUSTOM_RECORDED_CATEGORY;
-  const lastChoice = customLastChoice();
+  const existingChoice = customChoiceForPhrase(category, phraseText);
 
-  if (lastChoice && lastChoice.category === category && lastChoice.phraseText === phraseText) {
-    return lastChoice;
+  if (existingChoice) {
+    return existingChoice;
   }
 
   return {
@@ -1270,7 +1289,9 @@ function recorderChoices() {
 
 function recorderChoice() {
   if (recorderMode === "custom") {
-    return customLastChoice() ?? pendingCustomChoice();
+    return currentCustomPhraseText()
+      ? pendingCustomChoice()
+      : (customLastChoice() ?? pendingCustomChoice());
   }
 
   const choicesForRecorder = recorderChoices();
@@ -1323,6 +1344,8 @@ function saveRecorderState() {
     customNewCategory: recorderCustomNewCategory,
     customPhrase: recorderCustomPhrase,
     customLastPhraseId: recorderCustomLastPhraseId,
+    customPhraseQueue: recorderCustomPhraseQueue,
+    customQueueIndex: recorderCustomQueueIndex,
   }));
 }
 
@@ -1351,6 +1374,12 @@ function restoreRecorderState() {
     if (typeof savedState?.customLastPhraseId === "string") {
       recorderCustomLastPhraseId = savedState.customLastPhraseId;
     }
+    if (Array.isArray(savedState?.customPhraseQueue)) {
+      recorderCustomPhraseQueue = savedState.customPhraseQueue.map(normalizeWhitespace).filter(Boolean);
+    }
+    if (Number.isInteger(savedState?.customQueueIndex)) {
+      recorderCustomQueueIndex = savedState.customQueueIndex;
+    }
   } catch {
     // Ignore corrupt local state and resume from the active category.
   }
@@ -1360,6 +1389,10 @@ function restoreRecorderState() {
   recorderIndex = index === null
     ? firstOpenRecorderIndex(category)
     : Math.min(Math.max(index, 0), Math.max(choicesForRecorder.length - 1, 0));
+  recorderCustomQueueIndex = Math.min(Math.max(recorderCustomQueueIndex, 0), Math.max(recorderCustomPhraseQueue.length - 1, 0));
+  if (recorderCustomPhraseQueue.length && !recorderCustomPhrase) {
+    recorderCustomPhrase = recorderCustomPhraseQueue[recorderCustomQueueIndex];
+  }
   saveRecorderState();
 }
 
@@ -1421,6 +1454,40 @@ function renderCustomRecorderCategoryOptions() {
   }
 }
 
+function parsePhraseTextList(text) {
+  return String(text ?? "")
+    .split(/\r?\n+/)
+    .map((line) => normalizeWhitespace(
+      line
+        .replace(/^[-*•]\s+/, "")
+        .replace(/^\d+[\).:-]?\s+/, "")
+    ))
+    .filter((line, index, lines) => line && lines.indexOf(line) === index);
+}
+
+function setCustomQueueIndex(index) {
+  if (!recorderCustomPhraseQueue.length) {
+    recorderCustomQueueIndex = 0;
+    return;
+  }
+
+  recorderCustomQueueIndex = Math.min(Math.max(index, 0), recorderCustomPhraseQueue.length - 1);
+  recorderCustomPhrase = recorderCustomPhraseQueue[recorderCustomQueueIndex];
+  if (recorderCustomPhraseInput) {
+    recorderCustomPhraseInput.value = recorderCustomPhrase;
+  }
+}
+
+function clearCustomPhraseQueue({ keepCurrentPhrase = true } = {}) {
+  recorderCustomPhraseQueue = [];
+  recorderCustomQueueIndex = 0;
+  if (!keepCurrentPhrase) {
+    recorderCustomPhrase = "";
+  }
+  saveRecorderState();
+  renderVoiceRecorder();
+}
+
 function renderVoiceRecorder() {
   if (!voiceRecorderDialog) return;
 
@@ -1435,6 +1502,7 @@ function renderVoiceRecorder() {
   const totalCount = recorderMode === "custom" ? Math.max(choicesForRecorder.length, 1) : choicesForRecorder.length;
   const isCurrentRecorded = browserRecordedPhraseUrls.has(choice.phraseId);
   const isComplete = isRecorderCategoryComplete();
+  const hasCustomQueue = recorderCustomPhraseQueue.length > 0;
   const progress = recorderMode === "custom"
     ? (recordedCount > 0 ? 100 : 0)
     : (totalCount ? (recordedCount / totalCount) * 100 : 0);
@@ -1445,7 +1513,7 @@ function renderVoiceRecorder() {
     : `${recordedCount} of ${totalCount} recorded`;
   recorderProgressBar.style.setProperty("--recorded-progress", `${progress}%`);
   recorderPositionText.textContent = recorderMode === "custom"
-    ? "Custom phrase"
+    ? (hasCustomQueue ? `Custom ${recorderCustomQueueIndex + 1} of ${recorderCustomPhraseQueue.length}` : "Custom phrase")
     : `Phrase ${recorderIndex + 1} of ${totalCount}`;
   recorderPhraseState.textContent = isCurrentRecorded ? "Recorded" : (recorderMode === "custom" ? "Ready" : "Open");
   recorderPhraseHandle.textContent = recorderMode === "custom"
@@ -1453,10 +1521,21 @@ function renderVoiceRecorder() {
     : choice.title.split("-").slice(0, 2).join("-");
   recorderPhraseTitle.textContent = choice.displayTitle;
   recorderPhraseText.textContent = choice.phraseText;
-  previousRecorderPhraseButton.disabled = recorderMode === "custom" || recorderIndex === 0;
-  nextRecorderPhraseButton.disabled = recorderMode === "custom" || recorderIndex >= totalCount - 1;
+  previousRecorderPhraseButton.disabled = recorderMode === "custom"
+    ? (!hasCustomQueue || recorderCustomQueueIndex === 0)
+    : recorderIndex === 0;
+  nextRecorderPhraseButton.disabled = recorderMode === "custom"
+    ? (!hasCustomQueue || recorderCustomQueueIndex >= recorderCustomPhraseQueue.length - 1)
+    : recorderIndex >= totalCount - 1;
   playRecordedPhraseButton.disabled = !isCurrentRecorded;
   retakeRecordedPhraseButton.disabled = !isCurrentRecorded;
+  retakeRecordedPhraseButton.textContent = recorderMode === "custom" ? "Delete audio" : "Retake";
+  if (clearPhraseQueueButton) {
+    clearPhraseQueueButton.disabled = !hasCustomQueue;
+  }
+  if (deleteCustomCategoryButton) {
+    deleteCustomCategoryButton.disabled = customRecordedChoicesForCategory().length === 0;
+  }
   recordPhraseButton.classList.toggle("is-recording", isRecordingPhrase);
   recordPhraseButton.setAttribute("aria-label", isRecordingPhrase ? "Stop recording" : (recorderMode === "custom" ? "Record custom phrase" : "Record phrase"));
   useRecordedVoiceButton.disabled = recordedCount === 0;
@@ -1488,10 +1567,8 @@ function customRecordingTarget() {
     return null;
   }
 
-  const lastChoice = customLastChoice();
-  const phraseId = lastChoice && lastChoice.category === category && lastChoice.phraseText === phraseText
-    ? lastChoice.phraseId
-    : makeCustomPhraseId();
+  const existingChoice = customChoiceForPhrase(category, phraseText);
+  const phraseId = existingChoice?.phraseId ?? makeCustomPhraseId();
   const displayTitle = titleCaseFromWords(phraseText);
 
   return {
@@ -1555,11 +1632,14 @@ async function startBrowserPhraseRecording() {
         await saveBrowserRecordedPhrase(target.phraseId, blob, target.metadata);
         if (recorderMode === "custom") {
           recorderCustomLastPhraseId = target.phraseId;
+          if (recorderCustomPhraseQueue.length && recorderCustomQueueIndex < recorderCustomPhraseQueue.length - 1) {
+            setCustomQueueIndex(recorderCustomQueueIndex + 1);
+          }
         } else if (!isRecorderCategoryComplete()) {
           recorderIndex = nextOpenRecorderIndex(recorderIndex);
         }
         saveRecorderState();
-        setRecorderMessage(`Saved ${target.label}.`);
+        setRecorderMessage(`Saved ${target.label}`);
       } catch {
         setRecorderMessage("Could not save this recording.");
       }
@@ -1604,6 +1684,13 @@ function goToRecorderPhrase(delta) {
   }
 
   recorderPreviewAudio.pause();
+  if (recorderMode === "custom") {
+    setCustomQueueIndex(recorderCustomQueueIndex + delta);
+    saveRecorderState();
+    renderVoiceRecorder();
+    return;
+  }
+
   recorderIndex = Math.min(Math.max(recorderIndex + delta, 0), Math.max(recorderChoices().length - 1, 0));
   saveRecorderState();
   renderVoiceRecorder();
@@ -1643,13 +1730,73 @@ async function retakeCurrentBrowserRecording() {
     if (recorderCustomLastPhraseId === choice.phraseId) {
       recorderCustomLastPhraseId = null;
     }
-    setRecorderMessage(`Removed ${recorderMode === "custom" ? choice.displayTitle : choice.phraseId}.`);
+    setRecorderMessage(`Removed ${recorderMode === "custom" ? choice.displayTitle : choice.phraseId}`);
     saveRecorderState();
   } catch {
     setRecorderMessage("Could not remove this take.");
   }
 
   renderVoiceOptions();
+  renderVoiceRecorder();
+}
+
+async function deleteCurrentCustomCategory() {
+  if (recorderMode !== "custom") return;
+
+  const category = currentCustomRecorderCategory();
+  const choicesToDelete = customRecordedChoicesForCategory(category);
+  if (!choicesToDelete.length) {
+    setRecorderMessage(`No saved audio in ${category}.`);
+    return;
+  }
+
+  const shouldDelete = window.confirm(`Delete ${choicesToDelete.length} saved recording${choicesToDelete.length === 1 ? "" : "s"} in ${category}?`);
+  if (!shouldDelete) return;
+
+  try {
+    await Promise.all(choicesToDelete.map((choice) => deleteBrowserRecordedPhrase(choice.phraseId)));
+    if (recorderCustomCategory === category) {
+      recorderCustomCategory = DEFAULT_CUSTOM_RECORDED_CATEGORY;
+    }
+    if (normalizeWhitespace(recorderCustomNewCategory) === category) {
+      recorderCustomNewCategory = "";
+    }
+    if (recorderCustomLastPhraseId && choicesToDelete.some((choice) => choice.phraseId === recorderCustomLastPhraseId)) {
+      recorderCustomLastPhraseId = null;
+    }
+    saveRecorderState();
+    setRecorderMessage(`Deleted ${category}.`);
+  } catch {
+    setRecorderMessage("Could not delete this category.");
+  }
+
+  renderVoiceOptions();
+  renderVoiceRecorder();
+}
+
+async function loadCustomPhraseFile(file) {
+  if (!file) return;
+
+  try {
+    const text = await file.text();
+    const phrases = parsePhraseTextList(text);
+    if (!phrases.length) {
+      setRecorderMessage("No phrases found in that file.");
+      return;
+    }
+
+    recorderMode = "custom";
+    recorderCustomPhraseQueue = phrases;
+    setCustomQueueIndex(0);
+    saveRecorderState();
+    setRecorderMessage(`Loaded ${phrases.length} phrase${phrases.length === 1 ? "" : "s"}.`);
+  } catch {
+    setRecorderMessage("Could not load that text file.");
+  }
+
+  if (recorderPhraseFileInput) {
+    recorderPhraseFileInput.value = "";
+  }
   renderVoiceRecorder();
 }
 
@@ -2813,10 +2960,21 @@ recorderCustomCategoryInput?.addEventListener("input", () => {
 });
 recorderCustomPhraseInput?.addEventListener("input", () => {
   recorderCustomPhrase = recorderCustomPhraseInput.value;
+  if (recorderCustomPhraseQueue.length) {
+    recorderCustomPhraseQueue[recorderCustomQueueIndex] = normalizeWhitespace(recorderCustomPhraseInput.value);
+  }
   recorderPreviewAudio.pause();
   saveRecorderState();
   renderVoiceRecorder();
 });
+recorderPhraseFileInput?.addEventListener("change", () => {
+  loadCustomPhraseFile(recorderPhraseFileInput.files?.[0]);
+});
+clearPhraseQueueButton?.addEventListener("click", () => {
+  clearCustomPhraseQueue();
+  setRecorderMessage("Text list cleared.");
+});
+deleteCustomCategoryButton?.addEventListener("click", deleteCurrentCustomCategory);
 previousRecorderPhraseButton?.addEventListener("click", () => goToRecorderPhrase(-1));
 nextRecorderPhraseButton?.addEventListener("click", () => goToRecorderPhrase(1));
 recordPhraseButton?.addEventListener("click", toggleBrowserPhraseRecording);
