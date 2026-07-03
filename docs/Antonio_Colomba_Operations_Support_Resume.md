@@ -52,10 +52,6 @@ Local / Private
 
 Available for entry-level support, operations, admin, production coordination, customer success, technical support, and temp assignments. Open to in-person, hybrid, remote, temporary, contract, part-time, or full-time work.
 
-## Tools
-
-Photoshop, InDesign, Premiere, After Effects, Nuke, Maya, Houdini, Mac, Windows, Linux, troubleshooting, documentation, spreadsheets, AI-assisted workflows, Higgsfield, generative media workflows, Next.js, TypeScript, Python basics, crypto/product research.
-
 ## Education
 
 Digital Media Arts College | South Florida  

@@ -165,16 +165,6 @@ add_text(
     size=8.8,
 )
 
-tools = doc.add_paragraph()
-set_para(tools, before=2, after=7, line=1.08)
-add_text(tools, "Tools: ", size=8.5, bold=True, color=TEAL)
-add_text(
-    tools,
-    "Photoshop, InDesign, Premiere, After Effects, Nuke, Maya, Houdini, Mac, Windows, Linux, troubleshooting, documentation, spreadsheets, AI-assisted workflows, Higgsfield, generative media workflows, Next.js, TypeScript, Python basics, crypto/product research.",
-    size=8.3,
-    color=MUTED,
-)
-
 section_head("05", "Education", before=10)
 schools = [
     ("Digital Media Arts College", "South Florida", "M.F.A. Visual Effects Animation, Highest Academic Distinction."),
