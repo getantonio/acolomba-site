@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Renamed the resume hub Retouching label to Photo Retouching.
 - Removed the Bio row from the `resume.html` hub because Bio is already available in the site navigation.
 - Shortened the Retouching resume hub description to high-end retouching and creative production work.
 - Updated the Main resume hub description to managerial, coordination, admin, and customer support positioning.
