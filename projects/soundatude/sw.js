@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v54-recorder-noise-filter";
+const CACHE_NAME = "sound-a-tude-v65-inline-numbered-list";
 const MALE_AVATAR_PHRASE_IDS = [
   "sat-p004",
   "sat-p006",

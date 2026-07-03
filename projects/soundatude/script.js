@@ -26,7 +26,6 @@ const recorderCustomCategorySelect = document.querySelector("#recorderCustomCate
 const recorderNewCategoryField = document.querySelector("#recorderNewCategoryField");
 const recorderCustomCategoryInput = document.querySelector("#recorderCustomCategoryInput");
 const recorderCustomPhraseInput = document.querySelector("#recorderCustomPhraseInput");
-const recorderPhraseFileInput = document.querySelector("#recorderPhraseFileInput");
 const clearPhraseQueueButton = document.querySelector("#clearPhraseQueueButton");
 const deleteCustomCategoryButton = document.querySelector("#deleteCustomCategoryButton");
 const recorderProgressText = document.querySelector("#recorderProgressText");
@@ -70,6 +69,8 @@ const pageRail = document.querySelector(".page-rail");
 const pageDots = [...document.querySelectorAll(".page-dots span")];
 const openPlaylistButton = document.querySelector("#openPlaylistButton");
 const openPlayerButton = document.querySelector("#openPlayerButton");
+const openGuideButton = document.querySelector("#openGuideButton");
+const closeGuideButton = document.querySelector("#closeGuideButton");
 const consoleMeter = document.querySelector(".console-meter");
 const previewAudio = new Audio();
 const recorderPreviewAudio = new Audio();
@@ -77,7 +78,8 @@ const PLAYLIST_STORAGE_KEY = "sound-a-tude-playlists-v2";
 const VOICE_STORAGE_KEY = "sound-a-tude-voice-v1";
 const PLAYBACK_STORAGE_KEY = "sound-a-tude-playback-v1";
 const PLAYER_VISUAL_STORAGE_KEY = "sound-a-tude-player-visual-v1";
-const RECORDER_STORAGE_KEY = "sound-a-tude-recorder-v1";
+const LEGACY_RECORDER_STORAGE_KEYS = ["sound-a-tude-recorder-v1"];
+const RECORDER_STORAGE_KEY = "sound-a-tude-recorder-v2";
 const RECORDED_VOICE_DB_NAME = "sound-a-tude-recorded-voices";
 const RECORDED_VOICE_STORE = "recordings";
 const BROWSER_RECORDED_VOICE_ID = "browser-my-voice-v001";
@@ -101,6 +103,8 @@ const RECORDER_MIME_TYPES = [
   "audio/mp4",
   "audio/aac",
 ];
+
+clearLegacyRecorderState();
 const MALE_AVATAR_PHRASE_IDS = Object.freeze([
   "sat-p004",
   "sat-p006",
@@ -530,6 +534,57 @@ function displayTitleForChoice(choice) {
 
 function normalizeWhitespace(value) {
   return String(value ?? "").replace(/\s+/g, " ").trim();
+}
+
+function clearLegacyRecorderState() {
+  try {
+    LEGACY_RECORDER_STORAGE_KEYS.forEach((storageKey) => {
+      localStorage.removeItem(storageKey);
+    });
+  } catch {
+    // If storage is unavailable, the recorder can still run with in-memory state.
+  }
+}
+
+function decodeRtfUnicodeEscapes(text) {
+  return text.replace(/\\u(-?\d+)\??/g, (_, value) => {
+    const codePoint = Number(value);
+    const normalizedCodePoint = codePoint < 0 ? codePoint + 65536 : codePoint;
+    return Number.isFinite(normalizedCodePoint) ? String.fromCharCode(normalizedCodePoint) : "";
+  });
+}
+
+function stripRtfMarkup(text) {
+  let plainText = decodeRtfUnicodeEscapes(String(text ?? ""));
+  plainText = plainText
+    .replace(/\\'[0-9a-fA-F]{2}/g, " ")
+    .replace(/\\(?:par|line)\b-?\d* ?/g, "\n")
+    .replace(/\\tab\b-?\d* ?/g, " ")
+    .replace(/\\[a-zA-Z]+-?\d* ?/g, "")
+    .replace(/\\[^a-zA-Z0-9]/g, "")
+    .replace(/[{}]/g, "");
+
+  return plainText;
+}
+
+function phraseFileText(file, text) {
+  const fileName = file?.name || "";
+  const fileType = file?.type || "";
+  const hasRtfSignature = /^\s*{\s*\\rtf/i.test(text);
+  const isRtf = /\.rtf$/i.test(fileName) || /rtf/i.test(fileType) || hasRtfSignature;
+
+  return isRtf ? stripRtfMarkup(text) : String(text ?? "");
+}
+
+function customPhraseInputText(value) {
+  const text = String(value ?? "");
+  return /^\s*{\s*\\rtf/i.test(text)
+    ? normalizeWhitespace(phraseFileText({ name: "pasted.rtf", type: "text/rtf" }, text))
+    : text;
+}
+
+function savedCustomPhraseText(value) {
+  return normalizeWhitespace(customPhraseInputText(value));
 }
 
 function titleCaseFromWords(value) {
@@ -1358,10 +1413,7 @@ function saveRecorderState() {
     mode: recorderMode,
     customCategory: recorderCustomCategory,
     customNewCategory: recorderCustomNewCategory,
-    customPhrase: recorderCustomPhrase,
     customLastPhraseId: recorderCustomLastPhraseId,
-    customPhraseQueue: recorderCustomPhraseQueue,
-    customQueueIndex: recorderCustomQueueIndex,
   }));
 }
 
@@ -1384,17 +1436,8 @@ function restoreRecorderState() {
     if (typeof savedState?.customNewCategory === "string") {
       recorderCustomNewCategory = savedState.customNewCategory;
     }
-    if (typeof savedState?.customPhrase === "string") {
-      recorderCustomPhrase = savedState.customPhrase;
-    }
     if (typeof savedState?.customLastPhraseId === "string") {
       recorderCustomLastPhraseId = savedState.customLastPhraseId;
-    }
-    if (Array.isArray(savedState?.customPhraseQueue)) {
-      recorderCustomPhraseQueue = savedState.customPhraseQueue.map(normalizeWhitespace).filter(Boolean);
-    }
-    if (Number.isInteger(savedState?.customQueueIndex)) {
-      recorderCustomQueueIndex = savedState.customQueueIndex;
     }
   } catch {
     // Ignore corrupt local state and resume from the active category.
@@ -1405,11 +1448,17 @@ function restoreRecorderState() {
   recorderIndex = index === null
     ? firstOpenRecorderIndex(category)
     : Math.min(Math.max(index, 0), Math.max(choicesForRecorder.length - 1, 0));
-  recorderCustomQueueIndex = Math.min(Math.max(recorderCustomQueueIndex, 0), Math.max(recorderCustomPhraseQueue.length - 1, 0));
-  if (recorderCustomPhraseQueue.length && !recorderCustomPhrase) {
-    recorderCustomPhrase = recorderCustomPhraseQueue[recorderCustomQueueIndex];
-  }
+  resetCustomTextEntry();
   saveRecorderState();
+}
+
+function resetCustomTextEntry() {
+  recorderCustomPhrase = "";
+  recorderCustomPhraseQueue = [];
+  recorderCustomQueueIndex = 0;
+  if (recorderCustomPhraseInput) {
+    recorderCustomPhraseInput.value = "";
+  }
 }
 
 function setRecorderMessage(message) {
@@ -1470,15 +1519,59 @@ function renderCustomRecorderCategoryOptions() {
   }
 }
 
+const NUMBERED_PHRASE_PREFIX = /^\s*\d+(?:\s*[\).:-]\s*|\s+)/;
+const NUMBERED_PHRASE_MARKER = /(?:^|\s)\d+(?:\s*[\).:-]\s*|\s+)/g;
+
 function parsePhraseTextList(text) {
   return String(text ?? "")
     .split(/\r?\n+/)
     .map((line) => normalizeWhitespace(
       line
         .replace(/^[-*•]\s+/, "")
-        .replace(/^\d+[\).:-]?\s+/, "")
+        .replace(NUMBERED_PHRASE_PREFIX, "")
     ))
     .filter((line, index, lines) => line && lines.indexOf(line) === index);
+}
+
+function parseNumberedPhraseList(text) {
+  const normalizedText = customPhraseInputText(text);
+  const normalizedString = String(normalizedText ?? "");
+  const markers = [...normalizedString.matchAll(NUMBERED_PHRASE_MARKER)];
+
+  if (markers.length >= 2) {
+    return markers
+      .map((marker, index) => {
+        const phraseStart = marker.index + marker[0].length;
+        const phraseEnd = markers[index + 1]?.index ?? normalizedString.length;
+        return normalizeWhitespace(normalizedString.slice(phraseStart, phraseEnd));
+      })
+      .filter((line, index, lines) => line && lines.indexOf(line) === index);
+  }
+
+  const lines = normalizedString
+    .split(/\r?\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const numberedLines = lines.filter((line) => NUMBERED_PHRASE_PREFIX.test(line));
+
+  if (numberedLines.length < 2 || numberedLines.length !== lines.length) {
+    return [];
+  }
+
+  return parsePhraseTextList(numberedLines.join("\n"));
+}
+
+function queueCustomPhrasesFromText(text) {
+  const phrases = parseNumberedPhraseList(text);
+  if (!phrases.length) return false;
+
+  recorderMode = "custom";
+  recorderCustomPhraseQueue = phrases;
+  setCustomQueueIndex(0);
+  saveRecorderState();
+  setRecorderMessage(`Queued ${phrases.length} phrase${phrases.length === 1 ? "" : "s"}.`);
+  renderVoiceRecorder();
+  return true;
 }
 
 function setCustomQueueIndex(index) {
@@ -1488,13 +1581,14 @@ function setCustomQueueIndex(index) {
   }
 
   recorderCustomQueueIndex = Math.min(Math.max(index, 0), recorderCustomPhraseQueue.length - 1);
-  recorderCustomPhrase = recorderCustomPhraseQueue[recorderCustomQueueIndex];
+  recorderCustomPhrase = savedCustomPhraseText(recorderCustomPhraseQueue[recorderCustomQueueIndex]);
+  recorderCustomPhraseQueue[recorderCustomQueueIndex] = recorderCustomPhrase;
   if (recorderCustomPhraseInput) {
     recorderCustomPhraseInput.value = recorderCustomPhrase;
   }
 }
 
-function clearCustomPhraseQueue({ keepCurrentPhrase = true } = {}) {
+function clearCustomPhraseQueue({ keepCurrentPhrase = false } = {}) {
   recorderCustomPhraseQueue = [];
   recorderCustomQueueIndex = 0;
   if (!keepCurrentPhrase) {
@@ -1547,7 +1641,7 @@ function renderVoiceRecorder() {
   retakeRecordedPhraseButton.disabled = !isCurrentRecorded;
   retakeRecordedPhraseButton.textContent = recorderMode === "custom" ? "Delete audio" : "Retake";
   if (clearPhraseQueueButton) {
-    clearPhraseQueueButton.disabled = !hasCustomQueue;
+    clearPhraseQueueButton.disabled = !hasCustomQueue && !currentCustomPhraseText();
   }
   if (deleteCustomCategoryButton) {
     deleteCustomCategoryButton.disabled = customRecordedChoicesForCategory().length === 0;
@@ -1852,34 +1946,9 @@ async function deleteCurrentCustomCategory() {
   renderVoiceRecorder();
 }
 
-async function loadCustomPhraseFile(file) {
-  if (!file) return;
-
-  try {
-    const text = await file.text();
-    const phrases = parsePhraseTextList(text);
-    if (!phrases.length) {
-      setRecorderMessage("No phrases found in that file.");
-      return;
-    }
-
-    recorderMode = "custom";
-    recorderCustomPhraseQueue = phrases;
-    setCustomQueueIndex(0);
-    saveRecorderState();
-    setRecorderMessage(`Loaded ${phrases.length} phrase${phrases.length === 1 ? "" : "s"}.`);
-  } catch {
-    setRecorderMessage("Could not load that text file.");
-  }
-
-  if (recorderPhraseFileInput) {
-    recorderPhraseFileInput.value = "";
-  }
-  renderVoiceRecorder();
-}
-
 function openVoiceRecorder() {
   restoreRecorderState();
+  resetCustomTextEntry();
   renderVoiceRecorder();
   setRecorderMessage("");
   goToPage(2);
@@ -3037,20 +3106,31 @@ recorderCustomCategoryInput?.addEventListener("input", () => {
   renderVoiceRecorder();
 });
 recorderCustomPhraseInput?.addEventListener("input", () => {
-  recorderCustomPhrase = recorderCustomPhraseInput.value;
+  const cleanPhraseText = customPhraseInputText(recorderCustomPhraseInput.value);
+  if (queueCustomPhrasesFromText(cleanPhraseText)) {
+    return;
+  }
+  if (cleanPhraseText !== recorderCustomPhraseInput.value) {
+    recorderCustomPhraseInput.value = cleanPhraseText;
+  }
+  recorderCustomPhrase = cleanPhraseText;
   if (recorderCustomPhraseQueue.length) {
-    recorderCustomPhraseQueue[recorderCustomQueueIndex] = normalizeWhitespace(recorderCustomPhraseInput.value);
+    recorderCustomPhraseQueue[recorderCustomQueueIndex] = normalizeWhitespace(cleanPhraseText);
   }
   recorderPreviewAudio.pause();
   saveRecorderState();
   renderVoiceRecorder();
 });
-recorderPhraseFileInput?.addEventListener("change", () => {
-  loadCustomPhraseFile(recorderPhraseFileInput.files?.[0]);
+recorderCustomPhraseInput?.addEventListener("paste", (event) => {
+  const pastedText = event.clipboardData?.getData("text") || "";
+  if (!queueCustomPhrasesFromText(pastedText)) return;
+
+  event.preventDefault();
+  recorderPreviewAudio.pause();
 });
 clearPhraseQueueButton?.addEventListener("click", () => {
   clearCustomPhraseQueue();
-  setRecorderMessage("Text list cleared.");
+  setRecorderMessage("Custom text cleared.");
 });
 deleteCustomCategoryButton?.addEventListener("click", deleteCurrentCustomCategory);
 previousRecorderPhraseButton?.addEventListener("click", () => goToRecorderPhrase(-1));
@@ -3067,6 +3147,8 @@ shuffleButton.addEventListener("click", toggleShuffle);
 nextButton.addEventListener("click", skipToNextTrack);
 openPlaylistButton.addEventListener("click", () => goToPage(1));
 openPlayerButton.addEventListener("click", () => goToPage(0));
+openGuideButton?.addEventListener("click", () => goToPage(3));
+closeGuideButton?.addEventListener("click", () => goToPage(0));
 playlistSelect.addEventListener("change", () => switchPlaylist(playlistSelect.value));
 createPlaylistButton.addEventListener("click", createPlaylist);
 fileLoader.addEventListener("change", () => loadFiles(fileLoader.files));
