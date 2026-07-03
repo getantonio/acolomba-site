@@ -101,7 +101,6 @@
 
     .download {
       display: inline-block;
-      margin-top: 14px;
       padding: 5px 11px;
       border: 1px solid var(--blue);
       background: transparent;
@@ -110,6 +109,13 @@
       font-weight: 700;
       line-height: 1.1;
       text-decoration: none;
+    }
+
+    .download-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 14px;
     }
 
     section {
@@ -230,8 +236,13 @@
       }
 
       .summary,
-      .download {
+      .download,
+      .download-row {
         margin-left: 0;
+      }
+
+      .download-row {
+        justify-content: flex-start;
       }
 
       section {
@@ -264,6 +275,35 @@
         overflow-wrap: anywhere;
       }
     }
+
+    @media print {
+      body {
+        background: var(--paper);
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      main {
+        width: 100%;
+        max-width: none;
+        padding: 0;
+      }
+
+      nav,
+      .download-row,
+      .resume-switch {
+        display: none;
+      }
+
+      header {
+        margin-top: 0;
+      }
+
+      section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+    }
   </style>
 </head>
 <body>
@@ -281,7 +321,10 @@
       <p class="contact">
         NYC / Remote<br>
         (561) 271-1163<br>
-        <a class="download" href="Antonio_Colomba_Operations_Support_Resume.docx">Download</a>
+        <span class="download-row">
+          <a class="download" href="Antonio_Colomba_Main_Resume.pdf">PDF</a>
+          <a class="download" href="Antonio_Colomba_Operations_Support_Resume.docx">DOC</a>
+        </span>
       </p>
     </header>
 

@@ -62,6 +62,7 @@ Last updated: 2026-07-03
 - Added a bottom-of-page link from `main-resume.html` to `fast-resume.html`.
 - Captured the standing publish workflow: after every site update, push `main` to the live GitHub Pages repo.
 - Removed `Fast Resume` from site nav bars and changed the bottom fast-resume pointer on `main-resume.html` to a right-justified discrete text link.
+- Changed the main resume download area to side-by-side PDF and DOC links, with the PDF generated from the screen-styled `main-resume.html`.
 
 ## Blocked
 
