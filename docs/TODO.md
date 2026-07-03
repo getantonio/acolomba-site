@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Renamed the `resume.html` hub entries to Main, Retouching, Freelance, and Bio to avoid repeating "Resume" in every option.
 - Added a single `resume.html` hub page linking to Main Resume, Retouching Resume, Fast Resume, and Bio, then removed scattered direct resume-version links from site navigation.
 - Created a separate old-work retouching resume page and PDF for high-end retouching, visual finishing, and supervisor/lead-track roles.
 
