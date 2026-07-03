@@ -25,7 +25,7 @@ Retouching Artist | Senior Retoucher | Photo Retouching Lead | Retouching Superv
 NYC | Dates to confirm
 
 - Delivered detailed visual finishing and retouching work for agency, studio, and commercial clients.
-- Worked with teams including Foam Digital, McCann Erickson, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.
+- Worked with teams including McCann Erickson, Foam Digital, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.
 - Managed image correction, color matching, compositing, proofing, revision cycles, client direction, and quality-control expectations.
 - Supported production teams by preparing polished images for commercial, creative, and presentation use.
 

@@ -24,7 +24,7 @@ Operations Manager | Production Coordinator | Technical Support Associate | Onbo
 NYC | Dates to confirm
 
 - Delivered detailed visual finishing and retouching work for agency, studio, and commercial clients.
-- Worked with teams including Foam Digital, McCann Erickson, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.
+- Worked with teams including McCann Erickson, Foam Digital, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.
 - Managed image correction, color matching, compositing, proofing, revision cycles, client direction, and quality-control expectations.
 
 ### 291 Digital, High-End Digital Retoucher

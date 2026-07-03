@@ -23,8 +23,8 @@ Last updated: 2026-06-30
   - 291 Digital, High-End Digital Retoucher, NYC
   - FCB World Wide, High-End Digital Retoucher, NYC
 - Client / agency names visible:
-  - Foam Digital
   - McCann Erickson
+  - Foam Digital
   - Urban Studio
   - Nucleus Imaging
   - Digital Evolution
@@ -68,4 +68,3 @@ Antonio does have professional experience. The accurate framing is:
 - No formal fintech employment yet.
 - Real professional experience in high-end digital retouching, visual production, client work, deadlines, quality control, and technical creative tools.
 - Self-directed crypto/web3 project experience through Token Factory / TokenHub.
-

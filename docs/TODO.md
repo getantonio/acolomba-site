@@ -4,6 +4,9 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Reduced role-heading typography across resume pages to avoid orphaned single-word wraps.
+- Reordered the visible client list to McCann Erickson, Foam Digital, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.
+- Renamed the retouching resume Portfolio Proof section to Portfolio and removed titles beneath the artwork.
 - Changed the retouching resume Best Fit Roles wording from Visual Effects Artist to Visual Effects.
 - Renamed the resume hub Retouching label to Photo Retouching.
 - Removed the Bio row from the `resume.html` hub because Bio is already available in the site navigation.

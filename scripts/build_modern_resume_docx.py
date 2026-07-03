@@ -207,7 +207,7 @@ add_bottom_rule(divider, size="1")
 
 add_section("02", "Professional foundation", before=8)
 add_role("Freelance Engagements, High-End Digital Retoucher", "NYC | dates to confirm")
-add_bullet("Delivered high-end retouching and visual finishing for agency, studio, and commercial clients including Foam Digital, McCann Erickson, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.")
+add_bullet("Delivered high-end retouching and visual finishing for agency, studio, and commercial clients including McCann Erickson, Foam Digital, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.")
 add_bullet("Applied image correction, color matching, compositing, proofing, and client-direction revisions.")
 
 add_role("291 Digital, High-End Digital Retoucher", "NYC | 12/2005 - 09/2006", left=0.32, before=8)

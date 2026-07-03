@@ -142,7 +142,7 @@ for item in [
 section_head("02", "Professional experience", before=10)
 role("Freelance Engagements, High-End Digital Retoucher", "NYC | dates to confirm")
 bullet("Delivered detailed visual finishing and retouching work for agency, studio, and commercial clients.")
-bullet("Worked with teams including Foam Digital, McCann Erickson, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.")
+bullet("Worked with teams including McCann Erickson, Foam Digital, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.")
 bullet("Managed image correction, color matching, compositing, proofing, revision cycles, client direction, and quality-control expectations.")
 
 role("291 Digital, High-End Digital Retoucher", "NYC | 12/2005 - 09/2006", left=0.28)

@@ -27,7 +27,7 @@ Production Coordinator | Creative Operations Assistant | AI Workflow Coordinator
 NYC | Dates to confirm
 
 - Delivered high-end digital retouching and visual finishing work for agency, studio, and commercial clients.
-- Worked with brands and teams including Foam Digital, McCann Erickson, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.
+- Worked with brands and teams including McCann Erickson, Foam Digital, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.
 - Applied detailed image correction, color matching, compositing, and proofing to meet professional production standards.
 - Collaborated with creative stakeholders and adapted work to client direction, quality expectations, and tight deadlines.
 

@@ -116,7 +116,7 @@ add_bullet(doc, "Hands-on web3 project exposure through Token Factory / TokenHub
 add_heading(doc, "Professional Experience")
 add_role(doc, "Freelance Engagements", "High-End Digital Retoucher", "NYC | Dates to confirm")
 add_bullet(doc, "Delivered high-end digital retouching and visual finishing work for agency, studio, and commercial clients.")
-add_bullet(doc, "Worked with brands and teams including Foam Digital, McCann Erickson, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.")
+add_bullet(doc, "Worked with brands and teams including McCann Erickson, Foam Digital, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.")
 add_bullet(doc, "Applied detailed image correction, color matching, compositing, and proofing to meet professional production standards.")
 add_bullet(doc, "Collaborated with creative stakeholders and adapted work to client direction, quality expectations, and tight deadlines.")
 
