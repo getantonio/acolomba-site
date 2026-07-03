@@ -46,8 +46,94 @@ try {
       }
 
       body {
+        font-size: 15px !important;
+        line-height: 1.36 !important;
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;
+      }
+
+      main {
+        padding: 0 !important;
+      }
+
+      header {
+        margin: 0 0 16px !important;
+        gap: 28px !important;
+      }
+
+      h1 {
+        font-size: 56px !important;
+      }
+
+      .subtitle {
+        margin-top: 8px !important;
+        font-size: 18px !important;
+      }
+
+      .contact {
+        font-size: 12px !important;
+        line-height: 1.35 !important;
+      }
+
+      .summary {
+        max-width: none !important;
+        margin: 0 0 15px 190px !important;
+        font-size: 15px !important;
+        line-height: 1.34 !important;
+      }
+
+      section {
+        grid-template-columns: 170px minmax(0, 1fr) !important;
+        column-gap: 26px !important;
+        margin-top: 13px !important;
+        padding-top: 0 !important;
+        border-top: 0 !important;
+      }
+
+      h2 {
+        font-size: 15px !important;
+        line-height: 1.05 !important;
+      }
+
+      h3 {
+        margin: 10px 0 3px !important;
+        font-size: 15px !important;
+        line-height: 1.12 !important;
+      }
+
+      h3 small {
+        font-size: 10.5px !important;
+      }
+
+      ul {
+        margin: 4px 0 0 18px !important;
+      }
+
+      li {
+        margin: 2px 0 !important;
+      }
+
+      p {
+        margin-top: 0 !important;
+      }
+
+      .education-list {
+        gap: 5px !important;
+      }
+
+      .school {
+        font-size: 15px !important;
+        line-height: 1.1 !important;
+      }
+
+      .school-detail {
+        margin-top: 1px !important;
+        font-size: 12.5px !important;
+        line-height: 1.2 !important;
+      }
+
+      .school-location {
+        font-size: 11.5px !important;
       }
     `,
   });
@@ -57,12 +143,12 @@ try {
     format: "Letter",
     printBackground: true,
     margin: {
-      top: "0.25in",
-      right: "0.25in",
-      bottom: "0.25in",
-      left: "0.25in",
+      top: "0.22in",
+      right: "0.22in",
+      bottom: "0.22in",
+      left: "0.22in",
     },
-    scale: 0.78,
+    scale: 0.82,
   });
 } finally {
   await browser.close();
