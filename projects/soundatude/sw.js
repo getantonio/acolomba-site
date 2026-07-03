@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v68-custom-volume-scale";
+const CACHE_NAME = "sound-a-tude-v69-recorder-warmup";
 const MALE_AVATAR_PHRASE_IDS = [
   "sat-p004",
   "sat-p006",

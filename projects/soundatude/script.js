@@ -97,6 +97,7 @@ const RECORDER_AUDIO_CONSTRAINTS = {
   sampleRate: { ideal: 48000 },
   sampleSize: { ideal: 16 },
 };
+const RECORDER_MIC_WARMUP_MS = 320;
 const RECORDER_MIME_TYPES = [
   "audio/webm;codecs=opus",
   "audio/webm",
@@ -764,6 +765,7 @@ let recorderProcessedStream = null;
 let recorderAudioContext = null;
 let recorderChunks = [];
 let isRecordingPhrase = false;
+let recorderStartToken = 0;
 
 function kokoroFilesByPhrase(voiceId) {
   return Object.fromEntries(phraseIds.map((phraseId) => [
@@ -1677,6 +1679,12 @@ function preferredRecorderMimeType() {
   return RECORDER_MIME_TYPES.find((mimeType) => MediaRecorder.isTypeSupported?.(mimeType)) || "";
 }
 
+function waitForRecorderWarmup() {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, RECORDER_MIC_WARMUP_MS);
+  });
+}
+
 async function createFilteredRecorderStream(inputStream) {
   const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
   if (!AudioContextConstructor) return inputStream;
@@ -1780,6 +1788,10 @@ async function startBrowserPhraseRecording() {
   stopMainMedia();
   previewAudio.pause();
   recorderPreviewAudio.pause();
+  const startToken = ++recorderStartToken;
+  isRecordingPhrase = true;
+  setRecorderMessage(`Getting microphone ready for ${target.label}.`);
+  renderVoiceRecorder();
 
   try {
     recorderStream = await navigator.mediaDevices.getUserMedia({ audio: RECORDER_AUDIO_CONSTRAINTS });
@@ -1788,6 +1800,13 @@ async function startBrowserPhraseRecording() {
       recordingStream = await createFilteredRecorderStream(recorderStream);
     } catch (error) {
       console.warn("Recorder audio filtering unavailable, using raw microphone input.", error);
+    }
+
+    await waitForRecorderWarmup();
+    if (startToken !== recorderStartToken || !isRecordingPhrase) {
+      stopRecorderStream();
+      renderVoiceRecorder();
+      return;
     }
 
     const mimeType = preferredRecorderMimeType();
@@ -1803,6 +1822,7 @@ async function startBrowserPhraseRecording() {
     mediaRecorder.addEventListener("stop", async () => {
       const blob = new Blob(recorderChunks, { type: mediaRecorder.mimeType || "audio/webm" });
       isRecordingPhrase = false;
+      mediaRecorder = null;
       stopRecorderStream();
 
       try {
@@ -1820,7 +1840,6 @@ async function startBrowserPhraseRecording() {
     }, { once: true });
 
     mediaRecorder.start();
-    isRecordingPhrase = true;
     setRecorderMessage(`Recording ${target.label}.`);
     renderVoiceRecorder();
   } catch {
@@ -1832,12 +1851,14 @@ async function startBrowserPhraseRecording() {
 }
 
 function stopBrowserPhraseRecording() {
+  recorderStartToken += 1;
   if (mediaRecorder && mediaRecorder.state !== "inactive") {
     mediaRecorder.stop();
     return;
   }
 
   isRecordingPhrase = false;
+  mediaRecorder = null;
   stopRecorderStream();
   renderVoiceRecorder();
 }
