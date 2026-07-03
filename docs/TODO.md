@@ -5,6 +5,7 @@ Last updated: 2026-07-03
 ## Completed
 
 - Linked the Token Factory & Exchange project title to the live TokenHub.dev / Token Factory site.
+- Shortened the OpenRouter UI project focus line around asset library workflows.
 - Removed the forced line break from the Projects page Engineering Projects heading.
 - Restored Projects page readability with slightly larger serif text and clearer weights.
 - Refined the OpenRouter UI project copy around OpenRouter LLM API sourcing and generation flows.
