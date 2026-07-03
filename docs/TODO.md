@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Dimmed the Freelance resume option for now while keeping it available.
 - Changed the home-page Projects menu link to read just "Projects" without the descriptive subline.
 - Shortened the Bio menu subline to "Background, positioning."
 - Restored the Projects item in the homepage-style side menu as a plain link without descriptive subline.
