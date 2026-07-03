@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Updated the Bio page human-skills sentence to mention curiosity of emerging technology.
 - Changed the Bio page Background paragraph from He studied to Antonio studied.
 - Changed the Bio page AI wording from has been replaced to is being replaced.
 - Moved the Bio page visual judgment and calm written communication bullets to the bottom of the Human Skills stack.
