@@ -1808,14 +1808,9 @@ async function startBrowserPhraseRecording() {
         await saveBrowserRecordedPhrase(target.phraseId, blob, target.metadata);
         if (recorderMode === "custom") {
           recorderCustomLastPhraseId = target.phraseId;
-          if (recorderCustomPhraseQueue.length && recorderCustomQueueIndex < recorderCustomPhraseQueue.length - 1) {
-            setCustomQueueIndex(recorderCustomQueueIndex + 1);
-          }
-        } else if (!isRecorderCategoryComplete()) {
-          recorderIndex = nextOpenRecorderIndex(recorderIndex);
         }
         saveRecorderState();
-        setRecorderMessage(`Saved ${target.label}`);
+        setRecorderMessage(`Saved ${target.label}. Play it back or tap next.`);
       } catch {
         setRecorderMessage("Could not save this recording.");
       }
