@@ -53,10 +53,10 @@ Photoshop, InDesign, Premiere, After Effects, Nuke, Maya, Houdini, 3DEqualizer, 
 
 ## Education
 
-Digital Media Arts College | South Florida  
+Digital Media Arts College, now part of Lynn University | South Florida  
 M.F.A. Visual Effects Animation, Highest Academic Distinction.
 
-Digital Media Arts College | South Florida  
+Digital Media Arts College, now part of Lynn University | South Florida  
 B.F.A. 3D Character Animation, Summa Cum Laude, First in Class 2015.
 
 CG Spectrum / Rent-A-Mentor | Remote  

@@ -99,8 +99,8 @@ NYC | 09/2000 - 09/2001
 
 ## Education
 
-- Digital Media Arts College, M.F.A. Visual Effects Animation, Highest Academic Distinction
-- Digital Media Arts College, B.F.A. 3D Character Animation, Summa Cum Laude, First in Class 2015
+- Digital Media Arts College, now part of Lynn University, M.F.A. Visual Effects Animation, Highest Academic Distinction
+- Digital Media Arts College, now part of Lynn University, B.F.A. 3D Character Animation, Summa Cum Laude, First in Class 2015
 - CG Spectrum / RentAmentor, 3D Character Animation
 - Renaissance Center / 3D Buzz, 3D Animation
 - School of Visual Arts, Commercial Photography

@@ -4,7 +4,7 @@ Last updated: 2026-06-30
 
 Assumption: "city schools" means CUNY schools in New York City.
 
-Education context: local resume materials list two completed degrees already: an M.F.A. in Visual Effects Animation and a B.F.A. in 3D Character Animation from Digital Media Arts College. Because of that, continuing education, workforce certificates, bootcamps, and short credentials may be a better fit than another associate or bachelor's degree.
+Education context: local resume materials list two completed degrees already: an M.F.A. in Visual Effects Animation and a B.F.A. in 3D Character Animation from Digital Media Arts College, now part of Lynn University. Because of that, continuing education, workforce certificates, bootcamps, and short credentials may be a better fit than another associate or bachelor's degree.
 
 ## Best Fit Shortlist
 

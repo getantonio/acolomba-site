@@ -218,8 +218,8 @@ add_bullet("Produced high-resolution art, visual effects, retouching, color corr
 
 add_section("03", "Education", before=10, left=0.22)
 for item in [
-    "Digital Media Arts College, M.F.A. Visual Effects Animation, Highest Academic Distinction.",
-    "Digital Media Arts College, B.F.A. 3D Character Animation, Summa Cum Laude, First in Class 2015.",
+    "Digital Media Arts College, now part of Lynn University, M.F.A. Visual Effects Animation, Highest Academic Distinction.",
+    "Digital Media Arts College, now part of Lynn University, B.F.A. 3D Character Animation, Summa Cum Laude, First in Class 2015.",
     "CG Spectrum / RentAmentor, 3D Character Animation; Renaissance Center / 3D Buzz, 3D Animation; School of Visual Arts, Commercial Photography.",
 ]:
     add_bullet(item, size=9.0, left=0.4, after=3)
