@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Shortened the Retouching resume hub description to high-end retouching and creative production work.
 - Updated the Main resume hub description to managerial, coordination, admin, and customer support positioning.
 - Reduced the oversized typography on `resume.html` so the hub reads quieter and less unnecessarily bold.
 - Renamed the `resume.html` hub entries to Main, Retouching, Freelance, and Bio to avoid repeating "Resume" in every option.
