@@ -5,6 +5,7 @@ Last updated: 2026-07-03
 ## Completed
 
 - Linked the Token Factory & Exchange project title to the live TokenHub.dev / Token Factory site.
+- Changed Sound-a-tude project wording from voice cloning to custom voice affirmation recorder.
 - Changed internal project links to explicit `index.html` targets so local/file browsing opens the pages.
 - Added consistent web-version links across all Projects page entries.
 - Updated the Token Factory & Exchange project link to the unpaused Vercel deployment.
@@ -27,7 +28,7 @@ Last updated: 2026-07-03
 - Changed Token Factory project wording to pre-token-sales, Web3 education guides.
 - Updated the Token Factory & Exchange project focus copy with token creation, vesting, liquidity pools, Web3 education, marketing, and future management tools.
 - Simplified the Before/After Retouching project copy around the web lightbox, before/after images, AI-engineered study samples, and PDF/doc download.
-- Rewrote the Sound-a-tude project copy around the iPhone app, companion web version, playlist-based mindset training, and voice-cloning support.
+- Rewrote the Sound-a-tude project copy around the iPhone app, companion web version, playlist-based mindset training, and custom voice affirmation recorder.
 - Updated the home Resume teaser text to General, Retouching, Freelance.
 - Cleaned up the Projects page hero typography and spacing so the intro reads less oversized.
 - Updated the Bio page Human Skills bullet to say repeated mark ups.
