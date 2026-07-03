@@ -4,6 +4,17 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Added a right-justified Mixed Media Portfolio text link to the Projects page header and created `portfolio.html` as a working showcase for retouching, AI motion, audio/interface, and upcoming mixed-media samples.
+- Renamed the Projects page portfolio link to normal-sized "Portfolio" text and removed the large portfolio page heading/intro copy.
+- Changed the Portfolio page AI Image-to-Video Studies sample to image 04.
+- Simplified the Portfolio page by removing explanatory paragraphs and bullets, leaving only concise section headers and media.
+- Removed remaining explanatory captions from the Portfolio page, keeping only simple labels where useful.
+- Removed the Generative Media art pieces from the Portfolio page and tightened portfolio headings into compact labels.
+- Implemented the Portfolio page as compact clickable ID-card media frames with a reusable lightbox viewer for before/after images, video, audio, and project/detail links.
+- Removed the Sound-a-tude avatar placeholder, replaced it with an audio waveform-style mark, removed the standalone 4K Upscale card, and added padding inside portfolio card frames.
+- Replaced the Portfolio page Retouching card split-image thumbnail with a thumbnail of the Before/After Retouching page.
+- Centered Portfolio card text labels under each thumbnail.
+- Removed the redundant small Antonio Colomba nav mark from the landing/main page copies while keeping the navigation links right-aligned.
 - Removed Customer Operations Associate, renamed Administrative Operations Assistant to Administrative Operations, and removed the two ticket/CRM/calm-communication Core Strengths bullets from the resume pages and downloads.
 - Fixed Brave/Chromium viewport background bleed on the static site pages by matching the root document background to the page paper and making the body fill the viewport.
 - Added a full-window dove splash screen to the landing page using the original first Higgsfield dove photo, with a 1.75-second fade-in/fade-out, subtle blur, zoom-in, counterclockwise rotation motion, and a 2-second white fallback if the image is unavailable.
@@ -153,6 +164,8 @@ Last updated: 2026-07-03
 
 ## Queued
 
+- 2026-07-03 [Next] Continue filling the Mixed Media Portfolio with stronger selected samples: product sequence, audio clip, NFT/Web3 presentation, and process notes.
+- 2026-07-03 [Done] Reworked the Portfolio page into smaller clickable ID-card-style media frames with a general mixed-media viewer that can open simple work in a lightbox/popup and larger work on dedicated detail pages.
 - 2026-07-03 [Next] Use the GiftTree Photo Editor posting as a retouching/photo-editor targeting note: remote full-time, $90,000-$120,000, e-commerce/luxury/lifestyle retouching, high-resolution product and lifestyle photography for web, email, social, digital ads, and print.
 - 2026-07-03 [Next] Add certificate-backed HTTPS forwarding for `https://acolomba.com/` and `https://www.acolomba.com/` if direct HTTPS on the `.com` domain needs to work.
 - 2026-07-02 [Done] Created the first Higgsfield image-to-video sample for retouching comparison 1 and wired `projects/before-after-retouching/video/image-01-ai-kling-720p.mp4` into the AI modified gallery state.
