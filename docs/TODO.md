@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Changed Token Factory project wording to pre-token-sales, Web3 education guides.
 - Updated the Token Factory & Exchange project focus copy with token creation, vesting, liquidity pools, Web3 education, marketing, and future management tools.
 - Simplified the Before/After Retouching project copy around the web lightbox, before/after images, AI-engineered study samples, and PDF/doc download.
 - Rewrote the Sound-a-tude project copy around the iPhone app, companion web version, playlist-based mindset training, and voice-cloning support.
