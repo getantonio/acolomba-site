@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Fixed Brave/Chromium viewport background bleed on the static site pages by matching the root document background to the page paper and making the body fill the viewport.
 - Added a full-window dove splash screen to the landing page using the original first Higgsfield dove photo, with a 1.75-second fade-in/fade-out, subtle blur, zoom-in, counterclockwise rotation motion, and a 2-second white fallback if the image is unavailable.
 - Added the NFT Creation Project to the Projects page as a Web3 proof item for creator tools, marketplace operations, visual QA, and product support roles.
 - Configured Namecheap URL Redirect records so `http://acolomba.com/` and `http://www.acolomba.com/` forward to `https://acolomba.site/`.
