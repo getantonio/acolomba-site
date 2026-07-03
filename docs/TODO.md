@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Updated the home Resume link description to say Main, retouching, freelance, versions.
 - Updated Digital Media Arts College education entries to note that DMAC is now part of Lynn University.
 - Removed the broad Tools section from the support/general resume variants and their DOCX builders.
 - Replaced the generic local crypto/project-work bullet with specific multi-blockchain, DeFi, AI content, and audio attitude app wording.
