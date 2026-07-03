@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Removed "Senior Retoucher" and "Photo Retouching Lead" from the Retouching Resume best-fit roles and rebuilt the PDF download.
 - Dimmed the Freelance resume option for now while keeping it available.
 - Changed the home-page Projects menu link to read just "Projects" without the descriptive subline.
 - Shortened the Bio menu subline to "Background, positioning."
