@@ -1590,6 +1590,89 @@ button:focus-visible {
   transform: translateY(-50%);
 }
 
+.recorder-mode-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 34px;
+  padding: 3px;
+  border: 1px solid oklch(35% 0.024 240 / 0.58);
+  border-radius: 999px;
+  background: oklch(11% 0.015 235 / 0.72);
+}
+
+.recorder-mode-toggle button {
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: oklch(55% 0.018 96);
+  cursor: pointer;
+  font-size: 0.76rem;
+  font-weight: 740;
+}
+
+.recorder-mode-toggle button.is-selected {
+  background: oklch(23% 0.026 240 / 0.86);
+  color: oklch(78% 0.035 92);
+}
+
+.recorder-custom-fields {
+  display: grid;
+  gap: 10px;
+}
+
+.recorder-custom-fields[hidden],
+.recorder-new-category[hidden],
+.recorder-category-select[hidden] {
+  display: none;
+}
+
+.recorder-custom-fields label {
+  display: grid;
+  gap: 6px;
+  color: oklch(58% 0.018 96);
+  font-size: 0.68rem;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
+.recorder-custom-fields select,
+.recorder-custom-fields input,
+.recorder-custom-fields textarea {
+  width: 100%;
+  border: 1px solid oklch(41% 0.028 240 / 0.64);
+  border-radius: 9px;
+  background: oklch(12% 0.016 235 / 0.86);
+  color: oklch(82% 0.026 92);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 650;
+}
+
+.recorder-custom-fields select,
+.recorder-custom-fields input {
+  min-height: 40px;
+  padding: 0 12px;
+}
+
+.recorder-custom-fields textarea {
+  min-height: 78px;
+  padding: 11px 12px;
+  line-height: 1.35;
+  resize: vertical;
+}
+
+.recorder-custom-fields input::placeholder,
+.recorder-custom-fields textarea::placeholder {
+  color: oklch(49% 0.016 96);
+}
+
+.recorder-custom-fields select:focus-visible,
+.recorder-custom-fields input:focus-visible,
+.recorder-custom-fields textarea:focus-visible {
+  outline: 2px solid var(--selected);
+  outline-offset: 2px;
+}
+
 .recorder-progress {
   height: 8px;
   overflow: hidden;

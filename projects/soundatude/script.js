@@ -20,6 +20,12 @@ const openVoiceRecorderButton = document.querySelector("#openVoiceRecorderButton
 const voiceRecorderDialog = document.querySelector("#voiceRecorderDialog");
 const closeVoiceRecorderButton = document.querySelector("#closeVoiceRecorderButton");
 const recorderCategorySelect = document.querySelector("#recorderCategorySelect");
+const recorderModeButtons = [...document.querySelectorAll("[data-recorder-mode]")];
+const recorderCustomFields = document.querySelector("#recorderCustomFields");
+const recorderCustomCategorySelect = document.querySelector("#recorderCustomCategorySelect");
+const recorderNewCategoryField = document.querySelector("#recorderNewCategoryField");
+const recorderCustomCategoryInput = document.querySelector("#recorderCustomCategoryInput");
+const recorderCustomPhraseInput = document.querySelector("#recorderCustomPhraseInput");
 const recorderProgressText = document.querySelector("#recorderProgressText");
 const recorderProgressBar = document.querySelector("#recorderProgressBar");
 const recorderPositionText = document.querySelector("#recorderPositionText");
@@ -73,6 +79,9 @@ const RECORDED_VOICE_DB_NAME = "sound-a-tude-recorded-voices";
 const RECORDED_VOICE_STORE = "recordings";
 const BROWSER_RECORDED_VOICE_ID = "browser-my-voice-v001";
 const BROWSER_RECORDED_FALLBACK_VOICE_ID = "af_nicole";
+const CUSTOM_RECORDED_SOURCE = "browser-recorded-custom";
+const DEFAULT_CUSTOM_RECORDED_CATEGORY = "My Affirmations";
+const NEW_CUSTOM_CATEGORY_VALUE = "__new-custom-recording-category__";
 const AVATAR_VIDEO_VERSION = "avatar-video-seedance-480p-v008";
 const METER_BAR_COUNT = 56;
 const MALE_AVATAR_PHRASE_IDS = Object.freeze([
@@ -479,25 +488,106 @@ const phraseLibraryChoices = phraseLibrary.map(([phraseId, title], index) => ({
 }));
 const phraseLibraryChoiceIds = phraseLibraryChoices.map((choice) => choice.id);
 const phraseLibraryByPhraseId = new Map(phraseLibraryChoices.map((choice) => [choice.phraseId, choice]));
+let customRecordedChoices = [];
 
 function phraseChoiceIdsForPhraseIds(ids) {
   return ids.map((phraseId) => `loop-phrase-${phraseId}`);
 }
 
 function phraseChoiceIdsForCategory(category) {
-  return phraseLibraryChoices
+  return [...phraseLibraryChoices, ...customRecordedChoices]
     .filter((choice) => choice.category === category)
     .map((choice) => choice.id);
 }
 
-const mainCategories = [
+const builtInMainCategories = [
   { id: "attitude-effort", title: "Attitude & Effort", playlistId: "loop-phrase-library" },
   { id: "confidence-connection", title: "Confidence & Connection", playlistId: "loop-confidence-connection-library" },
 ];
+let mainCategories = [...builtInMainCategories];
 
 function displayTitleForChoice(choice) {
   const phraseChoice = choice.phraseId ? phraseLibraryByPhraseId.get(choice.phraseId) : null;
   return phraseChoice?.displayTitle ?? choice.displayTitle ?? choice.title;
+}
+
+function normalizeWhitespace(value) {
+  return String(value ?? "").replace(/\s+/g, " ").trim();
+}
+
+function titleCaseFromWords(value) {
+  const words = normalizeWhitespace(value).split(" ").filter(Boolean).slice(0, 5);
+  if (!words.length) return "Custom Phrase";
+
+  return words
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
+function customCategoryId(title) {
+  return `recorded-${slugifyPhraseTitle(title) || "affirmations"}`;
+}
+
+function customPlaylistId(title) {
+  return `loop-${customCategoryId(title)}`;
+}
+
+function customRecordedCategoryTitles() {
+  return [...new Set(customRecordedChoices.map((choice) => choice.category).filter(Boolean))];
+}
+
+function categoryTitlesForCustomRecorder() {
+  return [
+    DEFAULT_CUSTOM_RECORDED_CATEGORY,
+    ...builtInMainCategories.map((category) => category.title),
+    ...customRecordedCategoryTitles(),
+  ].filter((title, index, titles) => title && titles.indexOf(title) === index);
+}
+
+function syncMainCategories() {
+  const customCategories = customRecordedCategoryTitles().map((title) => ({
+    id: customCategoryId(title),
+    title,
+    playlistId: customPlaylistId(title),
+  }));
+
+  mainCategories = [...builtInMainCategories, ...customCategories];
+}
+
+function syncCustomRecordedPlaylists() {
+  syncMainCategories();
+
+  const customCategoryTitles = customRecordedCategoryTitles();
+  const activeCustomPlaylistIds = new Set(customCategoryTitles.map((category) => customPlaylistId(category)));
+  playlistsByMode.loop = playlistsByMode.loop.filter((playlist) => (
+    !playlist.id.startsWith("loop-recorded-") || activeCustomPlaylistIds.has(playlist.id)
+  ));
+
+  customCategoryTitles.forEach((category) => {
+    const playlistId = customPlaylistId(category);
+    const itemIds = customRecordedChoices
+      .filter((choice) => choice.category === category)
+      .map((choice) => choice.id);
+    const existingPlaylist = playlistsByMode.loop.find((playlist) => playlist.id === playlistId);
+
+    if (existingPlaylist) {
+      existingPlaylist.name = category;
+      existingPlaylist.category = category;
+      existingPlaylist.itemIds = itemIds;
+      return;
+    }
+
+    playlistsByMode.loop.push({
+      id: playlistId,
+      name: category,
+      category,
+      itemIds,
+    });
+  });
+
+  if (!playlistsByMode.loop.some((playlist) => playlist.id === activePlaylistIdByMode.loop)) {
+    activePlaylistIdByMode.loop = playlistsByMode.loop[0].id;
+  }
 }
 
 const kokoroAmericanVoices = [
@@ -585,9 +675,15 @@ const avatarVideoFilesByVisual = {
   },
 };
 const browserRecordedPhraseUrls = new Map();
+const browserRecordedPhraseMetadata = new Map();
 let recordedVoiceDatabasePromise = null;
 let recorderCategory = "Confidence & Connection";
 let recorderIndex = 0;
+let recorderMode = "guided";
+let recorderCustomCategory = DEFAULT_CUSTOM_RECORDED_CATEGORY;
+let recorderCustomNewCategory = "";
+let recorderCustomPhrase = "";
+let recorderCustomLastPhraseId = null;
 let mediaRecorder = null;
 let recorderStream = null;
 let recorderChunks = [];
@@ -784,8 +880,6 @@ function avatarVoiceIdsFor(voice) {
 }
 
 function resolveAvatarVideoSource(choice, voice = activeVoice()) {
-  return null;
-
   if (currentMode !== "loop" || !choice?.phraseId || !["male", "female"].includes(activePlayerVisual)) {
     return null;
   }
@@ -869,6 +963,9 @@ function setVoice(voiceId) {
 
   activeVoiceId = voiceOptions.some((voice) => voice.id === voiceId) ? voiceId : voiceOptions[0].id;
   localStorage.setItem(VOICE_STORAGE_KEY, activeVoiceId);
+  if (voiceSelect) {
+    voiceSelect.value = activeVoiceId;
+  }
   syncSelection({ scrollBehavior: "auto", updateAudio: true });
 
   if (shouldResume) {
@@ -909,6 +1006,57 @@ function updateVoiceControlMode() {
 
 function recordedKey(phraseId) {
   return `${BROWSER_RECORDED_VOICE_ID}:${phraseId}`;
+}
+
+function makeCustomPhraseId() {
+  return `sat-custom-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
+}
+
+function metadataForRecording(recording) {
+  return {
+    source: recording.source,
+    category: recording.category,
+    phraseText: recording.phraseText,
+    displayTitle: recording.displayTitle,
+    title: recording.title,
+    updatedAt: recording.updatedAt,
+  };
+}
+
+function isCustomRecordedMetadata(metadata) {
+  return metadata?.source === CUSTOM_RECORDED_SOURCE;
+}
+
+function customRecordedChoiceFromMetadata(phraseId, metadata) {
+  const phraseText = normalizeWhitespace(metadata.phraseText);
+  const displayTitle = normalizeWhitespace(metadata.displayTitle) || titleCaseFromWords(phraseText);
+  const category = normalizeWhitespace(metadata.category) || DEFAULT_CUSTOM_RECORDED_CATEGORY;
+  const title = normalizeWhitespace(metadata.title) || `my-${slugifyPhraseTitle(displayTitle) || "affirmation"}`;
+
+  return {
+    id: `loop-custom-recorded-${phraseId}`,
+    title,
+    displayTitle,
+    phraseText,
+    file: browserRecordedPhraseUrls.get(phraseId),
+    phraseId,
+    category,
+    subcategory: category,
+    subcategoryId: customCategoryId(category),
+    source: CUSTOM_RECORDED_SOURCE,
+  };
+}
+
+function rebuildCustomRecordedChoices() {
+  customRecordedChoices = [...browserRecordedPhraseMetadata.entries()]
+    .filter(([, metadata]) => isCustomRecordedMetadata(metadata))
+    .sort((a, b) => String(a[1].updatedAt ?? "").localeCompare(String(b[1].updatedAt ?? "")))
+    .map(([phraseId, metadata]) => customRecordedChoiceFromMetadata(phraseId, metadata));
+
+  choices.loop = choices.loop
+    .filter((choice) => choice.source !== CUSTOM_RECORDED_SOURCE)
+    .concat(customRecordedChoices);
+  syncCustomRecordedPlaylists();
 }
 
 function openRecordedVoiceDatabase() {
@@ -956,24 +1104,32 @@ async function loadBrowserRecordedPhrases() {
 
   browserRecordedPhraseUrls.forEach((url) => URL.revokeObjectURL(url));
   browserRecordedPhraseUrls.clear();
+  browserRecordedPhraseMetadata.clear();
 
   recordings
     .filter((recording) => recording?.voiceId === BROWSER_RECORDED_VOICE_ID && recording.blob instanceof Blob)
     .forEach((recording) => {
       browserRecordedPhraseUrls.set(recording.phraseId, URL.createObjectURL(recording.blob));
+      browserRecordedPhraseMetadata.set(recording.phraseId, metadataForRecording(recording));
     });
 
+  rebuildCustomRecordedChoices();
   syncBrowserRecordedVoiceOption();
+  renderPlaylistControls();
+  renderWheel();
+  renderPlaylistEditor();
 }
 
-async function saveBrowserRecordedPhrase(phraseId, blob) {
+async function saveBrowserRecordedPhrase(phraseId, blob, metadata = {}) {
+  const updatedAt = new Date().toISOString();
   await withRecordedVoiceStore("readwrite", (store) => store.put({
     id: recordedKey(phraseId),
     voiceId: BROWSER_RECORDED_VOICE_ID,
     phraseId,
     blob,
     type: blob.type,
-    updatedAt: new Date().toISOString(),
+    ...metadata,
+    updatedAt,
   }));
 
   const previousUrl = browserRecordedPhraseUrls.get(phraseId);
@@ -982,7 +1138,15 @@ async function saveBrowserRecordedPhrase(phraseId, blob) {
   }
 
   browserRecordedPhraseUrls.set(phraseId, URL.createObjectURL(blob));
+  browserRecordedPhraseMetadata.set(phraseId, {
+    ...metadata,
+    updatedAt,
+  });
+  rebuildCustomRecordedChoices();
   syncBrowserRecordedVoiceOption();
+  renderPlaylistControls();
+  renderWheel();
+  renderPlaylistEditor();
 }
 
 async function deleteBrowserRecordedPhrase(phraseId) {
@@ -994,7 +1158,12 @@ async function deleteBrowserRecordedPhrase(phraseId) {
   }
 
   browserRecordedPhraseUrls.delete(phraseId);
+  browserRecordedPhraseMetadata.delete(phraseId);
+  rebuildCustomRecordedChoices();
   syncBrowserRecordedVoiceOption();
+  renderPlaylistControls();
+  renderWheel();
+  renderPlaylistEditor();
 }
 
 function recordedFilesByBrowserPhrase() {
@@ -1007,6 +1176,49 @@ function hasAnyBrowserRecordedPhrase() {
 
 function recorderChoicesForCategory(category) {
   return phraseLibraryChoices.filter((choice) => choice.category === category);
+}
+
+function customRecordedChoicesForCategory(category = currentCustomRecorderCategory()) {
+  return customRecordedChoices.filter((choice) => choice.category === category);
+}
+
+function currentCustomRecorderCategory() {
+  const selectedCategory = recorderCustomCategorySelect?.value || recorderCustomCategory;
+  if (selectedCategory === NEW_CUSTOM_CATEGORY_VALUE) {
+    return normalizeWhitespace(recorderCustomCategoryInput?.value || recorderCustomNewCategory);
+  }
+
+  return normalizeWhitespace(selectedCategory) || DEFAULT_CUSTOM_RECORDED_CATEGORY;
+}
+
+function currentCustomPhraseText() {
+  return normalizeWhitespace(recorderCustomPhraseInput?.value || recorderCustomPhrase);
+}
+
+function customLastChoice() {
+  return customRecordedChoices.find((choice) => choice.phraseId === recorderCustomLastPhraseId)
+    ?? customRecordedChoicesForCategory()[customRecordedChoicesForCategory().length - 1]
+    ?? null;
+}
+
+function pendingCustomChoice() {
+  const phraseText = currentCustomPhraseText();
+  const category = currentCustomRecorderCategory() || DEFAULT_CUSTOM_RECORDED_CATEGORY;
+  const lastChoice = customLastChoice();
+
+  if (lastChoice && lastChoice.category === category && lastChoice.phraseText === phraseText) {
+    return lastChoice;
+  }
+
+  return {
+    id: "pending-custom-recording",
+    title: "my-custom-affirmation",
+    displayTitle: titleCaseFromWords(phraseText),
+    phraseText: phraseText || "Write a custom phrase, then record it here.",
+    phraseId: "",
+    category,
+    source: CUSTOM_RECORDED_SOURCE,
+  };
 }
 
 function validRecorderCategory(category) {
@@ -1049,19 +1261,35 @@ function syncBrowserRecordedVoiceOption() {
 }
 
 function recorderChoices() {
+  if (recorderMode === "custom") {
+    return customRecordedChoicesForCategory();
+  }
+
   return recorderChoicesForCategory(recorderCategory);
 }
 
 function recorderChoice() {
+  if (recorderMode === "custom") {
+    return customLastChoice() ?? pendingCustomChoice();
+  }
+
   const choicesForRecorder = recorderChoices();
   return choicesForRecorder[Math.min(Math.max(recorderIndex, 0), Math.max(choicesForRecorder.length - 1, 0))];
 }
 
 function recorderRecordedCount() {
+  if (recorderMode === "custom") {
+    return customRecordedChoicesForCategory().length;
+  }
+
   return recorderChoices().filter((choice) => browserRecordedPhraseUrls.has(choice.phraseId)).length;
 }
 
 function isRecorderCategoryComplete() {
+  if (recorderMode === "custom") {
+    return recorderRecordedCount() > 0;
+  }
+
   return hasCompleteBrowserRecordedCategory(recorderCategory);
 }
 
@@ -1090,6 +1318,11 @@ function saveRecorderState() {
   localStorage.setItem(RECORDER_STORAGE_KEY, JSON.stringify({
     category: recorderCategory,
     index: recorderIndex,
+    mode: recorderMode,
+    customCategory: recorderCustomCategory,
+    customNewCategory: recorderCustomNewCategory,
+    customPhrase: recorderCustomPhrase,
+    customLastPhraseId: recorderCustomLastPhraseId,
   }));
 }
 
@@ -1102,6 +1335,21 @@ function restoreRecorderState() {
     if (validRecorderCategory(savedState?.category)) {
       category = savedState.category;
       index = Number.isInteger(savedState.index) ? savedState.index : null;
+    }
+    if (["guided", "custom"].includes(savedState?.mode)) {
+      recorderMode = savedState.mode;
+    }
+    if (typeof savedState?.customCategory === "string" && savedState.customCategory.trim()) {
+      recorderCustomCategory = savedState.customCategory;
+    }
+    if (typeof savedState?.customNewCategory === "string") {
+      recorderCustomNewCategory = savedState.customNewCategory;
+    }
+    if (typeof savedState?.customPhrase === "string") {
+      recorderCustomPhrase = savedState.customPhrase;
+    }
+    if (typeof savedState?.customLastPhraseId === "string") {
+      recorderCustomLastPhraseId = savedState.customLastPhraseId;
     }
   } catch {
     // Ignore corrupt local state and resume from the active category.
@@ -1130,35 +1378,91 @@ function renderRecorderCategoryOptions() {
   }).join("");
 }
 
+function renderRecorderModeControls() {
+  recorderModeButtons.forEach((button) => {
+    const isSelected = button.dataset.recorderMode === recorderMode;
+    button.classList.toggle("is-selected", isSelected);
+    button.setAttribute("aria-pressed", String(isSelected));
+  });
+
+  if (recorderCustomFields) {
+    recorderCustomFields.hidden = recorderMode !== "custom";
+  }
+  if (recorderCategorySelect) {
+    recorderCategorySelect.closest(".recorder-category-select").hidden = recorderMode !== "guided";
+  }
+}
+
+function renderCustomRecorderCategoryOptions() {
+  if (!recorderCustomCategorySelect) return;
+
+  const categoryTitles = categoryTitlesForCustomRecorder();
+  const selectedCategory = categoryTitles.includes(recorderCustomCategory)
+    ? recorderCustomCategory
+    : NEW_CUSTOM_CATEGORY_VALUE;
+
+  recorderCustomCategorySelect.innerHTML = [
+    ...categoryTitles.map((category) => {
+      const selected = category === selectedCategory ? " selected" : "";
+      return `<option value="${escapeHTML(category)}"${selected}>${escapeHTML(category)}</option>`;
+    }),
+    `<option value="${NEW_CUSTOM_CATEGORY_VALUE}"${selectedCategory === NEW_CUSTOM_CATEGORY_VALUE ? " selected" : ""}>Add new category</option>`,
+  ].join("");
+
+  recorderCustomCategorySelect.value = selectedCategory;
+  if (recorderCustomCategoryInput) {
+    recorderCustomCategoryInput.value = recorderCustomNewCategory;
+  }
+  if (recorderCustomPhraseInput) {
+    recorderCustomPhraseInput.value = recorderCustomPhrase;
+  }
+  if (recorderNewCategoryField) {
+    recorderNewCategoryField.hidden = selectedCategory !== NEW_CUSTOM_CATEGORY_VALUE;
+  }
+}
+
 function renderVoiceRecorder() {
   if (!voiceRecorderDialog) return;
+
+  renderRecorderModeControls();
+  renderCustomRecorderCategoryOptions();
 
   const choicesForRecorder = recorderChoices();
   const choice = recorderChoice();
   if (!choice) return;
 
   const recordedCount = recorderRecordedCount();
-  const totalCount = choicesForRecorder.length;
+  const totalCount = recorderMode === "custom" ? Math.max(choicesForRecorder.length, 1) : choicesForRecorder.length;
   const isCurrentRecorded = browserRecordedPhraseUrls.has(choice.phraseId);
   const isComplete = isRecorderCategoryComplete();
-  const progress = totalCount ? (recordedCount / totalCount) * 100 : 0;
+  const progress = recorderMode === "custom"
+    ? (recordedCount > 0 ? 100 : 0)
+    : (totalCount ? (recordedCount / totalCount) * 100 : 0);
 
   renderRecorderCategoryOptions();
-  recorderProgressText.textContent = `${recordedCount} of ${totalCount} recorded`;
+  recorderProgressText.textContent = recorderMode === "custom"
+    ? `${recordedCount} custom recorded`
+    : `${recordedCount} of ${totalCount} recorded`;
   recorderProgressBar.style.setProperty("--recorded-progress", `${progress}%`);
-  recorderPositionText.textContent = `Phrase ${recorderIndex + 1} of ${totalCount}`;
-  recorderPhraseState.textContent = isCurrentRecorded ? "Recorded" : "Open";
-  recorderPhraseHandle.textContent = choice.title.split("-").slice(0, 2).join("-");
+  recorderPositionText.textContent = recorderMode === "custom"
+    ? "Custom phrase"
+    : `Phrase ${recorderIndex + 1} of ${totalCount}`;
+  recorderPhraseState.textContent = isCurrentRecorded ? "Recorded" : (recorderMode === "custom" ? "Ready" : "Open");
+  recorderPhraseHandle.textContent = recorderMode === "custom"
+    ? (choice.category || DEFAULT_CUSTOM_RECORDED_CATEGORY)
+    : choice.title.split("-").slice(0, 2).join("-");
   recorderPhraseTitle.textContent = choice.displayTitle;
   recorderPhraseText.textContent = choice.phraseText;
-  previousRecorderPhraseButton.disabled = recorderIndex === 0;
-  nextRecorderPhraseButton.disabled = recorderIndex >= totalCount - 1;
+  previousRecorderPhraseButton.disabled = recorderMode === "custom" || recorderIndex === 0;
+  nextRecorderPhraseButton.disabled = recorderMode === "custom" || recorderIndex >= totalCount - 1;
   playRecordedPhraseButton.disabled = !isCurrentRecorded;
   retakeRecordedPhraseButton.disabled = !isCurrentRecorded;
   recordPhraseButton.classList.toggle("is-recording", isRecordingPhrase);
-  recordPhraseButton.setAttribute("aria-label", isRecordingPhrase ? "Stop recording" : "Record phrase");
+  recordPhraseButton.setAttribute("aria-label", isRecordingPhrase ? "Stop recording" : (recorderMode === "custom" ? "Record custom phrase" : "Record phrase"));
   useRecordedVoiceButton.disabled = recordedCount === 0;
-  useRecordedVoiceButton.textContent = isComplete
+  useRecordedVoiceButton.textContent = recorderMode === "custom" && recordedCount > 0
+    ? "Use recorded category"
+    : isComplete
     ? "Use My Voice"
     : (recordedCount > 0 ? "Use partial voice" : "Record one phrase");
 }
@@ -1168,9 +1472,59 @@ function stopRecorderStream() {
   recorderStream = null;
 }
 
-async function startBrowserPhraseRecording() {
+function customRecordingTarget() {
+  const category = currentCustomRecorderCategory();
+  const phraseText = currentCustomPhraseText();
+
+  if (!category) {
+    setRecorderMessage("Add a category for this recording.");
+    recorderCustomCategoryInput?.focus();
+    return null;
+  }
+
+  if (!phraseText) {
+    setRecorderMessage("Write the custom phrase first.");
+    recorderCustomPhraseInput?.focus();
+    return null;
+  }
+
+  const lastChoice = customLastChoice();
+  const phraseId = lastChoice && lastChoice.category === category && lastChoice.phraseText === phraseText
+    ? lastChoice.phraseId
+    : makeCustomPhraseId();
+  const displayTitle = titleCaseFromWords(phraseText);
+
+  return {
+    phraseId,
+    label: displayTitle,
+    metadata: {
+      source: CUSTOM_RECORDED_SOURCE,
+      category,
+      phraseText,
+      displayTitle,
+      title: `my-${slugifyPhraseTitle(displayTitle) || "affirmation"}`,
+    },
+  };
+}
+
+function recorderRecordingTarget() {
+  if (recorderMode === "custom") {
+    return customRecordingTarget();
+  }
+
   const choice = recorderChoice();
-  if (!choice) return;
+  if (!choice) return null;
+
+  return {
+    phraseId: choice.phraseId,
+    label: choice.phraseId,
+    metadata: {},
+  };
+}
+
+async function startBrowserPhraseRecording() {
+  const target = recorderRecordingTarget();
+  if (!target) return;
 
   if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
     setRecorderMessage("This browser cannot record audio here.");
@@ -1198,12 +1552,14 @@ async function startBrowserPhraseRecording() {
       stopRecorderStream();
 
       try {
-        await saveBrowserRecordedPhrase(choice.phraseId, blob);
-        if (!isRecorderCategoryComplete()) {
+        await saveBrowserRecordedPhrase(target.phraseId, blob, target.metadata);
+        if (recorderMode === "custom") {
+          recorderCustomLastPhraseId = target.phraseId;
+        } else if (!isRecorderCategoryComplete()) {
           recorderIndex = nextOpenRecorderIndex(recorderIndex);
         }
         saveRecorderState();
-        setRecorderMessage(`Saved ${choice.phraseId}.`);
+        setRecorderMessage(`Saved ${target.label}.`);
       } catch {
         setRecorderMessage("Could not save this recording.");
       }
@@ -1213,7 +1569,7 @@ async function startBrowserPhraseRecording() {
 
     mediaRecorder.start();
     isRecordingPhrase = true;
-    setRecorderMessage(`Recording ${choice.phraseId}.`);
+    setRecorderMessage(`Recording ${target.label}.`);
     renderVoiceRecorder();
   } catch {
     isRecordingPhrase = false;
@@ -1272,7 +1628,7 @@ async function playCurrentBrowserRecording() {
 
   try {
     await recorderPreviewAudio.play();
-    setRecorderMessage(`Playing ${choice.phraseId}.`);
+    setRecorderMessage(`Playing ${recorderMode === "custom" ? choice.displayTitle : choice.phraseId}.`);
   } catch {
     setRecorderMessage("Could not play this recording.");
   }
@@ -1284,7 +1640,10 @@ async function retakeCurrentBrowserRecording() {
 
   try {
     await deleteBrowserRecordedPhrase(choice.phraseId);
-    setRecorderMessage(`Removed ${choice.phraseId}.`);
+    if (recorderCustomLastPhraseId === choice.phraseId) {
+      recorderCustomLastPhraseId = null;
+    }
+    setRecorderMessage(`Removed ${recorderMode === "custom" ? choice.displayTitle : choice.phraseId}.`);
     saveRecorderState();
   } catch {
     setRecorderMessage("Could not remove this take.");
@@ -1313,7 +1672,15 @@ function useBrowserRecordedVoice() {
     return;
   }
 
-  selectCategory(recorderCategory);
+  if (recorderMode === "custom") {
+    const customCategory = currentCustomRecorderCategory();
+    const category = mainCategories.find((candidate) => candidate.title === customCategory);
+    if (category) {
+      activateLoopPlaylist(category.playlistId);
+    }
+  } else {
+    selectCategory(recorderCategory);
+  }
   syncBrowserRecordedVoiceOption();
   setVoice(BROWSER_RECORDED_VOICE_ID);
   closeVoiceRecorder();
@@ -1935,6 +2302,16 @@ function describePlaylistChoice(choice) {
   const phraseChoice = choice.phraseId ? phraseLibraryByPhraseId.get(choice.phraseId) : null;
   const subcategory = choice.phraseId ? phraseSubcategoryByPhraseId.get(choice.phraseId) : null;
 
+  if (choice.source === CUSTOM_RECORDED_SOURCE) {
+    return {
+      label: choice.displayTitle ?? choice.title,
+      description: choice.phraseText ?? choice.title,
+      meta: `Recorded - ${choice.category}`,
+      groupId: customCategoryId(choice.category),
+      groupTitle: choice.category,
+    };
+  }
+
   if (phraseChoice) {
     return {
       label: phraseChoice.displayTitle,
@@ -2013,6 +2390,7 @@ function groupedPlaylistChoices(items) {
 
   const groupOrder = [
     ...phraseSubcategories.map((subcategory) => subcategory.id),
+    ...customRecordedCategoryTitles().map((title) => customCategoryId(title)),
     "source-cuts",
     "loaded-files",
     "conversation",
@@ -2055,7 +2433,11 @@ function renderPlaylistTrack(choice, activePlaylist, activeSet) {
 }
 
 function renderPlaylistSection(group, activePlaylist, activeSet, { addable = false } = {}) {
-  const canAddGroup = addable && phraseSubcategories.some((subcategory) => subcategory.id === group.id);
+  const addableGroupIds = new Set([
+    ...phraseSubcategories.map((subcategory) => subcategory.id),
+    ...customRecordedCategoryTitles().map((title) => customCategoryId(title)),
+  ]);
+  const canAddGroup = addable && addableGroupIds.has(group.id);
   const addButton = canAddGroup && group.items.length
     ? `<button class="playlist-section-add" type="button" data-add-group="${escapeHTML(group.id)}" aria-label="Add ${escapeHTML(group.title)} to mix">Add</button>`
     : "";
@@ -2104,9 +2486,9 @@ function updatePhraseSetControls() {
 
   const category = activePhraseCategory();
   const choiceIds = phraseChoiceIdsForCategory(category);
-  selectAllButton.textContent = category === "Confidence & Connection" ? "All 50" : "All 51";
-  randomCountInput.max = String(choiceIds.length);
-  randomCountInput.value = String(Math.min(Math.max(Number(randomCountInput.value) || 10, 1), choiceIds.length));
+  selectAllButton.textContent = `All ${choiceIds.length}`;
+  randomCountInput.max = String(Math.max(choiceIds.length, 1));
+  randomCountInput.value = String(Math.min(Math.max(Number(randomCountInput.value) || 10, 1), Math.max(choiceIds.length, 1)));
 }
 
 function togglePlaylistItem(itemId) {
@@ -2213,7 +2595,10 @@ function activateMainCategory(categoryId) {
 
 function selectAllPhrases() {
   const category = activePhraseCategory();
-  activateLoopPlaylist(category === "Confidence & Connection" ? "loop-confidence-connection-library" : "loop-phrase-library");
+  const mainCategory = mainCategories.find((candidate) => candidate.title === category);
+  if (mainCategory) {
+    activateLoopPlaylist(mainCategory.playlistId);
+  }
 }
 
 function shuffledItems(items) {
@@ -2226,10 +2611,11 @@ function shuffledItems(items) {
 function selectRandomPhrases() {
   const category = activePhraseCategory();
   const choiceIds = phraseChoiceIdsForCategory(category);
+  if (!choiceIds.length) return;
   const count = Math.min(Math.max(Number(randomCountInput.value) || 10, 1), choiceIds.length);
   randomCountInput.value = String(count);
 
-  const randomPlaylistId = category === "Confidence & Connection" ? "loop-cc-random" : "loop-ae-random";
+  const randomPlaylistId = `loop-${slugifyPhraseTitle(category) || "category"}-random`;
   let randomPlaylist = playlistsByMode.loop.find((playlist) => playlist.id === randomPlaylistId);
   if (!randomPlaylist) {
     randomPlaylist = {
@@ -2398,11 +2784,37 @@ playerVisualButtons.forEach((button) => {
 });
 openVoiceRecorderButton?.addEventListener("click", openVoiceRecorder);
 closeVoiceRecorderButton?.addEventListener("click", closeVoiceRecorder);
+recorderModeButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    recorderMode = button.dataset.recorderMode;
+    recorderPreviewAudio.pause();
+    saveRecorderState();
+    renderVoiceRecorder();
+  });
+});
 recorderCategorySelect?.addEventListener("change", () => {
   recorderCategory = recorderCategorySelect.value;
   recorderIndex = firstOpenRecorderIndex(recorderCategory);
   saveRecorderState();
   recorderPreviewAudio.pause();
+  renderVoiceRecorder();
+});
+recorderCustomCategorySelect?.addEventListener("change", () => {
+  recorderCustomCategory = recorderCustomCategorySelect.value;
+  recorderPreviewAudio.pause();
+  saveRecorderState();
+  renderVoiceRecorder();
+});
+recorderCustomCategoryInput?.addEventListener("input", () => {
+  recorderCustomNewCategory = recorderCustomCategoryInput.value;
+  recorderPreviewAudio.pause();
+  saveRecorderState();
+  renderVoiceRecorder();
+});
+recorderCustomPhraseInput?.addEventListener("input", () => {
+  recorderCustomPhrase = recorderCustomPhraseInput.value;
+  recorderPreviewAudio.pause();
+  saveRecorderState();
   renderVoiceRecorder();
 });
 previousRecorderPhraseButton?.addEventListener("click", () => goToRecorderPhrase(-1));

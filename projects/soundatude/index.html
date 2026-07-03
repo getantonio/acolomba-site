@@ -237,6 +237,26 @@
               <select id="recorderCategorySelect" aria-label="Choose recording category"></select>
             </label>
 
+            <div class="recorder-mode-toggle" role="group" aria-label="Recording mode">
+              <button class="is-selected" id="guidedRecorderModeButton" type="button" data-recorder-mode="guided" aria-pressed="true">Guided</button>
+              <button id="customRecorderModeButton" type="button" data-recorder-mode="custom" aria-pressed="false">Custom</button>
+            </div>
+
+            <div class="recorder-custom-fields" id="recorderCustomFields" hidden>
+              <label for="recorderCustomCategorySelect">
+                Category
+                <select id="recorderCustomCategorySelect" aria-label="Choose custom recording category"></select>
+              </label>
+              <label class="recorder-new-category" id="recorderNewCategoryField" for="recorderCustomCategoryInput" hidden>
+                New category
+                <input id="recorderCustomCategoryInput" type="text" autocomplete="off" placeholder="My Affirmations">
+              </label>
+              <label for="recorderCustomPhraseInput">
+                Custom phrase
+                <textarea id="recorderCustomPhraseInput" rows="3" placeholder="I can speak to myself with steadiness and care."></textarea>
+              </label>
+            </div>
+
             <div class="recorder-progress" aria-hidden="true">
               <span id="recorderProgressBar"></span>
             </div>
