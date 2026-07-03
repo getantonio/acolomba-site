@@ -12,10 +12,10 @@ Operations Manager | Production Coordinator | Technical Support Associate | Onbo
 
 ## Core Strengths
 
-- Calm written communication, organized follow-up, and careful handling of details.
 - Client/project background with revisions, deadline pressure, quality checks, proofing, and production standards.
 - Comfortable learning software tools, troubleshooting issues, documenting process, and following structured workflows.
 - Ready to support ticket handling, research, CRM updates, data entry, checklists, file organization, customer communication, and AI content workflows.
+- Calm written communication, organized follow-up, and careful handling of details.
 
 ## Professional Experience
 

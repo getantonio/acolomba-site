@@ -132,10 +132,10 @@ add_text(
 
 section_head("01", "Core strengths", before=7)
 for item in [
-    "Calm written communication, organized follow-up, and careful handling of details.",
     "Client/project background with revisions, deadline pressure, quality checks, proofing, and production standards.",
     "Comfortable learning software tools, troubleshooting issues, documenting process, and following structured workflows.",
     "Ready to support ticket handling, research, CRM updates, data entry, checklists, file organization, customer communication, and AI content workflows.",
+    "Calm written communication, organized follow-up, and careful handling of details.",
 ]:
     bullet(item)
 
