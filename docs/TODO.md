@@ -6,7 +6,7 @@ Last updated: 2026-07-03
 
 - Changed the home-page Projects menu link to read just "Projects" without the descriptive subline.
 - Shortened the Bio menu subline to "Background, positioning."
-- Removed the Projects item from the homepage-style side menu while keeping normal top navigation links.
+- Restored the Projects item in the homepage-style side menu as a plain link without descriptive subline.
 - Removed "Photo Retouching Manager" from the Retouching Resume best-fit roles list.
 - Simplified the Retouching Resume best-fit roles list to use "Quality Control" instead of the longer visual/image QA wording.
 - Added a right-justified Mixed Media Portfolio text link to the Projects page header and created `portfolio.html` as a working showcase for retouching, AI motion, audio/interface, and upcoming mixed-media samples.
@@ -40,6 +40,7 @@ Last updated: 2026-07-03
 - Configured Namecheap URL Redirect records so `http://acolomba.com/` and `http://www.acolomba.com/` forward to `https://acolomba.site/`.
 - Deployed the Sound-a-tude parity update to GitHub Pages via an explicit Pages workflow, switched the site from legacy branch publishing to workflow publishing, and verified the live project URL shows the new visual selector, conversation seek, recorder page, and avatar image assets.
 - Linked the Token Factory & Exchange project title to the live TokenHub.dev / Token Factory site.
+- Added the public YouTube channel archive to Portfolio and Projects with AntCoArt, GET Antonio, and AntCoFX channel links.
 - Changed Sound-a-tude project wording from voice cloning to custom voice affirmation recorder.
 - Changed internal project links to explicit `index.html` targets so local/file browsing opens the pages.
 - Added consistent web-version links across all Projects page entries.
@@ -184,6 +185,7 @@ Last updated: 2026-07-03
 
 - 2026-07-03 [Next] Review resume labeling/positioning around "Fast Resume | General Work Search | Support" and "Freelance Resume | General Work Search."
 - 2026-07-03 [Next] Continue filling the Mixed Media Portfolio with stronger selected samples: product sequence, audio clip, NFT/Web3 presentation, and process notes.
+- 2026-07-03 [Done] Added public YouTube channel links to the Mixed Media Portfolio and Projects page: AntCoArt, GET Antonio, and AntCoFX.
 - 2026-07-03 [Done] Reworked the Portfolio page into smaller clickable ID-card-style media frames with a general mixed-media viewer that can open simple work in a lightbox/popup and larger work on dedicated detail pages.
 - 2026-07-03 [Next] Use the GiftTree Photo Editor posting as a retouching/photo-editor targeting note: remote full-time, $90,000-$120,000, e-commerce/luxury/lifestyle retouching, high-resolution product and lifestyle photography for web, email, social, digital ads, and print.
 - 2026-07-03 [Next] Add certificate-backed HTTPS forwarding for `https://acolomba.com/` and `https://www.acolomba.com/` if direct HTTPS on the `.com` domain needs to work.

@@ -175,6 +175,20 @@
       line-height: 1;
     }
 
+    .card-youtube {
+      place-items: center;
+    }
+
+    .play-mark {
+      display: block;
+      width: 0;
+      height: 0;
+      border-top: 34px solid transparent;
+      border-bottom: 34px solid transparent;
+      border-left: 54px solid var(--ink);
+      transform: translateX(5px);
+    }
+
     .card-meta {
       padding: 11px 12px 12px;
       text-align: center;
@@ -289,6 +303,25 @@
 
     .viewer-audio audio {
       width: min(100%, 620px);
+    }
+
+    .viewer-link {
+      display: grid;
+      gap: 14px;
+      justify-items: center;
+      padding: 18px 0 4px;
+      text-align: center;
+    }
+
+    .viewer-link .card-frame {
+      width: min(100%, 300px);
+    }
+
+    .viewer-link p {
+      max-width: 52ch;
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.45;
     }
 
     .viewer-action {
@@ -412,6 +445,63 @@
         class="portfolio-card"
         type="button"
         data-viewer-type="link"
+        data-title="AntCoArt"
+        data-summary="A public channel archive for 3D animation, art-school pieces, modeling studies, and early motion work."
+        data-marker="play"
+        data-action-label="Open AntCoArt"
+        data-action-href="https://www.youtube.com/@AntCoArt"
+      >
+        <span class="card-frame card-youtube">
+          <span class="play-mark" aria-hidden="true"></span>
+        </span>
+        <span class="card-meta">
+          <span class="card-title">AntCoArt</span>
+          <span class="card-type">3D / Art Archive</span>
+        </span>
+      </button>
+
+      <button
+        class="portfolio-card"
+        type="button"
+        data-viewer-type="link"
+        data-title="GET Antonio"
+        data-summary="Short-form personal media experiments and quick video posts, useful as a looser companion to the polished portfolio pieces."
+        data-marker="play"
+        data-action-label="Open GET Antonio"
+        data-action-href="https://www.youtube.com/@getantonio13/videos"
+      >
+        <span class="card-frame card-youtube">
+          <span class="play-mark" aria-hidden="true"></span>
+        </span>
+        <span class="card-meta">
+          <span class="card-title">GET Antonio</span>
+          <span class="card-type">Short Video</span>
+        </span>
+      </button>
+
+      <button
+        class="portfolio-card"
+        type="button"
+        data-viewer-type="link"
+        data-title="AntCoFX"
+        data-summary="Older VFX channel with Houdini tests, camera tracking, compositing, 3D studies, and motion experiments."
+        data-marker="play"
+        data-action-label="Open AntCoFX"
+        data-action-href="https://www.youtube.com/channel/UCbtPziXaWkAJCC9EZNZtuTw/videos"
+      >
+        <span class="card-frame card-youtube">
+          <span class="play-mark" aria-hidden="true"></span>
+        </span>
+        <span class="card-meta">
+          <span class="card-title">AntCoFX</span>
+          <span class="card-type">VFX / Tests</span>
+        </span>
+      </button>
+
+      <button
+        class="portfolio-card"
+        type="button"
+        data-viewer-type="link"
         data-title="Upcoming"
         data-action-label="Back to projects"
         data-action-href="projects.html"
@@ -527,13 +617,34 @@
       };
 
       const renderLink = (card) => {
-        const plain = document.createElement("div");
-        plain.className = "card-frame card-plain";
-        const marker = document.createElement("span");
-        const sourceMarker = card.querySelector(".card-plain span");
-        marker.textContent = sourceMarker ? sourceMarker.textContent : "+";
-        plain.append(marker);
-        body.append(plain);
+        const wrap = document.createElement("div");
+        wrap.className = "viewer-link";
+
+        const frame = document.createElement("div");
+        const isPlayMarker = card.dataset.marker === "play";
+        frame.className = isPlayMarker ? "card-frame card-youtube" : "card-frame card-plain";
+
+        if (isPlayMarker) {
+          const marker = document.createElement("span");
+          marker.className = "play-mark";
+          marker.setAttribute("aria-hidden", "true");
+          frame.append(marker);
+        } else {
+          const marker = document.createElement("span");
+          const sourceMarker = card.querySelector(".card-plain span");
+          marker.textContent = sourceMarker ? sourceMarker.textContent : "+";
+          frame.append(marker);
+        }
+
+        wrap.append(frame);
+
+        if (card.dataset.summary) {
+          const summary = document.createElement("p");
+          summary.textContent = card.dataset.summary;
+          wrap.append(summary);
+        }
+
+        body.append(wrap);
       };
 
       const openViewer = (card) => {
