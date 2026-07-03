@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Added a full-window dove splash screen to the landing page using the original first Higgsfield dove photo, with a 1.75-second fade-in/fade-out, subtle blur, zoom-in, counterclockwise rotation motion, and a 2-second white fallback if the image is unavailable.
 - Added the NFT Creation Project to the Projects page as a Web3 proof item for creator tools, marketplace operations, visual QA, and product support roles.
 - Configured Namecheap URL Redirect records so `http://acolomba.com/` and `http://www.acolomba.com/` forward to `https://acolomba.site/`.
 - Deployed the Sound-a-tude parity update to GitHub Pages via an explicit Pages workflow, switched the site from legacy branch publishing to workflow publishing, and verified the live project URL shows the new visual selector, conversation seek, recorder page, and avatar image assets.
