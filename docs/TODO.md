@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Deployed the Sound-a-tude parity update to GitHub Pages via an explicit Pages workflow, switched the site from legacy branch publishing to workflow publishing, and verified the live project URL shows the new visual selector, conversation seek, recorder page, and avatar image assets.
 - Linked the Token Factory & Exchange project title to the live TokenHub.dev / Token Factory site.
 - Changed Sound-a-tude project wording from voice cloning to custom voice affirmation recorder.
 - Changed internal project links to explicit `index.html` targets so local/file browsing opens the pages.
