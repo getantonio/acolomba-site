@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Updated the Bio page Personal Practice section with running, martial arts, Muay Thai, and Brazilian jujitsu.
 - Added a Personal Practice section to the Bio page for outdoor activities and a healthy physical lifestyle.
 - Updated the Bio page study sentence to mention photography, lighting, design, and media production.
 - Changed the Bio page AI sentence from that work to that experience.
