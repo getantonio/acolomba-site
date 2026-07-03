@@ -62,7 +62,7 @@ try {
 
       header {
         grid-template-columns: minmax(0, 69%) 145px !important;
-        margin: 0 0 10px !important;
+        margin: 0 0 18px !important;
         gap: 22px !important;
       }
 
@@ -107,6 +107,7 @@ try {
       section {
         grid-template-columns: 150px minmax(0, 1fr) !important;
         column-gap: 22px !important;
+        align-items: baseline !important;
         margin-top: 9px !important;
         padding-top: 0 !important;
         border-top: 0 !important;
