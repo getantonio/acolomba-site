@@ -25,6 +25,7 @@ Last updated: 2026-07-03
 - Rebuilt the Main Resume PDF with zero PDF margins so the gray resume background reaches the page edge while remaining one page.
 - Aligned resume PDF contact/date/location metadata into a consistent right-side column and balanced the Retouching Resume PDF to fill the one-page layout more fully, including a small body/info-text size bump without enlarging section headings.
 - Matched the Retouching Resume webpage to the PDF layout: Retoucher is now the inline intro label, Professional Experience was shortened to Experience, Skills was simplified, and awkward one-word wraps were tightened.
+- Removed the Portfolio proof-page line from the generated Retouching Resume PDF while keeping the webpage portfolio section available.
 - Removed Customer Operations Associate, renamed Administrative Operations Assistant to Administrative Operations, and removed the two ticket/CRM/calm-communication Core Strengths bullets from the resume pages and downloads.
 - Fixed Brave/Chromium viewport background bleed on the static site pages by matching the root document background to the page paper and making the body fill the viewport.
 - Added a full-window dove splash screen to the landing page using the original first Higgsfield dove photo, with a 1.75-second fade-in/fade-out, subtle blur, zoom-in, counterclockwise rotation motion, and a 2-second white fallback if the image is unavailable.

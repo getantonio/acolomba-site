@@ -41,6 +41,7 @@ try {
     content: `
       nav,
       .download-row,
+      .portfolio-section,
       .proof-strip,
       .resume-switch {
         display: none !important;
