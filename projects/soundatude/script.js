@@ -784,6 +784,8 @@ function avatarVoiceIdsFor(voice) {
 }
 
 function resolveAvatarVideoSource(choice, voice = activeVoice()) {
+  return null;
+
   if (currentMode !== "loop" || !choice?.phraseId || !["male", "female"].includes(activePlayerVisual)) {
     return null;
   }
