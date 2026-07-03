@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v51-female-nicole-audio-fixed";
+const CACHE_NAME = "sound-a-tude-v52-custom-recorder";
 const MALE_AVATAR_PHRASE_IDS = [
   "sat-p004",
   "sat-p006",
