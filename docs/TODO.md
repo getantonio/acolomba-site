@@ -5,6 +5,7 @@ Last updated: 2026-07-03
 ## Completed
 
 - Linked the Token Factory & Exchange project title to the live TokenHub.dev / Token Factory site.
+- Replaced the Before/After Retouching project focus and bullet with plain agency/production background text.
 - Shortened the OpenRouter UI project focus line around asset library workflows.
 - Removed the forced line break from the Projects page Engineering Projects heading.
 - Restored Projects page readability with slightly larger serif text and clearer weights.
