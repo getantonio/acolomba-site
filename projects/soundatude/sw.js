@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v69-recorder-warmup";
+const CACHE_NAME = "sound-a-tude-v70-example-phrase-set";
 const MALE_AVATAR_PHRASE_IDS = [
   "sat-p004",
   "sat-p006",

@@ -26,6 +26,7 @@ const recorderCustomCategorySelect = document.querySelector("#recorderCustomCate
 const recorderNewCategoryField = document.querySelector("#recorderNewCategoryField");
 const recorderCustomCategoryInput = document.querySelector("#recorderCustomCategoryInput");
 const recorderCustomPhraseInput = document.querySelector("#recorderCustomPhraseInput");
+const loadExamplePhraseSetButton = document.querySelector("#loadExamplePhraseSetButton");
 const clearPhraseQueueButton = document.querySelector("#clearPhraseQueueButton");
 const deleteCustomCategoryButton = document.querySelector("#deleteCustomCategoryButton");
 const recorderProgressText = document.querySelector("#recorderProgressText");
@@ -104,6 +105,18 @@ const RECORDER_MIME_TYPES = [
   "audio/mp4",
   "audio/aac",
 ];
+const EXAMPLE_CUSTOM_PHRASE_SET = [
+  "1. I never give up on myself.",
+  "2. I keep going even when it gets hard.",
+  "3. Every setback makes me stronger.",
+  "4. I choose persistence over doubt.",
+  "5. I rise after every fall.",
+  "6. I am stronger than my fears.",
+  "7. I refuse to let go of hope.",
+  "8. I stay committed to my path.",
+  "9. I am capable of handling anything.",
+  "10. I keep moving forward with faith.",
+].join("\n");
 
 clearLegacyRecorderState();
 const MALE_AVATAR_PHRASE_IDS = Object.freeze([
@@ -3153,6 +3166,10 @@ recorderCustomPhraseInput?.addEventListener("paste", (event) => {
 
   event.preventDefault();
   recorderPreviewAudio.pause();
+});
+loadExamplePhraseSetButton?.addEventListener("click", () => {
+  recorderPreviewAudio.pause();
+  queueCustomPhrasesFromText(EXAMPLE_CUSTOM_PHRASE_SET);
 });
 clearPhraseQueueButton?.addEventListener("click", () => {
   clearCustomPhraseQueue();
