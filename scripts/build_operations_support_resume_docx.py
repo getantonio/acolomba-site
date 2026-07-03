@@ -153,7 +153,7 @@ bullet("Produced high-resolution art, visual effects, retouching, color correcti
 
 section_head("03", "Current project work", before=10)
 role("Agentic Engineered Technical Projects", "local/private")
-bullet("Built and organized local crypto, token, trading, AI content creation, and workflow projects with AI-assisted tools.")
+bullet("Built and organized a multi-blockchain token creation platform, decentralized DeFi trading platform on Solana and EVM networks, AI content creation platform, and mind-bending audio attitude training app.")
 bullet("Practiced troubleshooting, reading documentation, organizing tasks, testing flows, and turning messy ideas into usable workflows.")
 
 section_head("04", "Work readiness", before=10)

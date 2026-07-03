@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Replaced the generic local crypto/project-work bullet with specific multi-blockchain, DeFi, AI content, and audio attitude app wording.
 - Moved the calm written communication Core Strengths bullet to the bottom of the stack on support/general resume variants.
 - Reduced role-heading typography across resume pages to avoid orphaned single-word wraps.
 - Reordered the visible client list to McCann Erickson, Foam Digital, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.
