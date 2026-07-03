@@ -31,6 +31,8 @@ git push origin main
 
 No separate deploy repository or publish-copy step is needed.
 
+After site updates, push `main` to `origin` so `acolomba.site` receives the change through GitHub Pages. If push is rejected with "fetch first", run `git fetch origin main`, rebase or otherwise integrate `origin/main`, then push again after confirming the site changes are still present.
+
 ## Rebuild Resume Downloads
 
 The build scripts write the working DOCX in `docs/` and also refresh the root-level files used by the live site.
