@@ -134,8 +134,6 @@ section_head("01", "Core strengths", before=7)
 for item in [
     "Reliable with structured work, checklists, file organization, customer communication, and production standards.",
     "Comfortable learning software tools, troubleshooting issues, documenting process, and following workplace procedures.",
-    "Ready to support ticket handling, research, CRM updates, data entry, order/admin support, inventory checklists, and AI-assisted workflows.",
-    "Calm written communication, organized follow-up, and careful handling of details.",
 ]:
     bullet(item)
 

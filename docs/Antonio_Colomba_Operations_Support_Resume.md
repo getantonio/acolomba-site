@@ -8,14 +8,12 @@ Reliable and detail-oriented with a background in deadline-driven creative art a
 
 ## Best Fit Roles
 
-Operations Manager | Production Coordinator | Technical Support Associate | Onboarding Coordinator | Operations Support Specialist | Customer Operations Associate | Production Support Coordinator | Administrative Operations Assistant
+Operations Manager | Production Coordinator | Technical Support Associate | Onboarding Coordinator | Operations Support Specialist | Production Support Coordinator | Administrative Operations
 
 ## Core Strengths
 
 - Client/project background with revisions, deadline pressure, quality checks, proofing, and production standards.
 - Comfortable learning software tools, troubleshooting issues, documenting process, and following structured workflows.
-- Ready to support ticket handling, research, CRM updates, data entry, checklists, file organization, customer communication, and AI content workflows.
-- Calm written communication, organized follow-up, and careful handling of details.
 
 ## Professional Experience
 

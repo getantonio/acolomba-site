@@ -125,7 +125,7 @@ set_para(fit, before=0, after=9, line=1.08, left=0.2)
 add_text(fit, "Best fit roles: ", size=8.6, bold=True, color=TEAL)
 add_text(
     fit,
-    "Operations Manager, Production Coordinator, Technical Support Associate, Onboarding Coordinator, Operations Support Specialist, Customer Operations Associate, Production Support Coordinator, Administrative Operations Assistant.",
+    "Operations Manager, Production Coordinator, Technical Support Associate, Onboarding Coordinator, Operations Support Specialist, Production Support Coordinator, Administrative Operations.",
     size=8.5,
     color=MUTED,
 )
@@ -134,8 +134,6 @@ section_head("01", "Core strengths", before=7)
 for item in [
     "Client/project background with revisions, deadline pressure, quality checks, proofing, and production standards.",
     "Comfortable learning software tools, troubleshooting issues, documenting process, and following structured workflows.",
-    "Ready to support ticket handling, research, CRM updates, data entry, checklists, file organization, customer communication, and AI content workflows.",
-    "Calm written communication, organized follow-up, and careful handling of details.",
 ]:
     bullet(item)
 
