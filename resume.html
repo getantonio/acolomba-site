@@ -112,7 +112,8 @@
       border-top: 1px solid var(--rule);
     }
 
-    .resume-list a {
+    .resume-list a,
+    .resume-list .muted-option {
       display: grid;
       align-content: start;
       gap: 16px;
@@ -122,8 +123,10 @@
       text-decoration: none;
     }
 
-    .resume-list a.is-dimmed {
-      opacity: 0.42;
+    .resume-list .muted-option {
+      opacity: 0.46;
+      cursor: default;
+      user-select: none;
     }
 
     .resume-list strong {
@@ -163,7 +166,8 @@
         grid-template-columns: 1fr;
       }
 
-      .resume-list a {
+      .resume-list a,
+      .resume-list .muted-option {
         gap: 8px;
         min-height: 0;
       }
@@ -203,16 +207,16 @@
     <div class="resume-list" aria-label="Resume versions">
       <a href="main-resume.html">
         <strong>Main</strong>
-        <span>Managerial, coordination, admin, and customer support version.</span>
+        <span>Managerial, coordination, admin, and support</span>
       </a>
       <a href="retouching-resume.html">
         <strong>Photo Retouching</strong>
         <span>High-end retouching, creative production work.</span>
       </a>
-      <a class="is-dimmed" href="fast-resume.html">
+      <div class="muted-option" aria-disabled="true">
         <strong>Freelance</strong>
         <span>Broader general-work version for quick applications and temp roles.</span>
-      </a>
+      </div>
     </div>
   </main>
 </body>
