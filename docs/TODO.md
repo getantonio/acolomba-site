@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Simplified the Before/After Retouching project copy around the web lightbox, before/after images, AI-engineered study samples, and PDF/doc download.
 - Rewrote the Sound-a-tude project copy around the iPhone app, companion web version, playlist-based mindset training, and voice-cloning support.
 - Updated the home Resume teaser text to General, Retouching, Freelance.
 - Cleaned up the Projects page hero typography and spacing so the intro reads less oversized.
