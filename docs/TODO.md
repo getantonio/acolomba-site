@@ -4,6 +4,8 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Removed the explanatory project-work note from the Bio page.
+- Updated the Bio page to mention AI replacing much of the old retouching/VFX work and changed revision wording to mark up.
 - Rewrote the Bio page away from resume-title positioning and toward personal background, studies, interests, and human skills.
 - Changed the resume hub options into three horizontal link blocks on desktop.
 - Adjusted the contact page intro copy and mobile type sizing to avoid single-word wraps.
