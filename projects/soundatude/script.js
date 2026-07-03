@@ -1,6 +1,7 @@
 const audio = document.querySelector("#sampleAudio");
 const playerPanel = document.querySelector("#sample");
 const playButton = document.querySelector("#playButton");
+const avatarVideo = document.querySelector("#avatarVideo");
 const loopPicker = document.querySelector("#loopPicker");
 const loopTrigger = document.querySelector("#loopTrigger");
 const loopWheel = document.querySelector("#loopWheel");
@@ -10,6 +11,11 @@ const nextLoop = document.querySelector("#nextLoop");
 const modeButtons = [...document.querySelectorAll(".mode-toggle button")];
 const voiceSelect = document.querySelector("#voiceSelect");
 const voiceStatus = document.querySelector("#voiceStatus");
+const voiceControl = document.querySelector(".voice-control");
+const playerVisualButtons = [...document.querySelectorAll(".visual-choice [data-player-visual]")];
+const conversationSeek = document.querySelector("#conversationSeek");
+const conversationCurrentTime = document.querySelector("#conversationCurrentTime");
+const conversationDuration = document.querySelector("#conversationDuration");
 const openVoiceRecorderButton = document.querySelector("#openVoiceRecorderButton");
 const voiceRecorderDialog = document.querySelector("#voiceRecorderDialog");
 const closeVoiceRecorderButton = document.querySelector("#closeVoiceRecorderButton");
@@ -61,10 +67,34 @@ const recorderPreviewAudio = new Audio();
 const PLAYLIST_STORAGE_KEY = "sound-a-tude-playlists-v2";
 const VOICE_STORAGE_KEY = "sound-a-tude-voice-v1";
 const PLAYBACK_STORAGE_KEY = "sound-a-tude-playback-v1";
+const PLAYER_VISUAL_STORAGE_KEY = "sound-a-tude-player-visual-v1";
+const RECORDER_STORAGE_KEY = "sound-a-tude-recorder-v1";
 const RECORDED_VOICE_DB_NAME = "sound-a-tude-recorded-voices";
 const RECORDED_VOICE_STORE = "recordings";
 const BROWSER_RECORDED_VOICE_ID = "browser-my-voice-v001";
+const BROWSER_RECORDED_FALLBACK_VOICE_ID = "af_nicole";
+const AVATAR_VIDEO_VERSION = "avatar-video-seedance-480p-v008";
 const METER_BAR_COUNT = 56;
+const MALE_AVATAR_PHRASE_IDS = Object.freeze([
+  "sat-p004",
+  "sat-p006",
+  "sat-p009",
+  "sat-p018",
+  "sat-p021",
+  "sat-p024",
+  "sat-p031",
+  "sat-p032",
+  "sat-p041",
+  "sat-p042",
+]);
+const WAVEFORM_MATCHED_MALE_AVATAR_VOICE_IDS = Object.freeze([
+  "am_echo",
+  "am_eric",
+  "am_fenrir",
+  "am_onyx",
+  "am_puck",
+  "am_santa",
+]);
 
 const choices = {
   loop: [
@@ -80,16 +110,16 @@ const choices = {
     { title: "Morning Mindset Reset", file: "assets/audio/attitude-effort-sample.mp3", phraseId: "sat-p041" },
   ],
   conversation: [
-    { title: "Attitude Check-In", file: "assets/audio/attitude-effort-sample.mp3", phraseId: "sat-p021" },
-    { title: "Thought to Action Talk", file: "assets/audio/attitude-effort-sample.mp3", phraseId: "sat-p042" },
-    { title: "Show Up Conversation", file: "assets/audio/attitude-effort-sample.mp3", phraseId: "sat-p032" },
-    { title: "Mistake Reset", file: "assets/audio/attitude-effort-sample.mp3", phraseId: "sat-p004" },
-    { title: "Try Again Talk", file: "assets/audio/attitude-effort-sample.mp3", phraseId: "sat-p018" },
-    { title: "Focus Conversation", file: "assets/audio/attitude-effort-sample.mp3", phraseId: "sat-p006" },
-    { title: "Before the Challenge", file: "assets/audio/attitude-effort-sample.mp3", phraseId: "sat-p024" },
-    { title: "Give My Best Talk", file: "assets/audio/attitude-effort-sample.mp3", phraseId: "sat-p031" },
-    { title: "Calm Effort Conversation", file: "assets/audio/attitude-effort-sample.mp3", phraseId: "sat-p009" },
-    { title: "Morning Reset Conversation", file: "assets/audio/attitude-effort-sample.mp3", phraseId: "sat-p041" },
+    {
+      title: "Attitude & Effort",
+      file: "assets/audio/conversations/sat-c002-attitude-effort-conversation-mara-v001-theo-v001-mix-v001.mp3",
+      category: "Attitude & Effort",
+    },
+    {
+      title: "Confidence & Connection",
+      file: "assets/audio/conversations/sat-c001-confidence-connection-conversation-mara-v001-theo-v001-mix-v003.mp3",
+      category: "Confidence & Connection",
+    },
   ],
 };
 
@@ -505,6 +535,55 @@ const recordedVoicePacks = [
   // Add free/offline recorded packs after processing them with scripts/process_recorded_voice.py.
   // { id: "antonio-v001", label: "Antonio", shortLabel: "Antonio", group: "Recorded" },
 ];
+const avatarVideoFilesByVisual = {
+  male: {
+    // Add generated clips as: "<voice-id>:<phrase-id>": "assets/video/avatars/male/<voice-id>/<phrase-id>-avatar-male-<voice-id>.mp4?v=avatar-video-v001"
+    [avatarVideoKey("kokoro-am_michael-v001", "sat-p004")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p004-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_michael-v001", "sat-p006")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p006-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_michael-v001", "sat-p009")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p009-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_michael-v001", "sat-p018")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p018-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_michael-v001", "sat-p021")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p021-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_michael-v001", "sat-p024")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p024-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_michael-v001", "sat-p031")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p031-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_michael-v001", "sat-p032")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p032-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_michael-v001", "sat-p041")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p041-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_michael-v001", "sat-p042")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p042-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_adam-v001", "sat-p004")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p004-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_adam-v001", "sat-p006")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p006-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_adam-v001", "sat-p009")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p009-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_adam-v001", "sat-p018")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p018-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_adam-v001", "sat-p021")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p021-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_adam-v001", "sat-p024")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p024-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_adam-v001", "sat-p031")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p031-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_adam-v001", "sat-p032")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p032-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_adam-v001", "sat-p041")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p041-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_adam-v001", "sat-p042")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p042-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_liam-v001", "sat-p004")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p004-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_liam-v001", "sat-p006")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p006-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_liam-v001", "sat-p009")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p009-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_liam-v001", "sat-p018")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p018-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_liam-v001", "sat-p021")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p021-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_liam-v001", "sat-p024")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p024-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_liam-v001", "sat-p031")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p031-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_liam-v001", "sat-p032")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p032-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_liam-v001", "sat-p041")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p041-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-am_liam-v001", "sat-p042")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p042-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    ...waveformMatchedMaleAvatarVideoEntries(WAVEFORM_MATCHED_MALE_AVATAR_VOICE_IDS),
+  },
+  female: {
+    // Add generated clips as: "<voice-id>:<phrase-id>": "assets/video/avatars/female/<voice-id>/<phrase-id>-avatar-female-<voice-id>.mp4?v=avatar-video-v001"
+    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p004")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p004-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p006")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p006-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p009")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p009-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p018")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p018-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p021")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p021-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p024")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p024-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p031")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p031-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p032")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p032-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p041")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p041-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p042")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p042-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
+  },
+};
 const browserRecordedPhraseUrls = new Map();
 let recordedVoiceDatabasePromise = null;
 let recorderCategory = "Confidence & Connection";
@@ -534,6 +613,7 @@ const baseVoiceOptions = [
     label: voice.label,
     shortLabel: voice.shortLabel,
     group: voice.group,
+    sourceVoiceId: voice.sourceVoiceId,
     status: "ready",
     filesByPhrase: kokoroFilesByPhrase(voice.sourceVoiceId),
   })),
@@ -558,6 +638,10 @@ let voiceOptions = [...baseVoiceOptions];
 
 let currentMode = "loop";
 let activeVoiceId = localStorage.getItem(VOICE_STORAGE_KEY) || voiceOptions[0].id;
+let activePlayerVisual = localStorage.getItem(PLAYER_VISUAL_STORAGE_KEY) || "box";
+let currentResolvedSource = null;
+let isAvatarVideoSourceActive = false;
+let isSeekingConversation = false;
 let selectedIndexByMode = {
   loop: 0,
   conversation: 0,
@@ -608,8 +692,7 @@ let playlistsByMode = {
   conversation: [
     {
       id: "conversation-starter",
-      name: "Starter talks",
-      category: "Attitude & Effort",
+      name: "Category talks",
       itemIds: choices.conversation.map((choice) => choice.id),
     },
   ],
@@ -679,14 +762,52 @@ function outputVolumeForSource(source, baseVolume = baseOutputVolume()) {
   return source?.isBrowserRecordedVoiceFile ? recordedVoiceOutputVolume(baseVolume) : baseVolume;
 }
 
+function avatarVideoKey(voiceId, phraseId) {
+  return `${voiceId}:${phraseId}`;
+}
+
+function waveformMatchedMaleAvatarVideoEntries(sourceVoiceIds) {
+  return Object.fromEntries(sourceVoiceIds.flatMap((sourceVoiceId) => {
+    const voiceId = `kokoro-${sourceVoiceId}-v001`;
+    return MALE_AVATAR_PHRASE_IDS.map((phraseId) => [
+      avatarVideoKey(voiceId, phraseId),
+      `assets/video/avatars/male/${voiceId}/${phraseId}-avatar-male-kokoro-${sourceVoiceId}-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
+    ]);
+  }));
+}
+
+function avatarVoiceIdsFor(voice) {
+  return [
+    voice?.id,
+    voice?.sourceVoiceId ? `kokoro-${voice.sourceVoiceId}-v001` : null,
+  ].filter(Boolean);
+}
+
+function resolveAvatarVideoSource(choice, voice = activeVoice()) {
+  if (currentMode !== "loop" || !choice?.phraseId || !["male", "female"].includes(activePlayerVisual)) {
+    return null;
+  }
+
+  const avatarFiles = avatarVideoFilesByVisual[activePlayerVisual] ?? {};
+  for (const voiceId of avatarVoiceIdsFor(voice)) {
+    const avatarFile = avatarFiles[avatarVideoKey(voiceId, choice.phraseId)];
+    if (avatarFile) return avatarFile;
+  }
+
+  return null;
+}
+
 function resolveAudioSource(choice) {
   const voice = activeVoice();
-  const voiceFile = choice.phraseId ? voice.filesByPhrase[choice.phraseId] : null;
+  const voiceFile = currentMode === "loop" && choice.phraseId ? voice.filesByPhrase[choice.phraseId] : null;
+  const fallbackVoiceFile = currentMode === "loop" && choice.phraseId ? voice.fallbackFilesByPhrase?.[choice.phraseId] : null;
+  const resolvedVoiceFile = voiceFile || fallbackVoiceFile;
 
   return {
-    file: voiceFile || choice.file,
-    isVoiceFile: Boolean(voiceFile),
+    file: resolvedVoiceFile || choice.file,
+    isVoiceFile: Boolean(resolvedVoiceFile),
     isBrowserRecordedVoiceFile: voice.id === BROWSER_RECORDED_VOICE_ID && Boolean(voiceFile),
+    isBrowserRecordedVoiceFallback: voice.id === BROWSER_RECORDED_VOICE_ID && !voiceFile && Boolean(fallbackVoiceFile),
     voice,
   };
 }
@@ -694,15 +815,22 @@ function resolveAudioSource(choice) {
 function updateVoiceStatus(choice = currentChoices()[selectedIndexByMode[currentMode]]) {
   if (!voiceStatus || !choice) return;
 
-  const { isVoiceFile, voice } = resolveAudioSource(choice);
-  voiceStatus.classList.toggle("is-pending", !isVoiceFile);
+  const { isVoiceFile, isBrowserRecordedVoiceFallback, voice } = resolveAudioSource(choice);
+  voiceStatus.classList.toggle("is-pending", currentMode !== "conversation" && !isVoiceFile);
+
+  if (isBrowserRecordedVoiceFallback) {
+    voiceStatus.textContent = "My Voice partial";
+    return;
+  }
 
   if (isVoiceFile) {
     voiceStatus.textContent = `${voice.shortLabel} ready`;
     return;
   }
 
-  voiceStatus.textContent = choice.phraseId ? `${voice.shortLabel} not rendered` : "Source audio";
+  voiceStatus.textContent = currentMode === "conversation"
+    ? "Mara. + Theo."
+    : (choice.phraseId ? `${voice.shortLabel} not rendered` : "Source audio");
 }
 
 function renderVoiceOptions() {
@@ -729,19 +857,52 @@ function renderVoiceOptions() {
       "</optgroup>"
     ))
     .join("");
+  updateVoiceControlMode();
 }
 
 function setVoice(voiceId) {
-  const shouldResume = !audio.paused;
+  if (currentMode === "conversation") return;
+
+  const shouldResume = !activeMainMedia().paused;
 
   activeVoiceId = voiceOptions.some((voice) => voice.id === voiceId) ? voiceId : voiceOptions[0].id;
   localStorage.setItem(VOICE_STORAGE_KEY, activeVoiceId);
   syncSelection({ scrollBehavior: "auto", updateAudio: true });
 
   if (shouldResume) {
-    audio.currentTime = 0;
-    audio.play().catch(() => setPlayingState(false));
+    const media = activeMainMedia();
+    media.currentTime = 0;
+    media.play().catch(() => setPlayingState(false));
   }
+}
+
+function setPlayerVisual(visual, { save = true } = {}) {
+  const validVisuals = new Set(["box", "male", "female"]);
+  activePlayerVisual = validVisuals.has(visual) ? visual : "box";
+  playerPanel.dataset.playerVisual = activePlayerVisual;
+
+  playerVisualButtons.forEach((button) => {
+    const isSelected = button.dataset.playerVisual === activePlayerVisual;
+    button.classList.toggle("is-selected", isSelected);
+    button.setAttribute("aria-checked", String(isSelected));
+  });
+
+  if (save) {
+    localStorage.setItem(PLAYER_VISUAL_STORAGE_KEY, activePlayerVisual);
+  }
+
+  if (loopOptions.length) {
+    syncSelection({ scrollBehavior: "auto", center: false, updateAudio: true });
+  }
+}
+
+function updateVoiceControlMode() {
+  if (!voiceSelect || !voiceControl) return;
+
+  const isFixedConversationVoice = currentMode === "conversation";
+  voiceSelect.disabled = isFixedConversationVoice;
+  voiceSelect.setAttribute("aria-disabled", String(isFixedConversationVoice));
+  voiceControl.classList.toggle("is-fixed", isFixedConversationVoice);
 }
 
 function recordedKey(phraseId) {
@@ -784,7 +945,10 @@ async function withRecordedVoiceStore(mode, action) {
 }
 
 async function loadBrowserRecordedPhrases() {
-  if (!("indexedDB" in window)) return;
+  if (!("indexedDB" in window)) {
+    syncBrowserRecordedVoiceOption();
+    return;
+  }
 
   const recordings = await withRecordedVoiceStore("readonly", (store) => store.getAll());
 
@@ -835,10 +999,20 @@ function recordedFilesByBrowserPhrase() {
   return Object.fromEntries(browserRecordedPhraseUrls.entries());
 }
 
+function hasAnyBrowserRecordedPhrase() {
+  return browserRecordedPhraseUrls.size > 0;
+}
+
+function recorderChoicesForCategory(category) {
+  return phraseLibraryChoices.filter((choice) => choice.category === category);
+}
+
+function validRecorderCategory(category) {
+  return mainCategories.some((mainCategory) => mainCategory.title === category);
+}
+
 function hasCompleteBrowserRecordedCategory(category) {
-  const phraseIdsForCategory = phraseLibraryChoices
-    .filter((choice) => choice.category === category)
-    .map((choice) => choice.phraseId);
+  const phraseIdsForCategory = recorderChoicesForCategory(category).map((choice) => choice.phraseId);
 
   return phraseIdsForCategory.length > 0
     && phraseIdsForCategory.every((phraseId) => browserRecordedPhraseUrls.has(phraseId));
@@ -849,7 +1023,7 @@ function hasAnyCompleteBrowserRecordedCategory() {
 }
 
 function syncBrowserRecordedVoiceOption() {
-  const recordedOption = hasAnyCompleteBrowserRecordedCategory()
+  const recordedOption = hasAnyBrowserRecordedPhrase()
     ? [{
       id: BROWSER_RECORDED_VOICE_ID,
       label: "My Voice",
@@ -857,6 +1031,7 @@ function syncBrowserRecordedVoiceOption() {
       group: "Recorded",
       status: "ready",
       filesByPhrase: recordedFilesByBrowserPhrase(),
+      fallbackFilesByPhrase: kokoroFilesByPhrase(BROWSER_RECORDED_FALLBACK_VOICE_ID),
     }]
     : [];
 
@@ -872,7 +1047,7 @@ function syncBrowserRecordedVoiceOption() {
 }
 
 function recorderChoices() {
-  return phraseLibraryChoices.filter((choice) => choice.category === recorderCategory);
+  return recorderChoicesForCategory(recorderCategory);
 }
 
 function recorderChoice() {
@@ -886,6 +1061,56 @@ function recorderRecordedCount() {
 
 function isRecorderCategoryComplete() {
   return hasCompleteBrowserRecordedCategory(recorderCategory);
+}
+
+function firstOpenRecorderIndex(category = recorderCategory) {
+  const choicesForRecorder = recorderChoicesForCategory(category);
+  const openIndex = choicesForRecorder.findIndex((choice) => !browserRecordedPhraseUrls.has(choice.phraseId));
+  return openIndex >= 0 ? openIndex : 0;
+}
+
+function nextOpenRecorderIndex(afterIndex = recorderIndex) {
+  const choicesForRecorder = recorderChoices();
+  if (!choicesForRecorder.length) return 0;
+
+  for (let offset = 1; offset <= choicesForRecorder.length; offset += 1) {
+    const index = (afterIndex + offset) % choicesForRecorder.length;
+    const choice = choicesForRecorder[index];
+    if (!browserRecordedPhraseUrls.has(choice.phraseId)) {
+      return index;
+    }
+  }
+
+  return Math.min(Math.max(afterIndex, 0), choicesForRecorder.length - 1);
+}
+
+function saveRecorderState() {
+  localStorage.setItem(RECORDER_STORAGE_KEY, JSON.stringify({
+    category: recorderCategory,
+    index: recorderIndex,
+  }));
+}
+
+function restoreRecorderState() {
+  let category = activePhraseCategory();
+  let index = null;
+
+  try {
+    const savedState = JSON.parse(localStorage.getItem(RECORDER_STORAGE_KEY));
+    if (validRecorderCategory(savedState?.category)) {
+      category = savedState.category;
+      index = Number.isInteger(savedState.index) ? savedState.index : null;
+    }
+  } catch {
+    // Ignore corrupt local state and resume from the active category.
+  }
+
+  const choicesForRecorder = recorderChoicesForCategory(category);
+  recorderCategory = category;
+  recorderIndex = index === null
+    ? firstOpenRecorderIndex(category)
+    : Math.min(Math.max(index, 0), Math.max(choicesForRecorder.length - 1, 0));
+  saveRecorderState();
 }
 
 function setRecorderMessage(message) {
@@ -930,8 +1155,10 @@ function renderVoiceRecorder() {
   retakeRecordedPhraseButton.disabled = !isCurrentRecorded;
   recordPhraseButton.classList.toggle("is-recording", isRecordingPhrase);
   recordPhraseButton.setAttribute("aria-label", isRecordingPhrase ? "Stop recording" : "Record phrase");
-  useRecordedVoiceButton.disabled = !isComplete;
-  useRecordedVoiceButton.textContent = isComplete ? "Use My Voice" : "Finish all phrases";
+  useRecordedVoiceButton.disabled = recordedCount === 0;
+  useRecordedVoiceButton.textContent = isComplete
+    ? "Use My Voice"
+    : (recordedCount > 0 ? "Use partial voice" : "Record one phrase");
 }
 
 function stopRecorderStream() {
@@ -948,10 +1175,9 @@ async function startBrowserPhraseRecording() {
     return;
   }
 
-  audio.pause();
+  stopMainMedia();
   previewAudio.pause();
   recorderPreviewAudio.pause();
-  setPlayingState(false);
 
   try {
     recorderStream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -971,6 +1197,10 @@ async function startBrowserPhraseRecording() {
 
       try {
         await saveBrowserRecordedPhrase(choice.phraseId, blob);
+        if (!isRecorderCategoryComplete()) {
+          recorderIndex = nextOpenRecorderIndex(recorderIndex);
+        }
+        saveRecorderState();
         setRecorderMessage(`Saved ${choice.phraseId}.`);
       } catch {
         setRecorderMessage("Could not save this recording.");
@@ -1017,6 +1247,7 @@ function goToRecorderPhrase(delta) {
 
   recorderPreviewAudio.pause();
   recorderIndex = Math.min(Math.max(recorderIndex + delta, 0), Math.max(recorderChoices().length - 1, 0));
+  saveRecorderState();
   renderVoiceRecorder();
 }
 
@@ -1031,9 +1262,8 @@ async function playCurrentBrowserRecording() {
     return;
   }
 
-  audio.pause();
+  stopMainMedia();
   previewAudio.pause();
-  setPlayingState(false);
   recorderPreviewAudio.src = file;
   recorderPreviewAudio.volume = recordedVoiceOutputVolume();
   applyPlaybackTuningToMedia(recorderPreviewAudio, Number(speedControl.value) / 100);
@@ -1053,6 +1283,7 @@ async function retakeCurrentBrowserRecording() {
   try {
     await deleteBrowserRecordedPhrase(choice.phraseId);
     setRecorderMessage(`Removed ${choice.phraseId}.`);
+    saveRecorderState();
   } catch {
     setRecorderMessage("Could not remove this take.");
   }
@@ -1062,8 +1293,7 @@ async function retakeCurrentBrowserRecording() {
 }
 
 function openVoiceRecorder() {
-  recorderCategory = activePhraseCategory();
-  recorderIndex = 0;
+  restoreRecorderState();
   renderVoiceRecorder();
   setRecorderMessage("");
   goToPage(2);
@@ -1076,11 +1306,12 @@ function closeVoiceRecorder() {
 }
 
 function useBrowserRecordedVoice() {
-  if (!isRecorderCategoryComplete()) {
-    setRecorderMessage("Record every phrase in this category first.");
+  if (recorderRecordedCount() === 0) {
+    setRecorderMessage("Record at least one phrase first.");
     return;
   }
 
+  selectCategory(recorderCategory);
   syncBrowserRecordedVoiceOption();
   setVoice(BROWSER_RECORDED_VOICE_ID);
   closeVoiceRecorder();
@@ -1170,6 +1401,8 @@ function updateVolume() {
   const baseVolume = baseOutputVolume();
   const currentChoice = currentChoices()[selectedIndexByMode[currentMode]];
   audio.volume = currentChoice ? outputVolumeForSource(resolveAudioSource(currentChoice), baseVolume) : baseVolume;
+  avatarVideo.volume = baseVolume;
+  avatarVideo.muted = false;
 
   const previewChoice = previewingId ? findChoice(previewingId) : null;
   previewAudio.volume = previewChoice ? outputVolumeForSource(resolveAudioSource(previewChoice), baseVolume) : baseVolume;
@@ -1234,6 +1467,7 @@ function updatePlaybackTuning({ save = true } = {}) {
   const speed = Number(speedControl.value) / 100;
 
   applyPlaybackTuningToMedia(audio, speed);
+  applyPlaybackTuningToMedia(avatarVideo, speed);
   applyPlaybackTuningToMedia(previewAudio, speed);
   applyPlaybackTuningToMedia(recorderPreviewAudio, speed);
 
@@ -1385,6 +1619,7 @@ function setPlayingState(isPlaying) {
 
 function applyAudioLooping() {
   audio.loop = repeatMode === "single";
+  avatarVideo.loop = repeatMode === "single";
 }
 
 function updateQueueButtons() {
@@ -1434,14 +1669,15 @@ function centerSelectedOption(behavior = "smooth") {
 }
 
 function selectLoop(option) {
-  const shouldResume = !audio.paused;
+  const shouldResume = !activeMainMedia().paused;
 
   selectedIndexByMode[currentMode] = Number(option.dataset.index);
   syncSelection({ scrollBehavior: "smooth", updateAudio: true });
 
   if (shouldResume) {
-    audio.currentTime = 0;
-    audio.play().catch(() => setPlayingState(false));
+    const media = activeMainMedia();
+    media.currentTime = 0;
+    media.play().catch(() => setPlayingState(false));
   }
 }
 
@@ -1472,10 +1708,11 @@ function syncSelection({ scrollBehavior = "auto", center = true, updateAudio = t
 
   selectedLoop.textContent = displayTitleForChoice(selectedChoice);
   if (updateAudio) {
-    updateAudioSource(resolveAudioSource(selectedChoice).file);
+    updateMainMediaSource(selectedChoice);
   }
   updateVolume();
   updateVoiceStatus(selectedChoice);
+  updateConversationProgress();
   applyAudioLooping();
   updateLoopNeighbors();
   if (center) {
@@ -1512,14 +1749,117 @@ function updateSelectionFromScroll({ updateAudio = false } = {}) {
 }
 
 function updateAudioSource(file) {
-  if (audio.getAttribute("src") === file) {
+  if (audio.getAttribute("src") === file && !isAvatarVideoSourceActive) {
     updatePlaybackTuning({ save: false });
+    updateConversationProgress();
     return;
   }
+
+  avatarVideo.pause();
+  avatarVideo.currentTime = 0;
+  avatarVideo.removeAttribute("src");
+  avatarVideo.load();
+  playerPanel.classList.remove("has-avatar-video");
+  isAvatarVideoSourceActive = false;
 
   audio.setAttribute("src", file);
   audio.load();
   updatePlaybackTuning({ save: false });
+  updateConversationProgress();
+}
+
+function updateMainMediaSource(choice) {
+  const source = resolveAudioSource(choice);
+  const avatarVideoFile = resolveAvatarVideoSource(choice, source.voice);
+  currentResolvedSource = source;
+
+  if (avatarVideoFile) {
+    if (avatarVideo.getAttribute("src") === avatarVideoFile && isAvatarVideoSourceActive) {
+      updatePlaybackTuning({ save: false });
+      return;
+    }
+
+    audio.pause();
+    audio.currentTime = 0;
+    avatarVideo.setAttribute("src", avatarVideoFile);
+    avatarVideo.load();
+    avatarVideo.muted = false;
+    playerPanel.classList.add("has-avatar-video");
+    isAvatarVideoSourceActive = true;
+    updatePlaybackTuning({ save: false });
+    updateVolume();
+    updateConversationProgress();
+    return;
+  }
+
+  updateAudioSource(source.file);
+}
+
+function activeMainMedia() {
+  return isAvatarVideoSourceActive ? avatarVideo : audio;
+}
+
+function formatMediaTime(time) {
+  const totalSeconds = Number.isFinite(time) ? Math.max(0, Math.floor(time)) : 0;
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
+}
+
+function updateConversationProgress() {
+  if (!conversationSeek || !conversationCurrentTime || !conversationDuration) return;
+
+  const media = activeMainMedia();
+  const duration = Number.isFinite(media.duration) ? media.duration : 0;
+  const currentTime = Number.isFinite(media.currentTime) ? media.currentTime : 0;
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+  conversationSeek.disabled = currentMode !== "conversation" || duration <= 0;
+  conversationSeek.max = String(Math.max(duration, 1));
+
+  if (!isSeekingConversation) {
+    conversationSeek.value = String(Math.min(currentTime, duration || 1));
+  }
+
+  conversationSeek.style.setProperty("--conversation-progress", `${clamp(progress, 0, 100)}%`);
+  conversationCurrentTime.textContent = formatMediaTime(isSeekingConversation ? Number(conversationSeek.value) : currentTime);
+  conversationDuration.textContent = formatMediaTime(duration);
+}
+
+function seekConversationTo(time) {
+  if (!conversationSeek || !conversationCurrentTime || !conversationDuration) return;
+
+  const media = activeMainMedia();
+  const duration = Number.isFinite(media.duration) ? media.duration : 0;
+  if (currentMode !== "conversation" || duration <= 0) return;
+
+  const nextTime = clamp(time, 0, duration);
+  media.currentTime = nextTime;
+  conversationSeek.value = String(nextTime);
+  conversationSeek.style.setProperty("--conversation-progress", `${(nextTime / duration) * 100}%`);
+  conversationCurrentTime.textContent = formatMediaTime(nextTime);
+  conversationDuration.textContent = formatMediaTime(duration);
+}
+
+function seekConversationFromPointer(event) {
+  if (!conversationSeek || conversationSeek.disabled) return;
+
+  const media = activeMainMedia();
+  const duration = Number.isFinite(media.duration) ? media.duration : 0;
+  if (duration <= 0) return;
+
+  const rect = conversationSeek.getBoundingClientRect();
+  const ratio = rect.width > 0 ? (event.clientX - rect.left) / rect.width : 0;
+  seekConversationTo(clamp(ratio, 0, 1) * duration);
+}
+
+function stopMainMedia() {
+  audio.pause();
+  audio.currentTime = 0;
+  avatarVideo.pause();
+  avatarVideo.currentTime = 0;
+  setPlayingState(false);
+  updateConversationProgress();
 }
 
 function updateLoopNeighbors() {
@@ -1537,9 +1877,8 @@ function setMode(mode) {
   if (mode === currentMode) return;
 
   currentMode = mode;
-  audio.pause();
-  audio.currentTime = 0;
-  setPlayingState(false);
+  playerPanel.dataset.mode = currentMode;
+  stopMainMedia();
   stopPreview();
   applyAudioLooping();
 
@@ -1549,6 +1888,7 @@ function setMode(mode) {
     button.setAttribute("aria-pressed", String(isSelected));
   });
 
+  updateVoiceControlMode();
   renderWheel();
   renderPlaylistEditor();
   renderPlaylistControls();
@@ -1626,9 +1966,9 @@ function describePlaylistChoice(choice) {
   return {
     label: choice.title,
     description: choice.phraseText ?? choice.title,
-    meta: currentMode === "conversation" ? "Conversation starters" : "Other",
+    meta: currentMode === "conversation" ? "Category talks" : "Other",
     groupId: currentMode === "conversation" ? "conversation" : "other",
-    groupTitle: currentMode === "conversation" ? "Conversation starters" : "Other",
+    groupTitle: currentMode === "conversation" ? "Category talks" : "Other",
   };
 }
 
@@ -1776,7 +2116,7 @@ function togglePlaylistItem(itemId) {
   }
 
   const selectedItemId = activePlaylist.itemIds[selectedIndexByMode[currentMode]];
-  const wasPlaying = !audio.paused;
+  const wasPlaying = !activeMainMedia().paused;
   const wasPreviewingRemovedItem = previewingId === itemId;
 
   if (isIncluded) {
@@ -1797,8 +2137,9 @@ function togglePlaylistItem(itemId) {
   savePlaylistConfiguration();
 
   if (wasPlaying) {
-    audio.currentTime = 0;
-    audio.play().catch(() => setPlayingState(false));
+    const media = activeMainMedia();
+    media.currentTime = 0;
+    media.play().catch(() => setPlayingState(false));
   }
 }
 
@@ -1944,9 +2285,7 @@ async function playPreview(itemId) {
     return;
   }
 
-  audio.pause();
-  audio.currentTime = 0;
-  setPlayingState(false);
+  stopMainMedia();
   stopPreview();
   previewingId = itemId;
   const source = resolveAudioSource(choice);
@@ -1967,10 +2306,11 @@ async function playPreview(itemId) {
 async function playQueuedTrack() {
   selectedIndexByMode[currentMode] = nextQueuedIndex();
   syncSelection({ scrollBehavior: "smooth", updateAudio: true });
-  audio.currentTime = 0;
+  const media = activeMainMedia();
+  media.currentTime = 0;
 
   try {
-    await audio.play();
+    await media.play();
     setPlayingState(true);
   } catch {
     setPlayingState(false);
@@ -1978,11 +2318,12 @@ async function playQueuedTrack() {
 }
 
 async function skipToNextTrack() {
-  const shouldResume = !audio.paused;
+  const shouldResume = !activeMainMedia().paused;
 
   selectedIndexByMode[currentMode] = nextQueuedIndex();
   syncSelection({ scrollBehavior: "smooth", updateAudio: true });
-  audio.currentTime = 0;
+  const media = activeMainMedia();
+  media.currentTime = 0;
 
   if (!shouldResume) {
     setPlayingState(false);
@@ -1990,8 +2331,10 @@ async function skipToNextTrack() {
   }
 
   try {
-    primeAudioMeter();
-    await audio.play();
+    if (!isAvatarVideoSourceActive) {
+      primeAudioMeter();
+    }
+    await media.play();
     setPlayingState(true);
   } catch {
     setPlayingState(false);
@@ -1999,17 +2342,20 @@ async function skipToNextTrack() {
 }
 
 playButton.addEventListener("click", async () => {
-  if (audio.paused) {
+  const media = activeMainMedia();
+  if (media.paused) {
     try {
-      primeAudioMeter();
-      await audio.play();
+      if (!isAvatarVideoSourceActive) {
+        primeAudioMeter();
+      }
+      await media.play();
       setPlayingState(true);
     } catch {
       setPlayingState(false);
     }
   } else {
-    audio.pause();
-    audio.currentTime = 0;
+    media.pause();
+    media.currentTime = 0;
     setPlayingState(false);
     startMeterAnimation();
   }
@@ -2045,11 +2391,15 @@ modeButtons.forEach((button) => {
 });
 
 voiceSelect?.addEventListener("change", () => setVoice(voiceSelect.value));
+playerVisualButtons.forEach((button) => {
+  button.addEventListener("click", () => setPlayerVisual(button.dataset.playerVisual));
+});
 openVoiceRecorderButton?.addEventListener("click", openVoiceRecorder);
 closeVoiceRecorderButton?.addEventListener("click", closeVoiceRecorder);
 recorderCategorySelect?.addEventListener("change", () => {
   recorderCategory = recorderCategorySelect.value;
-  recorderIndex = 0;
+  recorderIndex = firstOpenRecorderIndex(recorderCategory);
+  saveRecorderState();
   recorderPreviewAudio.pause();
   renderVoiceRecorder();
 });
@@ -2104,22 +2454,89 @@ previewAudio.addEventListener("ended", () => {
 
 volumeControl.addEventListener("input", updateVolume);
 volumeControl.addEventListener("change", updateVolume);
+conversationSeek?.addEventListener("pointerdown", (event) => {
+  isSeekingConversation = true;
+  conversationSeek.setPointerCapture?.(event.pointerId);
+  seekConversationFromPointer(event);
+});
+conversationSeek?.addEventListener("pointermove", (event) => {
+  if (isSeekingConversation) {
+    seekConversationFromPointer(event);
+  }
+});
+conversationSeek?.addEventListener("pointerup", (event) => {
+  seekConversationFromPointer(event);
+  isSeekingConversation = false;
+  conversationSeek.releasePointerCapture?.(event.pointerId);
+  updateConversationProgress();
+});
+conversationSeek?.addEventListener("pointercancel", () => {
+  isSeekingConversation = false;
+  updateConversationProgress();
+});
+conversationSeek?.addEventListener("input", () => {
+  seekConversationTo(Number(conversationSeek.value) || 0);
+  updateConversationProgress();
+});
+conversationSeek?.addEventListener("change", () => {
+  seekConversationTo(Number(conversationSeek.value) || 0);
+  isSeekingConversation = false;
+  updateConversationProgress();
+});
+conversationSeek?.addEventListener("keydown", (event) => {
+  const media = activeMainMedia();
+  const duration = Number.isFinite(media.duration) ? media.duration : 0;
+  if (currentMode !== "conversation" || duration <= 0) return;
+
+  const step = event.shiftKey ? 30 : 5;
+  let nextTime = media.currentTime;
+
+  if (event.key === "ArrowLeft") nextTime -= step;
+  else if (event.key === "ArrowRight") nextTime += step;
+  else if (event.key === "Home") nextTime = 0;
+  else if (event.key === "End") nextTime = duration;
+  else return;
+
+  event.preventDefault();
+  seekConversationTo(nextTime);
+  updateConversationProgress();
+});
 speedControl.addEventListener("input", updatePlaybackTuning);
 speedControl.addEventListener("change", updatePlaybackTuning);
 pitchToggle.addEventListener("click", togglePitchMode);
-audio.addEventListener("loadedmetadata", () => updatePlaybackTuning({ save: false }));
+audio.addEventListener("loadedmetadata", () => {
+  updatePlaybackTuning({ save: false });
+  updateConversationProgress();
+});
+avatarVideo.addEventListener("loadedmetadata", () => {
+  updatePlaybackTuning({ save: false });
+  updateConversationProgress();
+});
 previewAudio.addEventListener("loadedmetadata", () => updatePlaybackTuning({ save: false }));
 recorderPreviewAudio.addEventListener("loadedmetadata", () => updatePlaybackTuning({ save: false }));
+audio.addEventListener("timeupdate", updateConversationProgress);
+avatarVideo.addEventListener("timeupdate", updateConversationProgress);
 audio.addEventListener("play", () => {
   primeAudioMeter();
   setPlayingState(true);
+  updateConversationProgress();
+});
+avatarVideo.addEventListener("play", () => {
+  setPlayingState(true);
+  updateConversationProgress();
 });
 audio.addEventListener("pause", startMeterAnimation);
+audio.addEventListener("pause", updateConversationProgress);
+avatarVideo.addEventListener("pause", () => {
+  startMeterAnimation();
+  updateConversationProgress();
+});
 
 renderAudioMeter();
 applyAudioLooping();
 updateQueueButtons();
-renderVoiceOptions();
+playerPanel.dataset.mode = currentMode;
+setPlayerVisual(activePlayerVisual, { save: false });
 loadBrowserRecordedPhrases().catch(() => {
   syncBrowserRecordedVoiceOption();
 });
@@ -2148,11 +2565,18 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-audio.addEventListener("ended", () => {
+function handleMainMediaEnded(event) {
+  if (event?.target === avatarVideo && activeMainMedia() !== avatarVideo) {
+    return;
+  }
+
   if (repeatMode !== "all") {
     setPlayingState(false);
     return;
   }
 
   playQueuedTrack();
-});
+}
+
+audio.addEventListener("ended", handleMainMediaEnded);
+avatarVideo.addEventListener("ended", handleMainMediaEnded);

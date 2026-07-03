@@ -9,7 +9,7 @@
     <link rel="canonical" href="https://acolomba.site/projects/soundatude/">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%23060607'/%3E%3Cpath d='M27 22v20l17-10z' fill='%23f2eee7'/%3E%3C/svg%3E">
-    <link rel="stylesheet" href="styles.css?v=web-recorder-volume-20260702-v4">
+    <link rel="stylesheet" href="styles.css?v=female-nicole-audio-fixed-20260703-v1">
   </head>
   <body>
     <main class="app-shell" aria-label="Sound-a-tude player">
@@ -48,9 +48,29 @@
             <em id="voiceStatus">Voice ready</em>
           </label>
 
+          <div class="visual-choice" role="radiogroup" aria-label="Player visual">
+            <button class="is-selected" type="button" role="radio" aria-checked="true" data-player-visual="box">
+              <span class="visual-swatch visual-swatch-box" aria-hidden="true"></span>
+              <span>Box</span>
+            </button>
+            <button type="button" role="radio" aria-checked="false" data-player-visual="male">
+              <span class="visual-swatch visual-swatch-male" aria-hidden="true"></span>
+              <span>Male</span>
+            </button>
+            <button type="button" role="radio" aria-checked="false" data-player-visual="female">
+              <span class="visual-swatch visual-swatch-female" aria-hidden="true"></span>
+              <span>Female</span>
+            </button>
+          </div>
         </div>
 
         <section class="now-console" aria-label="Now playing">
+          <div class="avatar-stage" aria-hidden="true">
+            <video class="avatar-video" id="avatarVideo" preload="metadata" playsinline></video>
+            <img class="avatar-head avatar-head-male" src="assets/images/avatars/soundatude-avatar-male-v001.png" alt="">
+            <img class="avatar-head avatar-head-female" src="assets/images/avatars/soundatude-avatar-female-v001.png" alt="">
+          </div>
+
           <div class="console-meter" aria-hidden="true">
           </div>
 
@@ -79,6 +99,12 @@
         </section>
 
         <audio id="sampleAudio" src="assets/audio/attitude-effort-sample.mp3" preload="metadata" loop></audio>
+
+        <div class="conversation-progress" aria-label="Conversation position">
+          <span id="conversationCurrentTime">0:00</span>
+          <input id="conversationSeek" type="range" min="0" max="1" step="0.1" value="0" aria-label="Conversation position" disabled>
+          <span id="conversationDuration">0:00</span>
+        </div>
 
         <div class="volume-control" aria-label="Volume">
           <button class="tuning-step" id="volumeDownButton" type="button" aria-label="Lower volume">-</button>
@@ -259,6 +285,6 @@
       </div>
     </main>
 
-    <script src="script.js?v=web-recorder-volume-20260702-v4"></script>
+        <script src="script.js?v=female-nicole-audio-fixed-20260703-v1"></script>
   </body>
 </html>
