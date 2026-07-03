@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Antonio Colomba | Message</title>
+  <title>Antonio Colomba | Contact</title>
   <style>
     :root {
       --paper: #d1d1d1;
@@ -11,6 +11,9 @@
       --muted: #202833;
       --blue: #202833;
       --rule: rgba(32, 40, 51, 0.34);
+      --field: rgba(32, 40, 51, 0.045);
+      --field-focus: rgba(32, 40, 51, 0.075);
+      --field-border: rgba(32, 40, 51, 0.28);
     }
 
     * {
@@ -83,6 +86,20 @@
       line-height: 1.42;
     }
 
+    .direct-contact {
+      display: grid;
+      gap: 5px;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 18px;
+      font-style: normal;
+      line-height: 1.45;
+    }
+
+    .direct-contact a {
+      font-weight: 700;
+    }
+
     .message-form {
       display: grid;
       gap: 12px;
@@ -100,14 +117,21 @@
     .message-form input,
     .message-form textarea {
       width: 100%;
-      border: 1px solid var(--rule);
+      border: 1px solid var(--field-border);
       border-radius: 0;
-      background: #fffffb;
+      background: var(--field);
       color: var(--ink);
       font: inherit;
       font-size: 16px;
       line-height: 1.35;
       padding: 10px 11px;
+    }
+
+    .message-form input:focus,
+    .message-form textarea:focus {
+      background: var(--field-focus);
+      border-color: var(--ink);
+      outline: 0;
     }
 
     .reply-method {
@@ -146,7 +170,18 @@
     }
 
     .message-form input[type="file"] {
+      color: var(--muted);
       padding: 8px 9px;
+    }
+
+    .message-form input[type="file"]::file-selector-button {
+      margin-right: 10px;
+      border: 1px solid var(--field-border);
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font: inherit;
+      padding: 4px 10px;
     }
 
     .message-form textarea {
@@ -209,8 +244,12 @@
 
     <section class="message-panel" aria-labelledby="message-title">
       <div>
-        <h1 id="message-title">Send a message</h1>
-        <p>Use this box for work inquiries, support roles, production coordination, or project follow-up.</p>
+        <h1 id="message-title">Contact Antonio</h1>
+        <p>He really wants to hear from you.</p>
+        <address class="direct-contact" aria-label="Direct contact">
+          <a href="mailto:getantonio@gmail.com">getantonio@gmail.com</a>
+          <a href="tel:+15612711163">(561) 271-1163</a>
+        </address>
       </div>
 
       <form class="message-form" data-message-form data-endpoint="https://antonio-telegram-message.pine-porter.workers.dev">
