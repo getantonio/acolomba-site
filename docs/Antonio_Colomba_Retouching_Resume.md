@@ -8,7 +8,7 @@ High-end digital retoucher and visual production artist with agency, studio, com
 
 ## Best Fit Roles
 
-Retouching Artist | Senior Retoucher | Photo Retouching Lead | Retouching Supervisor | Photo Retouching Manager | Image Quality Control Specialist | Visual Effects Artist | Creative Production Coordinator
+Retouching Artist | Senior Retoucher | Photo Retouching Lead | Retouching Supervisor | Photo Retouching Manager | Image Quality Control Specialist | Visual Effects | Creative Production Coordinator
 
 ## Core Strengths
 

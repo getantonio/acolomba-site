@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Changed the retouching resume Best Fit Roles wording from Visual Effects Artist to Visual Effects.
 - Renamed the resume hub Retouching label to Photo Retouching.
 - Removed the Bio row from the `resume.html` hub because Bio is already available in the site navigation.
 - Shortened the Retouching resume hub description to high-end retouching and creative production work.
