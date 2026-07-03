@@ -4,6 +4,7 @@ Last updated: 2026-07-03
 
 ## Completed
 
+- Changed the Bio page AI sentence from that work to that experience.
 - Changed the Bio page lead phrase from background in to professional work history in.
 - Updated the Bio page human-skills sentence to mention curiosity of emerging technology.
 - Changed the Bio page Background paragraph from He studied to Antonio studied.
