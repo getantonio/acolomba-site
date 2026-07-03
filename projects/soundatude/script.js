@@ -1648,12 +1648,16 @@ function renderVoiceRecorder() {
   }
   recordPhraseButton.classList.toggle("is-recording", isRecordingPhrase);
   recordPhraseButton.setAttribute("aria-label", isRecordingPhrase ? "Stop recording" : (recorderMode === "custom" ? "Record custom phrase" : "Record phrase"));
-  useRecordedVoiceButton.disabled = recordedCount === 0;
-  useRecordedVoiceButton.textContent = recorderMode === "custom" && recordedCount > 0
+  useRecordedVoiceButton.disabled = false;
+  useRecordedVoiceButton.textContent = isRecordingPhrase
+    ? "Stop recording"
+    : recordedCount === 0
+    ? "Record phrase"
+    : recorderMode === "custom"
     ? "Use recorded category"
     : isComplete
     ? "Use My Voice"
-    : (recordedCount > 0 ? "Use partial voice" : "Record one phrase");
+    : "Use partial voice";
 }
 
 function stopRecorderStream() {
@@ -1962,7 +1966,12 @@ function closeVoiceRecorder() {
 
 function useBrowserRecordedVoice() {
   if (recorderRecordedCount() === 0) {
-    setRecorderMessage("Record at least one phrase first.");
+    toggleBrowserPhraseRecording();
+    return;
+  }
+
+  if (isRecordingPhrase) {
+    stopBrowserPhraseRecording();
     return;
   }
 
