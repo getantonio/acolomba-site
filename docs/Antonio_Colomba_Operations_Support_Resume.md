@@ -8,7 +8,7 @@ Reliable and detail-oriented with a background in deadline-driven creative art a
 
 ## Best Fit Roles
 
-Operations Manager | Production Coordinator | Technical Support Associate | Onboarding Coordinator | Operations Support Specialist | Production Support Coordinator | Administrative Operations
+Operations Manager | Production Coordinator | Administrative Operations
 
 ## Core Strengths
 
@@ -41,14 +41,12 @@ NYC | 09/2000 - 09/2001
 
 ### Agentic Engineered Technical Projects
 
-Local / Private
-
-- Built and organized a multi-blockchain token creation platform, decentralized DeFi trading platform on Solana and EVM networks, AI content creation platform, and mind-bending audio attitude training app.
+- Engineered a multi-blockchain token creation platform, decentralized DeFi trading platform on Solana and EVM networks, AI content creation platform, and mind-bending audio attitude training app.
 - Practiced troubleshooting, reading documentation, organizing tasks, testing flows, and turning messy ideas into usable workflows.
 
 ## Work Readiness
 
-Available for entry-level support, operations, admin, production coordination, customer success, technical support, and temp assignments. Open to in-person, hybrid, remote, temporary, contract, part-time, or full-time work.
+Available for operations, admin, production coordination, customer success, technical support, and temp assignments. Open to in-person, hybrid, remote, temporary, contract, part-time, or full-time work.
 
 ## Education
 

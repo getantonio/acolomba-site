@@ -62,7 +62,7 @@ NYC | 09/2000 - 09/2001
 - Built and iterated on local trading and crypto applications including GMX tooling, signal dashboards, trading strategy systems, and arbitrage prototypes.
 - Worked with project structures using Next.js, TypeScript, Python, FastAPI-style backends, wallet connections, market data, dashboards, and strategy/backtesting concepts.
 - Used AI-assisted development to explore product workflows, debug issues, read documentation, and turn ideas into working local prototypes.
-- Current status: local/private projects; present through screenshots, repository walk-throughs, and short project summaries rather than public production claims.
+- Current status: project prototypes; present through screenshots, repository walk-throughs, and short project summaries rather than public production claims.
 
 ### Fintech Company Research Brief | Payments / Crypto / Compliance
 

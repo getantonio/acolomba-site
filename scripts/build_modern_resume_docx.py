@@ -173,7 +173,7 @@ add_text(
 add_bottom_rule(fit, size="1")
 
 add_section("01", "Current technical project work", before=10, left=0.24)
-add_role("Token Factory / TokenHub", "local/private crypto product prototype", left=0.24)
+add_role("Token Factory / TokenHub", "crypto product prototype", left=0.24)
 add_bullet("Built token creation and management flows covering configuration, supply, transfer restrictions, wallet addresses, security settings, liquidity concepts, and post-creation steps.", left=0.4)
 add_bullet("Explored multi-network token creation concepts across Ethereum Sepolia, Arbitrum Sepolia, Optimism Sepolia, and Polygon Amoy.", left=0.4)
 
@@ -187,7 +187,7 @@ add_bullet("Organizing messy product ideas into tasks, project notes, testable f
 note = doc.add_paragraph()
 set_para(note, before=7, after=15, line=1.1, left=0.82, right=0.18)
 add_text(note, "Presentation plan: ", size=9.05, bold=True, color=TEAL)
-add_text(note, "local/private projects should be shown through screenshots, walkthroughs, and short project summaries, not live product claims.", size=9.05, color=MUTED)
+add_text(note, "Project prototypes should be shown through screenshots, walkthroughs, and short project summaries, not live product claims.", size=9.05, color=MUTED)
 
 tools = doc.add_paragraph()
 set_para(tools, before=7, after=16, line=1.1, left=0.08, right=0.15)
@@ -206,7 +206,7 @@ add_text(divider, "   background and education", size=8.8, color=MUTED)
 add_bottom_rule(divider, size="1")
 
 add_section("02", "Professional foundation", before=8)
-add_role("Freelance Engagements, High-End Digital Retoucher", "NYC | dates to confirm")
+add_role("Freelance Engagements, High-End Digital Retoucher", "NYC")
 add_bullet("Delivered high-end retouching and visual finishing for agency, studio, and commercial clients including McCann Erickson, Foam Digital, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.")
 add_bullet("Applied image correction, color matching, compositing, proofing, and client-direction revisions.")
 

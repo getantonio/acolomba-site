@@ -45,11 +45,7 @@ NYC | 09/2000 - 09/2001
 
 ## Selected Visual Production Skills
 
-Photo retouching, color grade and matching, compositing, rotoscoping, 3D tracking, set extension, character animation, video editing, visual effects, proofing, client revisions, image QA, production file handling, AI image review, generative media workflows.
-
-## Tools
-
-Photoshop, InDesign, Premiere, After Effects, Nuke, Maya, Houdini, 3DEqualizer, Boujou, Unreal Engine, Vex, Python, MEL scripting, Mac, Windows, Linux.
+Photo retouching, color grade and matching, compositing, rotoscoping, 3D tracking, set extension, character animation, video editing, visual effects, proofing, client revisions, production file handling, AI image review, generative media workflows.
 
 ## Education
 

@@ -138,7 +138,7 @@ for item in [
     bullet(item)
 
 section_head("02", "Professional experience", before=10)
-role("Freelance Engagements, High-End Digital Retoucher", "NYC | dates to confirm")
+role("Freelance Engagements, High-End Digital Retoucher", "NYC")
 bullet("Delivered detailed visual finishing and retouching work for agency, studio, and commercial clients.")
 bullet("Worked with teams including McCann Erickson, Foam Digital, Urban Studio, Nucleus Imaging, Digital Evolution, EMR Systems, Fuel Digital, Color Edge, and Young & Rubicam Inc.")
 bullet("Managed image correction, color matching, compositing, proofing, revision cycles, client direction, and quality-control expectations.")
@@ -150,8 +150,8 @@ role("FCB World Wide, High-End Digital Retoucher", "NYC | 09/2000 - 09/2001")
 bullet("Produced high-resolution art, visual effects, retouching, color correction, and creative compositions.")
 
 section_head("03", "Current project work", before=10)
-role("Agentic Engineered Technical Projects", "local/private")
-bullet("Built and organized a multi-blockchain token creation platform, decentralized DeFi trading platform on Solana and EVM networks, AI content creation platform, and mind-bending audio attitude training app.")
+role("Agentic Engineered Technical Projects")
+bullet("Engineered a multi-blockchain token creation platform, decentralized DeFi trading platform on Solana and EVM networks, AI content creation platform, and mind-bending audio attitude training app.")
 bullet("Practiced troubleshooting, reading documentation, organizing tasks, testing flows, and turning messy ideas into usable workflows.")
 
 section_head("04", "Work readiness", before=10)
@@ -159,7 +159,7 @@ ready = doc.add_paragraph()
 set_para(ready, before=0, after=7, line=1.08, left=0.16)
 add_text(
     ready,
-    "Available for support, operations, admin, production help, customer success, technical support, data entry, inventory support, and temp assignments. Open to in-person, hybrid, remote, temporary, contract, part-time, or full-time work.",
+    "Available for operations, admin, production coordination, customer success, technical support, and temp assignments. Open to in-person, hybrid, remote, temporary, contract, part-time, or full-time work.",
     size=9.1,
 )
 

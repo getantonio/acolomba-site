@@ -135,11 +135,11 @@ add_bullet(doc, "Worked through token product flows including token configuratio
 add_bullet(doc, "Explored multi-network token creation concepts across Ethereum Sepolia, Arbitrum Sepolia, Optimism Sepolia, and Polygon Amoy.")
 add_bullet(doc, "Current status: not publicly accessible. Use screenshots, local code, and a short walkthrough write-up as proof instead of a live website link.")
 
-add_role(doc, "Trading & Crypto Tooling Projects", "AI-Assisted Development", "Local/private projects")
+add_role(doc, "Trading & Crypto Tooling Projects", "AI-Assisted Development", "Project prototypes")
 add_bullet(doc, "Built and iterated on local trading and crypto applications including GMX tooling, signal dashboards, trading strategy systems, and arbitrage prototypes.")
 add_bullet(doc, "Worked with project structures using Next.js, TypeScript, Python, wallet connections, market data, dashboards, and strategy/backtesting concepts.")
 add_bullet(doc, "Used AI-assisted development to explore product workflows, debug issues, read documentation, and turn ideas into working local prototypes.")
-add_bullet(doc, "Current status: local/private projects; present through screenshots, repository walk-throughs, and short project summaries rather than public production claims.")
+add_bullet(doc, "Current status: project prototypes; present through screenshots, repository walk-throughs, and short project summaries rather than public production claims.")
 
 add_role(doc, "Fintech Company Research Brief", "Payments / Crypto / Compliance", "")
 add_bullet(doc, "Compare Ripple, Stripe, Wise, Coinbase, and Circle by customer, business model, product, payments, compliance, custody, liquidity, and blockchain usage.")
