@@ -48,7 +48,7 @@ try {
       }
 
       body {
-        font-size: 13.2px !important;
+        font-size: 14px !important;
         line-height: 1.22 !important;
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;
@@ -85,8 +85,8 @@ try {
 
       .summary {
         max-width: none !important;
-        margin: 0 0 9px 180px !important;
-        font-size: 13.2px !important;
+        margin: 0 0 9px 157px !important;
+        font-size: 14px !important;
         line-height: 1.22 !important;
       }
 
@@ -105,8 +105,8 @@ try {
       }
 
       section {
-        grid-template-columns: 150px minmax(0, 1fr) !important;
-        column-gap: 22px !important;
+        grid-template-columns: 145px minmax(0, 1fr) !important;
+        column-gap: 12px !important;
         align-items: baseline !important;
         margin-top: 9px !important;
         padding-top: 0 !important;
@@ -116,9 +116,9 @@ try {
       }
 
       h2 {
-        font-size: 12.2px !important;
+        font-size: 12.8px !important;
         line-height: 1.02 !important;
-        padding-right: 10px !important;
+        padding-right: 0 !important;
       }
 
       .keep {
@@ -132,7 +132,7 @@ try {
         justify-content: start !important;
         align-items: baseline !important;
         margin: 7px 0 2px !important;
-        font-size: 12.3px !important;
+        font-size: 13px !important;
         line-height: 1.08 !important;
       }
 
@@ -164,13 +164,13 @@ try {
         grid-template-columns: minmax(0, 60%) 145px !important;
         column-gap: 12px !important;
         align-items: baseline !important;
-        font-size: 12px !important;
+        font-size: 12.8px !important;
         line-height: 1.08 !important;
       }
 
       .school-detail {
         margin-top: 1px !important;
-        font-size: 10.4px !important;
+        font-size: 11px !important;
         line-height: 1.08 !important;
       }
 
