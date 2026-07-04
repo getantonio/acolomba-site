@@ -5,19 +5,17 @@ This is the single source repository for `acolomba.site`.
 GitHub Pages serves this repository from the root of `main`, so the live site files live at the repo root:
 
 - `index.html`
-- `antonio-colomba-bio.html`
 - `resume.html`
 - `main-resume.html`
 - `retouching-resume.html`
-- `operations-support-resume.html` (redirect compatibility)
 - `fast-resume.html`
 - `antonio-resume.html` (legacy compatibility copy)
 - `antonio-bio.html`
-- `Antonio_Colomba_Main_Resume.pdf`
-- `Antonio_Colomba_Retouching_Resume.pdf`
-- `Antonio_Colomba_Operations_Support_Resume.docx`
-- `Antonio_Colomba_Fast_Resume.docx`
-- `Antonio_Colomba_Modern_Resume.docx`
+- `docs/Antonio_Colomba_Main_Resume.pdf`
+- `docs/Antonio_Colomba_Retouching_Resume.pdf`
+- `docs/Antonio_Colomba_Operations_Support_Resume.docx`
+- `docs/Antonio_Colomba_Fast_Resume.docx`
+- `docs/Antonio_Colomba_Modern_Resume.docx`
 - `CNAME`
 
 Project notes, drafts, setup docs, and helper scripts live in `docs/`, `scripts/`, `workers/`, and `telegram-endpoint/`.
