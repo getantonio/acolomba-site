@@ -69,7 +69,7 @@ try {
       }
 
       .subtitle {
-        margin-top: 8px !important;
+        margin-top: 18px !important;
         font-size: 18px !important;
       }
 
