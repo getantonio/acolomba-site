@@ -13,7 +13,6 @@ GitHub Pages serves this repository from the root of `main`, so the live site fi
 - `antonio-bio.html`
 - `docs/Antonio_Colomba_Main_Resume.pdf`
 - `docs/Antonio_Colomba_Retouching_Resume.pdf`
-- `docs/Antonio_Colomba_Operations_Support_Resume.docx`
 - `docs/Antonio_Colomba_Fast_Resume.docx`
 - `docs/Antonio_Colomba_Modern_Resume.docx`
 - `CNAME`
@@ -50,10 +49,9 @@ After site updates, push `main` to `origin` so `acolomba.site` receives the chan
 
 ## Rebuild Resume Downloads
 
-The build scripts write the working DOCX in `docs/` and also refresh the root-level files used by the live site.
+The build scripts write the current resume downloads in `docs/`.
 
 ```bash
-python3 scripts/build_operations_support_resume_docx.py
 python3 scripts/build_fast_resume_docx.py
 python3 scripts/build_modern_resume_docx.py
 node scripts/build_main_resume_pdf.mjs

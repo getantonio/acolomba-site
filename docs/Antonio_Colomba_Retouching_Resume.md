@@ -16,7 +16,7 @@ Retouching Artist | Retouching Supervisor | Quality Control | Creative Productio
 - Client-driven revision cycles, creative direction handoff, deadline pressure, and production quality control.
 - Practical visual judgment across photography, commercial art, VFX, animation, video, and digital production.
 - Comfortable reviewing images for consistency, accuracy, polish, brand standards, and production readiness.
-- Useful bridge into modern AI image QA, generative media review, asset cleanup, and visual workflow support.
+- Useful bridge into modern generative media review, asset cleanup, and visual workflow support.
 
 ## Professional Experience
 
