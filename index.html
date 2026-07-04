@@ -25,6 +25,7 @@
     }
 
     body {
+      position: relative;
       margin: 0;
       min-height: 100vh;
       background: var(--paper);
@@ -34,71 +35,21 @@
       line-height: 1.5;
     }
 
-    body.splash-active {
-      overflow: hidden;
-    }
-
-    .splash-screen {
+    body::before {
+      content: "";
       position: fixed;
       inset: 0;
-      z-index: 50;
-      background: transparent;
-      opacity: 0;
-      transition: opacity 350ms ease;
-    }
-
-    .splash-screen[hidden] {
-      display: none;
-    }
-
-    .splash-screen.is-fallback {
-      background: #f8f8f6;
-    }
-
-    .splash-screen.is-visible {
-      opacity: 1;
-    }
-
-    .splash-screen.is-leaving {
-      opacity: 0;
+      z-index: 0;
+      background-image: url("assets/splash/dove-splash-1.jpg");
+      background-position: center;
+      background-size: cover;
+      opacity: 0.1;
       pointer-events: none;
     }
 
-    .splash-art {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transform: scale(1.015) rotate(0deg);
-      transform-origin: center;
-      will-change: transform, filter;
-    }
-
-    .splash-screen.is-fallback .splash-art {
-      display: none;
-    }
-
-    .splash-screen.is-visible .splash-art {
-      animation: splashImageDrift 1300ms ease-out both;
-    }
-
-    @keyframes splashImageDrift {
-      0% {
-        filter: blur(7px);
-        transform: scale(1.015) rotate(0deg);
-      }
-
-      24% {
-        filter: blur(0);
-      }
-
-      100% {
-        filter: blur(0);
-        transform: scale(1.09) rotate(-3deg);
-      }
-    }
-
     main {
+      position: relative;
+      z-index: 1;
       width: min(100% - 44px, 960px);
       margin: 0 auto;
       padding: 22px 0 30px;
@@ -257,70 +208,9 @@
       }
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .splash-screen {
-        transition: none;
-      }
-
-      .splash-screen.is-visible .splash-art {
-        animation: none;
-        filter: none;
-        transform: none;
-      }
-    }
   </style>
 </head>
 <body>
-  <div class="splash-screen" data-splash hidden aria-hidden="true">
-    <img class="splash-art" data-splash-image alt="">
-  </div>
-  <script>
-    (() => {
-      const splash = document.querySelector("[data-splash]");
-      const image = document.querySelector("[data-splash-image]");
-      const splashArt = "assets/splash/dove-splash-1.jpg";
-      const imageDuration = 1300;
-      const fallbackDuration = 1300;
-      const fadeDuration = 350;
-      let closeTimer;
-
-      if (!splash || !image) {
-        return;
-      }
-
-      const closeSplash = () => {
-        window.clearTimeout(closeTimer);
-        splash.classList.add("is-leaving");
-        document.body.classList.remove("splash-active");
-
-        window.setTimeout(() => {
-          splash.hidden = true;
-        }, fadeDuration);
-      };
-
-      const showSplash = (duration, isFallback = false) => {
-        if (!splash.hidden) {
-          return;
-        }
-
-        splash.classList.toggle("is-fallback", isFallback);
-        splash.classList.remove("is-leaving");
-        document.body.classList.add("splash-active");
-        splash.hidden = false;
-
-        window.requestAnimationFrame(() => {
-          splash.classList.add("is-visible");
-        });
-
-        closeTimer = window.setTimeout(closeSplash, Math.max(duration - fadeDuration, 0));
-      };
-
-      image.addEventListener("load", () => showSplash(imageDuration), { once: true });
-      image.addEventListener("error", () => showSplash(fallbackDuration, true), { once: true });
-      image.src = splashArt;
-    })();
-  </script>
-
   <main>
     <nav aria-label="Main navigation">
       <div class="links">
