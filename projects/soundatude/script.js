@@ -545,12 +545,21 @@ const categoryCueWordsByTitle = {
   "Attitude & Effort": ["attitude", "effort"],
   "Confidence & Connection": ["confidence", "connection"],
 };
+const cuePrimaryPalette = [
+  "oklch(66% 0.230 29)",
+  "oklch(76% 0.230 145)",
+  "oklch(66% 0.220 257)",
+  "oklch(82% 0.170 205)",
+  "oklch(72% 0.230 326)",
+  "oklch(90% 0.175 98)",
+  "oklch(96% 0.006 250)",
+];
 const cueWordColors = {
-  attitude: "oklch(78% 0.105 34)",
-  effort: "oklch(82% 0.118 76)",
-  confidence: "oklch(76% 0.090 232)",
-  connection: "oklch(78% 0.106 326)",
-  default: "oklch(79% 0.082 154)",
+  attitude: cuePrimaryPalette[0],
+  effort: cuePrimaryPalette[5],
+  confidence: cuePrimaryPalette[2],
+  connection: cuePrimaryPalette[4],
+  default: cuePrimaryPalette[6],
 };
 const cueWordStopWords = new Set(["and", "or", "the", "a", "an", "my", "i", "to", "of", "in", "with"]);
 const CUE_WORD_SECONDS = 0.68;
@@ -602,7 +611,7 @@ function cueWordColor(word) {
   const hash = [...String(word || "focus")].reduce((total, character) => (
     (total * 31 + character.charCodeAt(0)) % 360
   ), 0);
-  return `oklch(80% 0.090 ${hash})`;
+  return cuePrimaryPalette[hash % cuePrimaryPalette.length];
 }
 
 function normalizeWhitespace(value) {

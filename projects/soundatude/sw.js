@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v78-word-tip-cues";
+const CACHE_NAME = "sound-a-tude-v79-primary-tip-cues";
 const APP_SHELL = [
   "./",
   "./index.html",
