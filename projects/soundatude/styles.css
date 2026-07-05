@@ -36,6 +36,7 @@
   --wave-hue: 275;
   --wave-tooth: oklch(96% 0.060 86 / 0.98);
   --wave-glow: oklch(64% 0.210 330);
+  --mouth-shift-x: -36px;
   --word-tip-color: oklch(81% 0.280 338);
   --word-tip-intensity: 0;
 }
@@ -446,7 +447,7 @@ button:focus-visible {
     0 0 calc(3px + var(--level, 0.12) * 16px) color-mix(in oklch, var(--wave-glow), var(--wave-lip-top) 58%),
     inset 0 0 calc(2px + var(--level, 0.12) * 10px) color-mix(in oklch, var(--wave-glow), var(--wave-tooth) calc(var(--tooth-weight, 0) * 70%));
   opacity: calc(0.72 + (var(--level, 0.12) * 0.28));
-  transform: scaleY(var(--display-level, var(--level, 0.12)));
+  transform: translateX(var(--mouth-shift-x, 0px)) scaleY(var(--display-level, var(--level, 0.12)));
   transform-origin: center;
   transition:
     opacity 120ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -1197,18 +1198,18 @@ button:focus-visible {
   border: 1px solid oklch(20% 0.026 226 / 0.82);
   border-radius: 50%;
   background:
-    radial-gradient(circle at 36% 24%, oklch(100% 0 0 / 0.11), transparent 28%),
-    linear-gradient(145deg, oklch(18% 0.032 226 / 0.96), oklch(8% 0.018 226 / 0.94) 72%, oklch(0% 0 0 / 0.96));
+    radial-gradient(ellipse 62% 30% at 50% 9%, oklch(100% 0 0 / 0.060), transparent 58%),
+    linear-gradient(180deg, oklch(18% 0.030 226 / 0.98), oklch(9% 0.018 226 / 0.98) 56%, oklch(4% 0.010 226 / 0.98));
   color: oklch(76% 0.053 90 / 0.92);
   font-size: 0.86rem;
   font-weight: 820;
   line-height: 1;
   cursor: pointer;
   box-shadow:
-    inset 0 1px 0 oklch(100% 0 0 / 0.06),
-    inset 0 0 0 1px oklch(0% 0 0 / 0.28),
-    inset 0 -12px 22px oklch(0% 0 0 / 0.22),
-    0 9px 20px oklch(0% 0 0 / 0.26);
+    inset 0 1px 0 oklch(100% 0 0 / 0.040),
+    inset 0 0 0 1px oklch(0% 0 0 / 0.52),
+    inset 0 -8px 14px oklch(0% 0 0 / 0.30),
+    0 7px 14px oklch(0% 0 0 / 0.24);
   transition: transform 180ms ease, background 180ms ease, color 180ms ease;
 }
 
@@ -1325,17 +1326,18 @@ button:focus-visible {
   border: 1px solid oklch(20% 0.026 226 / 0.78);
   border-radius: 999px;
   background:
-    radial-gradient(circle at 42% 12%, oklch(100% 0 0 / 0.10), transparent 32%),
-    linear-gradient(145deg, oklch(18% 0.032 226 / 0.92), oklch(7% 0.014 226 / 0.92));
+    radial-gradient(ellipse 64% 32% at 50% 10%, oklch(100% 0 0 / 0.052), transparent 60%),
+    linear-gradient(180deg, oklch(18% 0.030 226 / 0.96), oklch(8% 0.016 226 / 0.96) 62%, oklch(4% 0.010 226 / 0.96));
   color: var(--muted);
   cursor: pointer;
   font-size: 0.62rem;
   font-weight: 740;
   line-height: 1;
   box-shadow:
-    inset 0 1px 0 oklch(100% 0 0 / 0.05),
-    inset 0 0 0 1px oklch(0% 0 0 / 0.24),
-    0 8px 18px oklch(0% 0 0 / 0.20);
+    inset 0 1px 0 oklch(100% 0 0 / 0.038),
+    inset 0 0 0 1px oklch(0% 0 0 / 0.46),
+    inset 0 -6px 12px oklch(0% 0 0 / 0.25),
+    0 7px 14px oklch(0% 0 0 / 0.18);
 }
 
 .pitch-toggle strong {
@@ -1346,8 +1348,8 @@ button:focus-visible {
 
 .pitch-toggle.is-active {
   background:
-    radial-gradient(circle at 42% 12%, oklch(100% 0 0 / 0.11), transparent 32%),
-    linear-gradient(145deg, oklch(19% 0.034 226 / 0.94), oklch(7% 0.014 226 / 0.92));
+    radial-gradient(ellipse 64% 32% at 50% 10%, oklch(100% 0 0 / 0.058), transparent 60%),
+    linear-gradient(180deg, oklch(20% 0.034 226 / 0.96), oklch(9% 0.018 226 / 0.96) 62%, oklch(4% 0.010 226 / 0.96));
 }
 
 .transport-controls {
@@ -1394,14 +1396,15 @@ button:focus-visible {
   border: 1px solid oklch(22% 0.030 226 / 0.86);
   border-radius: 50%;
   background:
-    radial-gradient(circle at 36% 24%, oklch(100% 0 0 / 0.11), transparent 28%),
-    linear-gradient(145deg, oklch(18% 0.032 226 / 0.96), oklch(8% 0.018 226 / 0.94) 72%, oklch(0% 0 0 / 0.96));
+    radial-gradient(ellipse 62% 30% at 50% 9%, oklch(100% 0 0 / 0.052), transparent 58%),
+    linear-gradient(180deg, oklch(18% 0.030 226 / 0.98), oklch(8% 0.018 226 / 0.98) 58%, oklch(4% 0.010 226 / 0.98));
   color: var(--queue-icon);
   cursor: pointer;
   box-shadow:
-    inset 0 1px 0 oklch(100% 0 0 / 0.035),
-    inset 0 0 0 1px oklch(0% 0 0 / 0.32),
-    0 10px 24px oklch(0% 0 0 / 0.18);
+    inset 0 1px 0 oklch(100% 0 0 / 0.034),
+    inset 0 0 0 1px oklch(0% 0 0 / 0.54),
+    inset 0 -7px 13px oklch(0% 0 0 / 0.27),
+    0 7px 15px oklch(0% 0 0 / 0.20);
   transition:
     transform 150ms cubic-bezier(0.22, 1, 0.36, 1),
     color 150ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -1409,15 +1412,15 @@ button:focus-visible {
 }
 
 .queue-button:hover {
-  transform: scale(1.04);
+  transform: scale(1.02);
   color: var(--queue-icon-active);
 }
 
 .queue-button.is-active {
   border-color: oklch(31% 0.038 226 / 0.88);
   background:
-    radial-gradient(circle at 36% 24%, oklch(100% 0 0 / 0.13), transparent 28%),
-    linear-gradient(145deg, oklch(23% 0.046 226 / 0.98), oklch(10% 0.024 226 / 0.96) 72%, oklch(0% 0 0 / 0.96));
+    radial-gradient(ellipse 62% 30% at 50% 9%, oklch(100% 0 0 / 0.060), transparent 58%),
+    linear-gradient(180deg, oklch(22% 0.040 226 / 0.98), oklch(10% 0.024 226 / 0.98) 58%, oklch(4% 0.010 226 / 0.98));
   color: var(--queue-icon-active);
 }
 
@@ -1465,28 +1468,28 @@ button:focus-visible {
   border: 1px solid var(--button-border);
   border-radius: 50%;
   background:
-    radial-gradient(circle at 38% 24%, oklch(100% 0 0 / 0.13), transparent 28%),
-    linear-gradient(145deg, oklch(22% 0.040 226), oklch(9% 0.020 226) 72%, oklch(0% 0 0));
+    radial-gradient(ellipse 62% 30% at 50% 9%, oklch(100% 0 0 / 0.060), transparent 58%),
+    linear-gradient(180deg, oklch(21% 0.038 226), oklch(9% 0.020 226) 58%, oklch(4% 0.010 226));
   color: var(--button-icon);
   cursor: pointer;
   box-shadow:
-    inset 0 1px 0 oklch(100% 0 0 / 0.06),
-    inset 0 0 0 1px oklch(0% 0 0 / 0.34),
-    inset 0 -18px 34px oklch(0% 0 0 / 0.18),
-    0 18px 44px oklch(0% 0 0 / 0.34);
+    inset 0 1px 0 oklch(100% 0 0 / 0.044),
+    inset 0 0 0 1px oklch(0% 0 0 / 0.56),
+    inset 0 -11px 20px oklch(0% 0 0 / 0.30),
+    0 12px 28px oklch(0% 0 0 / 0.30);
   transition:
     transform 150ms cubic-bezier(0.22, 1, 0.36, 1),
     background 150ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .play-button:hover {
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 .play-button.is-playing {
   background:
-    radial-gradient(circle at 38% 24%, oklch(100% 0 0 / 0.12), transparent 28%),
-    linear-gradient(145deg, oklch(22% 0.040 226), oklch(9% 0.020 226) 72%, oklch(0% 0 0));
+    radial-gradient(ellipse 62% 30% at 50% 9%, oklch(100% 0 0 / 0.056), transparent 58%),
+    linear-gradient(180deg, oklch(21% 0.038 226), oklch(9% 0.020 226) 58%, oklch(4% 0.010 226));
   color: var(--stop-icon);
 }
 

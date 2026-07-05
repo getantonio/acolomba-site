@@ -2299,7 +2299,15 @@ function hypnoticMeterLevel(index, time = 0, intensity = 0) {
 }
 
 function idleMeterLevel(index, time = 0) {
-  return hypnoticMeterLevel(index, time, 0.06);
+  const pairedIndex = Math.min(index, Math.max(METER_BAR_COUNT - 1 - index, 0));
+  const centerPosition = pairedIndex / Math.max((METER_BAR_COUNT - 1) / 2, 1);
+  const centerLift = Math.pow(Math.max(centerPosition, 0), 0.72);
+  const seamMotion = Math.sin(time * 1.65 + pairedIndex * 0.31) * 0.5 + 0.5;
+  const microBreath = Math.sin(time * 0.82 + pairedIndex * 0.09) * 0.5 + 0.5;
+  return 0.018
+    + centerLift * 0.008
+    + seamMotion * (0.0015 + centerLift * 0.0025)
+    + microBreath * 0.0015;
 }
 
 function meterEdgeEnvelope(index) {
@@ -2341,7 +2349,7 @@ function meterMiddleVariation(index, time = 0, level = 0) {
 function meterDisplayLevel(level, index = 0, time = 0) {
   const variedLevel = level * meterMiddleVariation(index, time, level);
   const edgeEnvelope = meterEdgeEnvelope(index);
-  return clamp(0.028 + Math.max(variedLevel - 0.028, 0) * edgeEnvelope, 0.028, METER_LEVEL_CEILING);
+  return clamp(0.020 + Math.max(variedLevel - 0.020, 0) * edgeEnvelope, 0.020, METER_LEVEL_CEILING);
 }
 
 function meterMouthWeight(index) {
@@ -2597,7 +2605,7 @@ function updateAudioMeter() {
     const restlessMotion = hasLiveAudio
       ? idleMeterLevel(index, time) * (0.048 + meterEnergyPulse * 0.036)
       : 0;
-    const nextLevel = clamp(shapedLevel + middleLift + restlessMotion, 0.026, METER_LEVEL_CEILING);
+    const nextLevel = clamp(shapedLevel + middleLift + restlessMotion, 0.020, METER_LEVEL_CEILING);
     const smoothedLevel = nextLevel;
     const visualLevel = meterDisplayLevel(smoothedLevel, index, time);
 
