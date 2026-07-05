@@ -2300,6 +2300,10 @@ function meterDisplayLevel(level) {
   return level;
 }
 
+function audioSampleLevel(sample) {
+  return Math.abs(sample);
+}
+
 function renderAudioMeter() {
   if (!consoleMeter) return;
 
@@ -2331,7 +2335,7 @@ function primeAudioMeter() {
       analyser = audioContext.createAnalyser();
       analyser.fftSize = 4096;
       analyser.smoothingTimeConstant = 0.30;
-      meterData = new Uint8Array(analyser.fftSize);
+      meterData = new Float32Array(analyser.fftSize);
       meterSource = audioContext.createMediaElementSource(audio);
       meterSource.connect(analyser);
       analyser.connect(audioContext.destination);
@@ -2358,9 +2362,9 @@ function updateAudioMeter() {
   let liveEnergy = 0;
 
   if (hasLiveAudio) {
-    analyser.getByteTimeDomainData(meterData);
+    analyser.getFloatTimeDomainData(meterData);
     for (let sampleIndex = 0; sampleIndex < meterData.length; sampleIndex += 1) {
-      const centeredSample = (meterData[sampleIndex] - 128) / 128;
+      const centeredSample = meterData[sampleIndex];
       liveEnergy += centeredSample * centeredSample;
     }
     liveEnergy = Math.sqrt(liveEnergy / meterData.length);
@@ -2386,18 +2390,29 @@ function updateAudioMeter() {
 
     if (hasLiveAudio) {
       let sum = 0;
+      let peak = 0;
       const sampleStart = index * samplesPerBar;
       const sampleEnd = Math.min(sampleStart + samplesPerBar, meterData.length);
+      const centerSampleIndex = Math.min(sampleStart + Math.floor((sampleEnd - sampleStart) / 2), meterData.length - 1);
+      const centerSample = audioSampleLevel(meterData[centerSampleIndex]);
 
       for (let sampleIndex = sampleStart; sampleIndex < sampleEnd; sampleIndex += 1) {
-        const centeredSample = (meterData[sampleIndex] - 128) / 128;
-        sum += centeredSample * centeredSample;
+        const sampleLevel = audioSampleLevel(meterData[sampleIndex]);
+        peak = Math.max(peak, sampleLevel);
+        sum += sampleLevel * sampleLevel;
       }
 
       const rms = Math.sqrt(sum / Math.max(sampleEnd - sampleStart, 1));
-      const intensity = clamp(liveEnergy * 18.5 + rms * 12.2, 0.22, 1);
-      const audioLift = clamp(Math.pow(rms * 11.5, 0.64) * 0.86, 0, 0.90);
-      nextLevel = Math.max(hypnoticMeterLevel(index, time, intensity) + audioLift, 0.08);
+      const energyScale = Math.max(liveEnergy, 0.00008);
+      const absoluteShape = clamp((centerSample * 0.52 + peak * 0.34 + rms * 0.14) * 180, 0, 1);
+      const relativeShape = (
+        Math.pow(clamp((centerSample / energyScale) / 3.5, 0, 1), 1.05) * 0.34
+        + Math.pow(clamp((peak / energyScale) / 4.4, 0, 1), 1.15) * 0.44
+        + Math.pow(clamp((rms / energyScale) / 2.8, 0, 1), 1.10) * 0.22
+      );
+      const sampleShape = Math.pow(absoluteShape, 0.78) * 0.42 + relativeShape * 0.58;
+      const polish = idleMeterLevel(index, time) * 0.012;
+      nextLevel = sampleShape + polish;
     }
 
     nextLevels[index] = nextLevel;
@@ -2409,7 +2424,7 @@ function updateAudioMeter() {
   const targetPeak = hasLiveAudio
     ? clamp(0.42 + liveEnergy * 12, 0.48, METER_LEVEL_CEILING)
     : METER_LEVEL_CEILING;
-  const targetFloor = hasLiveAudio ? clamp(targetPeak * 0.42, 0.16, 0.38) : 0.08;
+  const targetFloor = hasLiveAudio ? clamp(targetPeak * 0.24, 0.10, 0.24) : 0.08;
   let highestLevel = 0;
 
   meterBars.forEach((bar, index) => {
