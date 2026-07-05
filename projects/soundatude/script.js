@@ -107,6 +107,7 @@ let waveformMainPath = null;
 let waveformAltPath = null;
 let waveformThirdPath = null;
 let waveformHotPoints = [];
+let haloOrb = null;
 const RECORDER_AUDIO_CONSTRAINTS = {
   echoCancellation: { ideal: true },
   noiseSuppression: { ideal: true },
@@ -2337,17 +2338,19 @@ function renderAudioMeter() {
     <span class="halo-ring halo-ring-one" aria-hidden="true"></span>
     <span class="halo-ring halo-ring-two" aria-hidden="true"></span>
     <span class="halo-ring halo-ring-three" aria-hidden="true"></span>
+    <span class="halo-orb" aria-hidden="true"></span>
     <span class="wave-hot wave-hot-a" aria-hidden="true"></span>
     <span class="wave-hot wave-hot-b" aria-hidden="true"></span>
     <span class="wave-hot wave-hot-c" aria-hidden="true"></span>
   `;
-  meterBars = [...consoleMeter.querySelectorAll(".meter-bar, .console-meter > span:not(.halo-ring):not(.wave-hot)")];
+  meterBars = [...consoleMeter.querySelectorAll(".meter-bar, .console-meter > span:not(.halo-ring):not(.halo-orb):not(.wave-hot)")];
   waveformVector = consoleMeter.querySelector(".waveform-vector");
   waveformFillPath = consoleMeter.querySelector(".wave-fill");
   waveformMainPath = consoleMeter.querySelector(".wave-main");
   waveformAltPath = consoleMeter.querySelector(".wave-alt");
   waveformThirdPath = consoleMeter.querySelector(".wave-third");
   waveformHotPoints = [...consoleMeter.querySelectorAll(".wave-hot")];
+  haloOrb = consoleMeter.querySelector(".halo-orb");
   updateVectorWaveform(performance.now() / 1000);
 }
 
@@ -2381,6 +2384,7 @@ function applyWaveformStyle(style, { save = false } = {}) {
   activeWaveformStyle = WAVEFORM_STYLES.has(style) ? style : "aurora";
   consoleMeter?.setAttribute("data-waveform-style", activeWaveformStyle);
   syncWaveformStyleButtons();
+  startMeterAnimation();
 
   if (save) {
     try {
@@ -2449,6 +2453,9 @@ function updateVectorWaveform(time = 0) {
   waveformAltPath?.setAttribute("d", altPath);
   waveformThirdPath?.setAttribute("d", thirdPath);
   waveformFillPath?.setAttribute("d", `${mainPath} L 320 108 L 0 108 Z`);
+  const scan = (Math.sin(time * 1.15) + 1) / 2;
+  consoleMeter?.style.setProperty("--halo-scan-x", `${Math.round(8 + scan * 84)}%`);
+  consoleMeter?.style.setProperty("--halo-scan-y", `${Math.round(54 + Math.sin(time * 2.1) * 16)}%`);
   updateWaveHotPoints(time);
 }
 
@@ -2550,7 +2557,7 @@ function updateAudioMeter() {
   consoleMeter?.style.setProperty("--word-tip-intensity", cueWordIntensity.toFixed(3));
   updateVectorWaveform(time);
 
-  if (hasLiveAudio || highestLevel > 0.18 || cueWordIntensity > 0) {
+  if (hasLiveAudio || highestLevel > 0.18 || cueWordIntensity > 0 || WAVEFORM_STYLES.has(activeWaveformStyle)) {
     meterFrame = requestAnimationFrame(updateAudioMeter);
     return;
   }

@@ -762,6 +762,7 @@ button:focus-visible {
 
 .waveform-vector,
 .halo-ring,
+.halo-orb,
 .wave-hot {
   position: absolute;
   pointer-events: none;
@@ -785,6 +786,24 @@ button:focus-visible {
   vector-effect: non-scaling-stroke;
 }
 
+.console-meter[data-waveform-style="aurora"] .wave-line,
+.console-meter[data-waveform-style="thread"] .wave-line,
+.console-meter[data-waveform-style="field"] .wave-line {
+  stroke-dasharray: 8 12;
+  animation: waveformDash 2.8s linear infinite;
+}
+
+.console-meter[data-waveform-style="thread"] .wave-main {
+  stroke-dasharray: 16 10;
+  animation-duration: 2.1s;
+}
+
+@keyframes waveformDash {
+  to {
+    stroke-dashoffset: -60;
+  }
+}
+
 .wave-hot {
   left: var(--hot-x, 50%);
   top: var(--hot-y, 48%);
@@ -797,6 +816,23 @@ button:focus-visible {
   box-shadow: 0 0 calc(6px + var(--word-tip-intensity, 0) * 24px) var(--hot-color, var(--word-tip-color));
   opacity: calc(var(--word-tip-intensity, 0) * 0.95);
   transform: translate(-50%, -50%);
+}
+
+.halo-orb {
+  left: var(--halo-scan-x, 8%);
+  top: var(--halo-scan-y, 54%);
+  z-index: 3;
+  display: none;
+  width: calc(9px + var(--meter-intensity, 0.2) * 10px);
+  height: calc(9px + var(--meter-intensity, 0.2) * 10px);
+  border-radius: 50%;
+  background: #0000ff;
+  box-shadow:
+    0 0 12px #0000ff,
+    0 0 24px rgb(0 255 255 / 0.42);
+  opacity: 0.92;
+  transform: translate(-50%, -50%);
+  transition: left 70ms linear, top 70ms linear, width 90ms linear, height 90ms linear;
 }
 
 .console-meter[data-waveform-style="aurora"] {
@@ -926,6 +962,29 @@ button:focus-visible {
     0 0 calc(14px + var(--meter-intensity, 0.2) * 24px) oklch(72% 0.23 264 / 0.30);
   opacity: calc(0.28 + var(--meter-intensity, 0.2) * 0.38);
   transform: translate(-50%, -50%) scale(calc(0.82 + var(--meter-intensity, 0.2) * 0.42));
+}
+
+.console-meter[data-waveform-style="halo"] .halo-ring-one {
+  animation: haloPulse 2.6s ease-in-out infinite;
+}
+
+.console-meter[data-waveform-style="halo"] .halo-ring-two {
+  animation: haloPulse 3.2s ease-in-out infinite reverse;
+}
+
+.console-meter[data-waveform-style="halo"] .halo-ring-three {
+  animation: haloPulse 3.8s ease-in-out infinite;
+}
+
+.console-meter[data-waveform-style="halo"] .halo-orb {
+  display: block;
+}
+
+@keyframes haloPulse {
+  50% {
+    opacity: calc(0.40 + var(--meter-intensity, 0.2) * 0.44);
+    transform: translate(-50%, -50%) scale(calc(0.98 + var(--meter-intensity, 0.2) * 0.34));
+  }
 }
 
 .halo-ring-one {
