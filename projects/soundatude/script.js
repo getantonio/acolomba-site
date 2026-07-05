@@ -980,7 +980,7 @@ function voiceWaveformHue(voice = activeVoice()) {
 }
 
 function cssWaveformHue(voiceHue = voiceWaveformHue()) {
-  return (voiceHue + 50) % 360;
+  return voiceHue === 225 ? 350 : 326;
 }
 
 function updateWaveformHue() {
@@ -990,12 +990,12 @@ function updateWaveformHue() {
   const upperHue = (cssHue + 8) % 360;
   const lowerHue = (cssHue + 340) % 360;
   document.documentElement.style.setProperty("--wave-hue", hue.toFixed(0));
-  document.documentElement.style.setProperty("--wave-lip-tip", `oklch(75% 0.162 ${tipHue.toFixed(0)} / 0.98)`);
-  document.documentElement.style.setProperty("--wave-lip-top", `oklch(69% 0.160 ${cssHue.toFixed(0)} / 0.97)`);
-  document.documentElement.style.setProperty("--wave-lip-upper", `oklch(66% 0.132 ${upperHue.toFixed(0)} / 0.94)`);
-  document.documentElement.style.setProperty("--wave-lip-bottom", `oklch(53% 0.128 ${lowerHue.toFixed(0)} / 0.95)`);
-  document.documentElement.style.setProperty("--wave-glow", `oklch(62% 0.110 ${cssHue.toFixed(0)})`);
-  document.documentElement.style.setProperty("--word-tip-color", `oklch(78% 0.170 ${tipHue.toFixed(0)})`);
+  document.documentElement.style.setProperty("--wave-lip-tip", `oklch(80% 0.280 ${tipHue.toFixed(0)} / 0.99)`);
+  document.documentElement.style.setProperty("--wave-lip-top", `oklch(71% 0.250 ${cssHue.toFixed(0)} / 0.98)`);
+  document.documentElement.style.setProperty("--wave-lip-upper", `oklch(66% 0.220 ${upperHue.toFixed(0)} / 0.97)`);
+  document.documentElement.style.setProperty("--wave-lip-bottom", `oklch(50% 0.190 ${lowerHue.toFixed(0)} / 0.97)`);
+  document.documentElement.style.setProperty("--wave-glow", `oklch(64% 0.210 ${cssHue.toFixed(0)})`);
+  document.documentElement.style.setProperty("--word-tip-color", `oklch(81% 0.280 ${tipHue.toFixed(0)})`);
   meterBars?.forEach((bar, index) => applyMeterBarColorVars(bar, index));
 }
 
@@ -2246,9 +2246,7 @@ function loadPlaybackTuning() {
     const savedTuning = JSON.parse(localStorage.getItem(PLAYBACK_STORAGE_KEY));
     if (!savedTuning) return;
 
-    if (Number.isFinite(savedTuning.speed)) {
-      speedControl.value = String(Math.min(Math.max(savedTuning.speed, 75), 125));
-    }
+    speedControl.value = "100";
 
     if (typeof savedTuning.pitchPreserved === "boolean") {
       pitchPreserved = savedTuning.pitchPreserved;
@@ -2307,9 +2305,9 @@ function meterMiddleVariation(index, time = 0, level = 0) {
   const centerDistance = Math.abs(position - 0.5) * 2;
   const middleBand = Math.pow(Math.max(1 - centerDistance * 1.72, 0), 0.62);
   const activity = clamp((level - 0.08) / 0.48, 0, 1);
-  const fastDetail = Math.sin(time * 4.85 + index * 0.73);
-  const counterDetail = Math.sin(time * 3.15 - index * 1.17);
-  const slowSculpt = Math.sin(time * 1.38 + position * Math.PI * 10.5);
+  const fastDetail = Math.sin(time * 8.40 + index * 0.73);
+  const counterDetail = Math.sin(time * 5.70 - index * 1.17);
+  const slowSculpt = Math.sin(time * 2.45 + position * Math.PI * 10.5);
   const seed = (((index * 37 + 17) % 100) / 100 - 0.5) * 2;
   return 1 + middleBand * (
     fastDetail * 0.062
@@ -2353,10 +2351,10 @@ function meterBarLipPalette(index) {
   const bottomHue = (cssHue + 340 + roseLobe * 5 + mauveLobe * 18 + plumEdge * 20) % 360;
 
   return {
-    lipTip: `oklch(${(74 + centerSheen * 3).toFixed(1)}% ${(0.155 + centerSheen * 0.022).toFixed(3)} ${tipHue.toFixed(1)} / 0.98)`,
-    lipTop: `oklch(${(67 + centerSheen * 3).toFixed(1)}% ${(0.142 + roseLobe * 0.020 + centerSheen * 0.012).toFixed(3)} ${topHue.toFixed(1)} / 0.97)`,
-    lipUpper: `oklch(${(63 + centerSheen * 2).toFixed(1)}% ${(0.126 + mauveLobe * 0.018).toFixed(3)} ${upperHue.toFixed(1)} / 0.95)`,
-    lipBottom: `oklch(${(51 + centerSheen * 2).toFixed(1)}% ${(0.112 + mauveLobe * 0.018).toFixed(3)} ${bottomHue.toFixed(1)} / 0.95)`,
+    lipTip: `oklch(${(77 + centerSheen * 4).toFixed(1)}% ${(0.240 + centerSheen * 0.050).toFixed(3)} ${tipHue.toFixed(1)} / 0.99)`,
+    lipTop: `oklch(${(68 + centerSheen * 4).toFixed(1)}% ${(0.210 + roseLobe * 0.045 + centerSheen * 0.026).toFixed(3)} ${topHue.toFixed(1)} / 0.98)`,
+    lipUpper: `oklch(${(63 + centerSheen * 3).toFixed(1)}% ${(0.180 + mauveLobe * 0.042).toFixed(3)} ${upperHue.toFixed(1)} / 0.97)`,
+    lipBottom: `oklch(${(48 + centerSheen * 3).toFixed(1)}% ${(0.155 + mauveLobe * 0.036).toFixed(3)} ${bottomHue.toFixed(1)} / 0.97)`,
   };
 }
 
@@ -2377,10 +2375,10 @@ function meterBarColorStyle(index) {
 function meterToothWeight(index, level) {
   const position = index / Math.max(METER_BAR_COUNT - 1, 1);
   const toothBreak = meterToothBreak(index);
-  const centerHighlight = Math.pow(Math.max(1 - Math.abs(position - 0.5) * (2.85 + toothBreak * 0.26), 0), 1.00 + toothBreak * 0.28);
-  const levelGate = clamp((level - 0.06) / 0.48, 0, 1);
-  const toothPulse = 0.88 + Math.sin(performance.now() / 1000 * 3.8 + index * 0.47) * 0.12;
-  return clamp(centerHighlight * (0.32 + levelGate * 0.68) * (0.88 + toothBreak * 0.34) * toothPulse, 0, 1);
+  const centerHighlight = Math.pow(Math.max(1 - Math.abs(position - 0.5) * (2.35 + toothBreak * 0.20), 0), 0.82 + toothBreak * 0.20);
+  const levelGate = clamp((level - 0.04) / 0.42, 0, 1);
+  const toothPulse = 0.86 + Math.sin(performance.now() / 1000 * 6.2 + index * 0.47) * 0.14;
+  return clamp(centerHighlight * (0.54 + levelGate * 0.64) * (0.92 + toothBreak * 0.34) * toothPulse, 0, 1);
 }
 
 function meterToothNoise(index) {
@@ -2394,7 +2392,7 @@ function meterToothBreak(index) {
 function meterToothHeight(index, level) {
   const levelGate = clamp((level - 0.08) / 0.52, 0, 1);
   const toothWeight = meterToothWeight(index, level);
-  return clamp(0.076 + toothWeight * (0.056 + meterToothNoise(index) * 0.050) + levelGate * 0.018, 0.076, 0.188);
+  return clamp(0.092 + toothWeight * (0.082 + meterToothNoise(index) * 0.070) + levelGate * 0.026, 0.092, 0.255);
 }
 
 function meterToothTop(index) {
@@ -2433,8 +2431,8 @@ function primeAudioMeter() {
       const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
       audioContext = new AudioContextConstructor();
       analyser = audioContext.createAnalyser();
-      analyser.fftSize = 4096;
-      analyser.smoothingTimeConstant = 0.30;
+      analyser.fftSize = 2048;
+      analyser.smoothingTimeConstant = 0.04;
       meterData = new Float32Array(analyser.fftSize);
       meterSource = audioContext.createMediaElementSource(audio);
       meterSource.connect(analyser);
@@ -2522,9 +2520,9 @@ function updateAudioMeter() {
   const rawFloor = Math.min(...nextLevels);
   const rawRange = Math.max(rawPeak - rawFloor, 0.001);
   const targetPeak = hasLiveAudio
-    ? clamp(0.42 + liveEnergy * 12, 0.48, METER_LEVEL_CEILING)
+    ? clamp(0.52 + liveEnergy * 18, 0.56, METER_LEVEL_CEILING)
     : METER_LEVEL_CEILING;
-  const targetFloor = hasLiveAudio ? clamp(targetPeak * 0.24, 0.10, 0.24) : 0.08;
+  const targetFloor = hasLiveAudio ? clamp(targetPeak * 0.14, 0.055, 0.16) : 0.08;
   let highestLevel = 0;
 
   meterBars.forEach((bar, index) => {
@@ -2535,11 +2533,11 @@ function updateAudioMeter() {
     const centerDistance = Math.abs(position - 0.5) * 2;
     const middleBand = Math.pow(Math.max(1 - centerDistance * 1.52, 0), 0.70);
     const middleLift = middleBand
-      * (Math.sin(time * 4.1 + index * 0.67) * 0.012 + Math.sin(time * 2.35 - index * 1.11) * 0.009)
-      * (hasLiveAudio ? 1.34 : 0.92);
+      * (Math.sin(time * 7.2 + index * 0.67) * 0.018 + Math.sin(time * 4.8 - index * 1.11) * 0.013)
+      * (hasLiveAudio ? 1.65 : 0.92);
     const nextLevel = clamp(shapedLevel + middleLift, 0.065, METER_LEVEL_CEILING);
     const previousLevel = meterLevels[index] ?? nextLevel;
-    const smoothing = nextLevel > previousLevel ? 0.92 : 0.40;
+    const smoothing = nextLevel > previousLevel ? 1.00 : 0.68;
     const smoothedLevel = previousLevel + (nextLevel - previousLevel) * smoothing;
 
     meterLevels[index] = smoothedLevel;
@@ -2552,7 +2550,7 @@ function updateAudioMeter() {
   });
 
   consoleMeter?.style.setProperty("--meter-intensity", clamp(highestLevel, 0.12, 1).toFixed(3));
-  cueWordIntensity = activeCueWord ? cueWordIntensity * 0.90 : cueWordIntensity * 0.82;
+  cueWordIntensity = activeCueWord ? cueWordIntensity * 0.78 : cueWordIntensity * 0.66;
   if (cueWordIntensity < 0.015) cueWordIntensity = 0;
   consoleMeter?.style.setProperty("--word-tip-intensity", cueWordIntensity.toFixed(3));
 

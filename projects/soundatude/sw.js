@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v104-iphone-lips";
+const CACHE_NAME = "sound-a-tude-v105-contrast-lips";
 const APP_SHELL = [
   "./",
   "./index.html",
