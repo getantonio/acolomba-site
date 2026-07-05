@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v76-hypnotic-waveform";
+const CACHE_NAME = "sound-a-tude-v77-playback-ui-parity";
 const APP_SHELL = [
   "./",
   "./index.html",

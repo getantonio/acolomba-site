@@ -709,8 +709,8 @@ const kokoroAmericanVoices = [
 ];
 
 const coreVoiceAliases = [
-  { id: "core-mara-v001", label: "Mara.", shortLabel: "Mara.", group: "Core", sourceVoiceId: "af_nicole" },
-  { id: "core-theo-v001", label: "Theo.", shortLabel: "Theo.", group: "Core", sourceVoiceId: "am_michael" },
+  { id: "core-mara-v001", label: "Mara", shortLabel: "Mara", group: "Core", sourceVoiceId: "af_nicole" },
+  { id: "core-theo-v001", label: "Theo", shortLabel: "Theo", group: "Core", sourceVoiceId: "am_michael" },
 ];
 
 const KOKORO_AUDIO_VERSION = "all-kokoro-preserve-ending-20260705";
@@ -850,6 +850,11 @@ let loopOptions = [];
 let scrollFrame = null;
 let scrollSettleTimer = null;
 let activePageIndex = 0;
+let pageSwipeStartX = 0;
+let pageSwipeStartY = 0;
+let pageSwipePointerId = null;
+let pageSwipeOffset = 0;
+let isPageSwiping = false;
 let repeatMode = "all";
 let shuffleEnabled = false;
 let pitchPreserved = true;
@@ -941,7 +946,7 @@ function updateVoiceStatus(choice = currentChoices()[selectedIndexByMode[current
   }
 
   voiceStatus.textContent = currentMode === "conversation"
-    ? "Mara. + Theo."
+    ? "Mara + Theo"
     : (choice.phraseId ? `${voice.shortLabel} not rendered` : "Source audio");
 }
 
@@ -2339,8 +2344,77 @@ function updatePageDots() {
 
 function goToPage(pageIndex) {
   activePageIndex = Math.min(Math.max(pageIndex, 0), pageDots.length - 1);
+  pageSwipeOffset = 0;
+  pageRail.style.setProperty("--page-drag-offset", "0px");
   pageRail.style.setProperty("--page-index", activePageIndex);
   updatePageDots();
+}
+
+function isPageSwipeIgnored(target) {
+  return Boolean(target.closest(
+    "button, input, select, textarea, label, .loop-wheel, .playlist-editor, .guide-sheet, .voice-recorder-sheet"
+  ));
+}
+
+function constrainedPageSwipeOffset(offset) {
+  const atFirstPage = activePageIndex === 0 && offset > 0;
+  const atLastPage = activePageIndex === pageDots.length - 1 && offset < 0;
+  return atFirstPage || atLastPage ? offset * 0.32 : offset;
+}
+
+function startPageSwipe(event) {
+  if (!event.isPrimary || isPageSwipeIgnored(event.target)) return;
+
+  pageSwipePointerId = event.pointerId;
+  pageSwipeStartX = event.clientX;
+  pageSwipeStartY = event.clientY;
+  pageSwipeOffset = 0;
+  isPageSwiping = false;
+  try {
+    pageRail.setPointerCapture?.(event.pointerId);
+  } catch {
+    // Synthetic or interrupted pointer streams may not be capturable.
+  }
+}
+
+function movePageSwipe(event) {
+  if (event.pointerId !== pageSwipePointerId) return;
+
+  const offsetX = event.clientX - pageSwipeStartX;
+  const offsetY = event.clientY - pageSwipeStartY;
+  if (!isPageSwiping && Math.abs(offsetX) < 12) return;
+  if (!isPageSwiping && Math.abs(offsetY) > Math.abs(offsetX) * 0.85) {
+    endPageSwipe(event);
+    return;
+  }
+
+  isPageSwiping = true;
+  pageSwipeOffset = constrainedPageSwipeOffset(offsetX);
+  pageRail.classList.add("is-swiping");
+  pageRail.style.setProperty("--page-drag-offset", `${pageSwipeOffset}px`);
+  event.preventDefault();
+}
+
+function endPageSwipe(event) {
+  if (event.pointerId !== pageSwipePointerId) return;
+
+  const railWidth = pageRail.clientWidth || 1;
+  const threshold = Math.min(90, railWidth * 0.22);
+  const nextPage = pageSwipeOffset < -threshold ? activePageIndex + 1 : (
+    pageSwipeOffset > threshold ? activePageIndex - 1 : activePageIndex
+  );
+
+  try {
+    if (pageRail.hasPointerCapture?.(event.pointerId)) {
+      pageRail.releasePointerCapture(event.pointerId);
+    }
+  } catch {
+    // The pointer may already have been released by the browser.
+  }
+  pageRail.classList.remove("is-swiping");
+  pageSwipePointerId = null;
+  isPageSwiping = false;
+  goToPage(nextPage);
 }
 
 function centerSelectedOption(behavior = "smooth") {
@@ -3000,9 +3074,7 @@ async function skipToNextTrack() {
   }
 
   try {
-    if (!isAvatarVideoSourceActive) {
-      primeAudioMeter();
-    }
+    primeAudioMeter();
     await media.play();
     setPlayingState(true);
   } catch {
@@ -3014,9 +3086,7 @@ playButton.addEventListener("click", async () => {
   const media = activeMainMedia();
   if (media.paused) {
     try {
-      if (!isAvatarVideoSourceActive) {
-        primeAudioMeter();
-      }
+      primeAudioMeter();
       await media.play();
       setPlayingState(true);
     } catch {
@@ -3141,6 +3211,10 @@ openPlaylistButton.addEventListener("click", () => goToPage(1));
 openPlayerButton.addEventListener("click", () => goToPage(0));
 openGuideButton?.addEventListener("click", () => goToPage(3));
 closeGuideButton?.addEventListener("click", () => goToPage(0));
+pageRail.addEventListener("pointerdown", startPageSwipe);
+pageRail.addEventListener("pointermove", movePageSwipe);
+pageRail.addEventListener("pointerup", endPageSwipe);
+pageRail.addEventListener("pointercancel", endPageSwipe);
 playlistSelect.addEventListener("change", () => switchPlaylist(playlistSelect.value));
 createPlaylistButton.addEventListener("click", createPlaylist);
 fileLoader.addEventListener("change", () => loadFiles(fileLoader.files));
