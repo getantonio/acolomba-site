@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v115-left-mouth-flatter-buttons";
+const CACHE_NAME = "sound-a-tude-v116-balanced-controls";
 const APP_SHELL = [
   "./",
   "./index.html",

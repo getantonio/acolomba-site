@@ -1228,12 +1228,12 @@ button:focus-visible {
 }
 
 .playback-tuning {
-  width: min(100%, 318px);
+  width: min(100%, 292px);
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
   justify-items: center;
-  gap: 8px;
+  gap: 7px;
   align-self: center;
 }
 
@@ -1246,24 +1246,48 @@ button:focus-visible {
 }
 
 .tuning-control {
-  width: 100%;
-  min-height: 44px;
+  width: min(100%, 292px);
+  min-height: 68px;
   display: grid;
-  grid-template-columns: 62px 44px minmax(0, 1fr) 58px 44px;
+  grid-template-columns: 44px minmax(0, 156px) 44px;
+  grid-template-areas:
+    "readout readout readout"
+    "down slider up";
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 4px 16px;
   padding: 0;
   color: var(--muted);
   font-size: 0.64rem;
   font-weight: 740;
 }
 
-.tuning-control span,
+.tuning-readout span,
 .pitch-toggle span {
   text-transform: none;
 }
 
+.tuning-readout {
+  grid-area: readout;
+  min-height: 18px;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+  justify-self: center;
+  color: oklch(72% 0.026 92 / 0.88);
+}
+
+.tuning-control .tuning-step:first-of-type {
+  grid-area: down;
+}
+
+.tuning-control .tuning-step:last-of-type {
+  grid-area: up;
+}
+
 .tuning-control input {
+  grid-area: slider;
   width: 100%;
   height: 26px;
   margin: 0;
@@ -1311,8 +1335,8 @@ button:focus-visible {
 .tuning-control output {
   min-width: 0;
   color: oklch(82% 0.032 89 / 0.86);
-  font-size: 0.88rem;
-  text-align: right;
+  font-size: 0.84rem;
+  text-align: center;
 }
 
 .pitch-toggle {
@@ -2106,7 +2130,7 @@ button:focus-visible {
   .playback-tuning {
     width: min(100%, 292px);
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: 7px;
   }
 
   .volume-control {
@@ -2181,8 +2205,9 @@ button:focus-visible {
   }
 
   .tuning-control {
-    gap: 6px;
-    padding: 0 0 0 6px;
+    grid-template-columns: 44px minmax(0, 150px) 44px;
+    gap: 4px 14px;
+    padding: 0;
   }
 
   .pitch-toggle {
