@@ -2289,7 +2289,7 @@ function hypnoticMeterLevel(index, time = 0, intensity = 0) {
   const breath = 0.78 + Math.sin(time * 0.72) * 0.22;
   const floor = 0.065 + centerLift * 0.035;
   const motion = standingWave * breath * (0.10 + intensity * 0.76);
-  return clamp(floor + motion, 0.055, METER_LEVEL_CEILING);
+  return floor + motion;
 }
 
 function idleMeterLevel(index, time = 0) {
@@ -2297,7 +2297,7 @@ function idleMeterLevel(index, time = 0) {
 }
 
 function meterDisplayLevel(level) {
-  return level <= 0.20 ? level : Math.pow(level, 0.62);
+  return level;
 }
 
 function renderAudioMeter() {
@@ -2378,10 +2378,10 @@ function updateAudioMeter() {
     activeCueWord = null;
   }
 
-  let highestLevel = 0;
   const samplesPerBar = meterData ? Math.max(1, Math.floor(meterData.length / METER_BAR_COUNT)) : 1;
+  const nextLevels = [];
 
-  meterBars.forEach((bar, index) => {
+  meterBars.forEach((_, index) => {
     let nextLevel = idleMeterLevel(index, time);
 
     if (hasLiveAudio) {
@@ -2397,9 +2397,26 @@ function updateAudioMeter() {
       const rms = Math.sqrt(sum / Math.max(sampleEnd - sampleStart, 1));
       const intensity = clamp(liveEnergy * 18.5 + rms * 12.2, 0.22, 1);
       const audioLift = clamp(Math.pow(rms * 11.5, 0.64) * 0.86, 0, 0.90);
-      nextLevel = clamp(hypnoticMeterLevel(index, time, intensity) + audioLift, 0.08, METER_LEVEL_CEILING);
+      nextLevel = Math.max(hypnoticMeterLevel(index, time, intensity) + audioLift, 0.08);
     }
 
+    nextLevels[index] = nextLevel;
+  });
+
+  const rawPeak = Math.max(...nextLevels, 0.08);
+  const rawFloor = Math.min(...nextLevels);
+  const rawRange = Math.max(rawPeak - rawFloor, 0.001);
+  const targetPeak = hasLiveAudio
+    ? clamp(0.42 + liveEnergy * 12, 0.48, METER_LEVEL_CEILING)
+    : METER_LEVEL_CEILING;
+  const targetFloor = hasLiveAudio ? clamp(targetPeak * 0.42, 0.16, 0.38) : 0.08;
+  let highestLevel = 0;
+
+  meterBars.forEach((bar, index) => {
+    const shapedLevel = hasLiveAudio
+      ? targetFloor + ((nextLevels[index] - rawFloor) / rawRange) * (targetPeak - targetFloor)
+      : nextLevels[index];
+    const nextLevel = clamp(shapedLevel, 0.08, METER_LEVEL_CEILING);
     const previousLevel = meterLevels[index] ?? nextLevel;
     const smoothing = nextLevel > previousLevel ? 0.92 : 0.40;
     const smoothedLevel = previousLevel + (nextLevel - previousLevel) * smoothing;
