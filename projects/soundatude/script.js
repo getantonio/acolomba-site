@@ -937,6 +937,8 @@ let meterData = null;
 let meterFrame = null;
 let meterBars = [];
 let meterLevels = [];
+let previousMeterEnergy = 0;
+let meterEnergyPulse = 0;
 let activeCueWords = [];
 let activeCueStep = -1;
 let activeCueWord = null;
@@ -2481,15 +2483,25 @@ function updateAudioMeter() {
   const hasLiveAudio = analyser && meterData && !audio.paused && !audio.ended;
   const time = performance.now() / 1000;
   let liveEnergy = 0;
+  let livePeak = 0;
 
   if (hasLiveAudio) {
     analyser.getFloatTimeDomainData(meterData);
     for (let sampleIndex = 0; sampleIndex < meterData.length; sampleIndex += 1) {
       const centeredSample = meterData[sampleIndex];
+      livePeak = Math.max(livePeak, Math.abs(centeredSample));
       liveEnergy += centeredSample * centeredSample;
     }
     liveEnergy = Math.sqrt(liveEnergy / meterData.length);
   }
+
+  const energyLift = hasLiveAudio ? clamp((liveEnergy - 0.0007) * 280, 0, 1) : 0;
+  const peakLift = hasLiveAudio ? clamp((livePeak - 0.003) * 18, 0, 1) : 0;
+  const transientLift = hasLiveAudio ? clamp((liveEnergy - previousMeterEnergy) * 420, 0, 1) : 0;
+  meterEnergyPulse = hasLiveAudio
+    ? Math.max(meterEnergyPulse * 0.56, transientLift, peakLift * 0.66 + energyLift * 0.46)
+    : meterEnergyPulse * 0.70;
+  previousMeterEnergy = hasLiveAudio ? liveEnergy : 0;
 
   if (hasLiveAudio && activeCueWords.length) {
     const cueStep = Math.floor(audio.currentTime / CUE_WORD_SECONDS);
@@ -2525,11 +2537,11 @@ function updateAudioMeter() {
 
       const rms = Math.sqrt(sum / Math.max(sampleEnd - sampleStart, 1));
       const energyScale = Math.max(liveEnergy, 0.00008);
-      const absoluteShape = clamp((centerSample * 0.52 + peak * 0.34 + rms * 0.14) * 180, 0, 1);
+      const absoluteShape = clamp((centerSample * 0.52 + peak * 0.34 + rms * 0.14) * 300, 0, 1);
       const relativeShape = (
-        Math.pow(clamp((centerSample / energyScale) / 3.5, 0, 1), 1.05) * 0.34
-        + Math.pow(clamp((peak / energyScale) / 4.4, 0, 1), 1.15) * 0.44
-        + Math.pow(clamp((rms / energyScale) / 2.8, 0, 1), 1.10) * 0.22
+        Math.pow(clamp((centerSample / energyScale) / 2.4, 0, 1), 0.92) * 0.36
+        + Math.pow(clamp((peak / energyScale) / 3.0, 0, 1), 0.98) * 0.46
+        + Math.pow(clamp((rms / energyScale) / 2.0, 0, 1), 0.96) * 0.18
       );
       const sampleShape = Math.pow(absoluteShape, 0.78) * 0.42 + relativeShape * 0.58;
       const polish = idleMeterLevel(index, time) * 0.022;
@@ -2552,9 +2564,9 @@ function updateAudioMeter() {
   const rawFloor = Math.min(...nextLevels);
   const rawRange = Math.max(rawPeak - rawFloor, 0.001);
   const targetPeak = hasLiveAudio
-    ? clamp(0.52 + liveEnergy * 18, 0.56, METER_LEVEL_CEILING)
+    ? clamp(0.34 + Math.pow(energyLift, 0.60) * 0.32 + Math.pow(peakLift, 0.55) * 0.38 + meterEnergyPulse * 0.30, 0.34, METER_LEVEL_CEILING)
     : METER_LEVEL_CEILING;
-  const targetFloor = hasLiveAudio ? clamp(targetPeak * 0.14, 0.055, 0.16) : 0.08;
+  const targetFloor = hasLiveAudio ? clamp(0.090 + energyLift * 0.034, 0.090, 0.130) : 0.08;
   let highestLevel = 0;
 
   meterBars.forEach((bar, index) => {
@@ -2565,9 +2577,12 @@ function updateAudioMeter() {
     const centerDistance = Math.abs(position - 0.5) * 2;
     const middleBand = Math.pow(Math.max(1 - centerDistance * 1.52, 0), 0.70);
     const middleLift = middleBand
-      * (Math.sin(time * 7.2 + index * 0.67) * 0.018 + Math.sin(time * 4.8 - index * 1.11) * 0.013)
-      * (hasLiveAudio ? 1.65 : 0.92);
-    const nextLevel = clamp(shapedLevel + middleLift, 0.065, METER_LEVEL_CEILING);
+      * (Math.sin(time * 12.8 + index * 0.67) * 0.024 + Math.sin(time * 8.6 - index * 1.11) * 0.017)
+      * (hasLiveAudio ? (0.90 + meterEnergyPulse * 2.20) : 0.92);
+    const restlessMotion = hasLiveAudio
+      ? idleMeterLevel(index, time) * (0.200 + meterEnergyPulse * 0.090)
+      : 0;
+    const nextLevel = clamp(shapedLevel + middleLift + restlessMotion, 0.125, METER_LEVEL_CEILING);
     const smoothedLevel = nextLevel;
     const visualLevel = meterDisplayLevel(smoothedLevel, index, time);
 
