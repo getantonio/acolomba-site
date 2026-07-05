@@ -148,9 +148,9 @@ button:focus-visible {
   display: grid;
   grid-template-columns: 1fr auto auto 1fr;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
   width: min(100%, 300px);
-  min-height: 26px;
+  min-height: 30px;
 }
 
 .brand-header.compact {
@@ -159,20 +159,20 @@ button:focus-visible {
 
 .brand {
   margin: 0;
-  color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 720;
-  text-transform: uppercase;
+  color: oklch(74% 0.034 92 / 0.90);
+  font-size: 0.84rem;
+  font-weight: 780;
+  text-transform: none;
   letter-spacing: 0;
 }
 
 .brand-line {
   height: 1px;
-  background: linear-gradient(90deg, transparent, oklch(43% 0.023 246 / 0.55));
+  background: linear-gradient(90deg, transparent, oklch(47% 0.027 246 / 0.48));
 }
 
 .brand-line:last-child {
-  background: linear-gradient(90deg, oklch(43% 0.023 246 / 0.55), transparent);
+  background: linear-gradient(90deg, oklch(47% 0.027 246 / 0.48), transparent);
 }
 
 .brand-mark {
@@ -182,7 +182,7 @@ button:focus-visible {
   gap: 3px;
   width: 15px;
   height: 16px;
-  color: oklch(63% 0.033 248);
+  color: oklch(74% 0.050 90 / 0.90);
 }
 
 .brand-mark span {
@@ -194,7 +194,7 @@ button:focus-visible {
 
 .brand-mark span:first-child {
   height: 9px;
-  opacity: 0.72;
+  opacity: 0.80;
 }
 
 .brand-mark span:last-child {
@@ -440,7 +440,8 @@ button:focus-visible {
 }
 
 .player.is-minimal-ui .brand-header {
-  display: none;
+  order: 0;
+  opacity: 0.88;
 }
 
 .player.is-minimal-ui .player-control-row {
