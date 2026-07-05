@@ -548,19 +548,21 @@ const categoryCueWordsByTitle = {
   "Confidence & Connection": ["confidence", "connection"],
 };
 const cuePrimaryPalette = [
-  "oklch(66% 0.230 29)",
-  "oklch(76% 0.230 145)",
-  "oklch(66% 0.220 257)",
-  "oklch(82% 0.170 205)",
-  "oklch(72% 0.230 326)",
-  "oklch(90% 0.175 98)",
-  "oklch(96% 0.006 250)",
+  "oklch(63% 0.280 29)",   // anger red
+  "oklch(90% 0.215 99)",   // caution yellow
+  "oklch(64% 0.250 258)",  // calm blue
+  "oklch(61% 0.285 303)",  // attitude purple
+  "oklch(80% 0.205 82)",   // effort gold
+  "oklch(77% 0.205 205)",  // cyan
+  "oklch(97% 0.010 250)",  // white
 ];
 const cueWordColors = {
-  attitude: cuePrimaryPalette[0],
-  effort: cuePrimaryPalette[5],
+  anger: cuePrimaryPalette[0],
+  caution: cuePrimaryPalette[1],
+  attitude: cuePrimaryPalette[3],
+  effort: cuePrimaryPalette[4],
   confidence: cuePrimaryPalette[2],
-  connection: cuePrimaryPalette[4],
+  connection: "oklch(65% 0.270 285)",
   default: cuePrimaryPalette[6],
 };
 const cueWordStopWords = new Set(["and", "or", "the", "a", "an", "my", "i", "to", "of", "in", "with"]);
@@ -986,7 +988,7 @@ function applyUiMode({ save = false } = {}) {
   playerPanel.classList.toggle("is-minimal-ui", isMinimalUi);
   uiModeToggle?.classList.toggle("is-active", isMinimalUi);
   uiModeToggle?.setAttribute("aria-pressed", String(isMinimalUi));
-  uiModeToggle?.setAttribute("aria-label", isMinimalUi ? "Switch to classic UI" : "Switch to minimal UI");
+  uiModeToggle?.setAttribute("aria-label", isMinimalUi ? "Switch to classic UI" : "Switch to focus UI");
 
   if (!save) return;
 
