@@ -89,6 +89,7 @@ const CUSTOM_RECORDED_SOURCE = "browser-recorded-custom";
 const DEFAULT_CUSTOM_RECORDED_CATEGORY = "My Affirmations";
 const NEW_CUSTOM_CATEGORY_VALUE = "__new-custom-recording-category__";
 const METER_BAR_COUNT = 192;
+const METER_LEVEL_CEILING = 0.86;
 const RECORDER_AUDIO_CONSTRAINTS = {
   echoCancellation: { ideal: true },
   noiseSuppression: { ideal: true },
@@ -2287,8 +2288,8 @@ function hypnoticMeterLevel(index, time = 0, intensity = 0) {
   );
   const breath = 0.78 + Math.sin(time * 0.72) * 0.22;
   const floor = 0.065 + centerLift * 0.035;
-  const motion = standingWave * breath * (0.10 + intensity * 0.76);
-  return clamp(floor + motion, 0.055, 1);
+  const motion = standingWave * breath * (0.09 + intensity * 0.68);
+  return clamp(floor + motion, 0.055, METER_LEVEL_CEILING);
 }
 
 function idleMeterLevel(index, time = 0) {
@@ -2390,13 +2391,13 @@ function updateAudioMeter() {
       }
 
       const rms = Math.sqrt(sum / Math.max(sampleEnd - sampleStart, 1));
-      const intensity = clamp(liveEnergy * 18.5 + rms * 12.2, 0.22, 1);
-      const audioLift = clamp(Math.pow(rms * 11.5, 0.64) * 0.86, 0, 0.98);
-      nextLevel = clamp(hypnoticMeterLevel(index, time, intensity) + audioLift, 0.08, 1);
+      const intensity = clamp(liveEnergy * 16 + rms * 10, 0.18, 0.90);
+      const audioLift = clamp(Math.pow(rms * 8.5, 0.72) * 0.58, 0, 0.58);
+      nextLevel = clamp(hypnoticMeterLevel(index, time, intensity) + audioLift, 0.08, METER_LEVEL_CEILING);
     }
 
     const previousLevel = meterLevels[index] ?? nextLevel;
-    const smoothing = nextLevel > previousLevel ? 0.92 : 0.40;
+    const smoothing = nextLevel > previousLevel ? 0.76 : 0.34;
     const smoothedLevel = previousLevel + (nextLevel - previousLevel) * smoothing;
 
     meterLevels[index] = smoothedLevel;

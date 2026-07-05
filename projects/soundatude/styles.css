@@ -617,7 +617,8 @@ button:focus-visible {
 .console-meter .meter-bar {
   position: relative;
   z-index: 1;
-  height: 100%;
+  height: calc(100% - 5px);
+  align-self: end;
   justify-self: stretch;
   border-radius: 999px;
   background:
