@@ -86,7 +86,7 @@ const BROWSER_RECORDED_FALLBACK_VOICE_ID = "af_nicole";
 const CUSTOM_RECORDED_SOURCE = "browser-recorded-custom";
 const DEFAULT_CUSTOM_RECORDED_CATEGORY = "My Affirmations";
 const NEW_CUSTOM_CATEGORY_VALUE = "__new-custom-recording-category__";
-const METER_BAR_COUNT = 64;
+const METER_BAR_COUNT = 96;
 const RECORDER_AUDIO_CONSTRAINTS = {
   echoCancellation: { ideal: true },
   noiseSuppression: { ideal: true },
@@ -541,9 +541,68 @@ const builtInMainCategories = [
 ];
 let mainCategories = [...builtInMainCategories];
 
+const categoryCueWordsByTitle = {
+  "Attitude & Effort": ["attitude", "effort"],
+  "Confidence & Connection": ["confidence", "connection"],
+};
+const cueWordColors = {
+  attitude: "oklch(78% 0.105 34)",
+  effort: "oklch(82% 0.118 76)",
+  confidence: "oklch(76% 0.090 232)",
+  connection: "oklch(78% 0.106 326)",
+  default: "oklch(79% 0.082 154)",
+};
+const cueWordStopWords = new Set(["and", "or", "the", "a", "an", "my", "i", "to", "of", "in", "with"]);
+const CUE_WORD_SECONDS = 0.68;
+
 function displayTitleForChoice(choice) {
   const phraseChoice = choice.phraseId ? phraseLibraryByPhraseId.get(choice.phraseId) : null;
   return phraseChoice?.displayTitle ?? choice.displayTitle ?? choice.title;
+}
+
+function cueWordsForCategory(categoryTitle) {
+  const builtInWords = categoryCueWordsByTitle[categoryTitle];
+  if (builtInWords) return builtInWords;
+
+  return normalizeWhitespace(categoryTitle)
+    .toLowerCase()
+    .match(/[a-z]+/g)
+    ?.filter((word, index, words) => (
+      word.length > 2
+      && !cueWordStopWords.has(word)
+      && words.indexOf(word) === index
+    ))
+    .slice(0, 3) || ["focus"];
+}
+
+function cueWordsForChoice(choice) {
+  const categoryWords = cueWordsForCategory(choice?.category || activePhraseCategory());
+  const sourceText = normalizeWhitespace([
+    choice?.phraseText,
+    choice?.displayTitle,
+    choice?.title,
+  ].filter(Boolean).join(" ")).toLowerCase();
+  const spokenWords = sourceText.match(/[a-z]+/g) || [];
+  const matchedWords = spokenWords.filter((word) => categoryWords.includes(word));
+
+  return matchedWords.length ? matchedWords : categoryWords;
+}
+
+function setActiveCueWords(choice) {
+  activeCueWords = cueWordsForChoice(choice);
+  activeCueStep = -1;
+  activeCueWord = null;
+  cueWordIntensity = 0;
+  consoleMeter?.style.setProperty("--word-tip-intensity", "0");
+}
+
+function cueWordColor(word) {
+  if (cueWordColors[word]) return cueWordColors[word];
+
+  const hash = [...String(word || "focus")].reduce((total, character) => (
+    (total * 31 + character.charCodeAt(0)) % 360
+  ), 0);
+  return `oklch(80% 0.090 ${hash})`;
 }
 
 function normalizeWhitespace(value) {
@@ -866,6 +925,10 @@ let meterData = null;
 let meterFrame = null;
 let meterBars = [];
 let meterLevels = [];
+let activeCueWords = [];
+let activeCueStep = -1;
+let activeCueWord = null;
+let cueWordIntensity = 0;
 
 loadSavedPlaylistConfiguration();
 ensureBuiltInPlaylists();
@@ -2181,9 +2244,9 @@ function hypnoticMeterLevel(index, time = 0, intensity = 0) {
     + (shimmer * 0.5 + 0.5) * 0.20
   );
   const breath = 0.78 + Math.sin(time * 0.72) * 0.22;
-  const floor = 0.10 + centerLift * 0.05;
-  const motion = standingWave * breath * (0.16 + intensity * 0.62);
-  return clamp(floor + motion, 0.08, 1);
+  const floor = 0.065 + centerLift * 0.035;
+  const motion = standingWave * breath * (0.10 + intensity * 0.76);
+  return clamp(floor + motion, 0.055, 1);
 }
 
 function idleMeterLevel(index, time = 0) {
@@ -2216,8 +2279,8 @@ function primeAudioMeter() {
       const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
       audioContext = new AudioContextConstructor();
       analyser = audioContext.createAnalyser();
-      analyser.fftSize = 2048;
-      analyser.smoothingTimeConstant = 0.68;
+      analyser.fftSize = 4096;
+      analyser.smoothingTimeConstant = 0.52;
       meterData = new Uint8Array(analyser.fftSize);
       meterSource = audioContext.createMediaElementSource(audio);
       meterSource.connect(analyser);
@@ -2253,6 +2316,18 @@ function updateAudioMeter() {
     liveEnergy = Math.sqrt(liveEnergy / meterData.length);
   }
 
+  if (hasLiveAudio && activeCueWords.length) {
+    const cueStep = Math.floor(audio.currentTime / CUE_WORD_SECONDS);
+    if (cueStep !== activeCueStep) {
+      activeCueStep = cueStep;
+      activeCueWord = activeCueWords[cueStep % activeCueWords.length];
+      cueWordIntensity = 1;
+      consoleMeter?.style.setProperty("--word-tip-color", cueWordColor(activeCueWord));
+    }
+  } else {
+    activeCueWord = null;
+  }
+
   let highestLevel = 0;
   const samplesPerBar = meterData ? Math.max(1, Math.floor(meterData.length / METER_BAR_COUNT)) : 1;
 
@@ -2270,13 +2345,13 @@ function updateAudioMeter() {
       }
 
       const rms = Math.sqrt(sum / Math.max(sampleEnd - sampleStart, 1));
-      const intensity = clamp(liveEnergy * 5.2 + rms * 2.4, 0.16, 1);
-      const audioLift = clamp(rms * 3.1, 0, 0.58);
-      nextLevel = clamp(hypnoticMeterLevel(index, time, intensity) + audioLift, 0.08, 1);
+      const intensity = clamp(liveEnergy * 7.2 + rms * 3.6, 0.12, 1);
+      const audioLift = clamp(rms * 4.9, 0, 0.72);
+      nextLevel = clamp(hypnoticMeterLevel(index, time, intensity) + audioLift, 0.055, 1);
     }
 
     const previousLevel = meterLevels[index] ?? nextLevel;
-    const smoothing = nextLevel > previousLevel ? 0.64 : 0.30;
+    const smoothing = nextLevel > previousLevel ? 0.78 : 0.24;
     const smoothedLevel = previousLevel + (nextLevel - previousLevel) * smoothing;
 
     meterLevels[index] = smoothedLevel;
@@ -2285,8 +2360,11 @@ function updateAudioMeter() {
   });
 
   consoleMeter?.style.setProperty("--meter-intensity", clamp(highestLevel, 0.12, 1).toFixed(3));
+  cueWordIntensity = activeCueWord ? cueWordIntensity * 0.90 : cueWordIntensity * 0.82;
+  if (cueWordIntensity < 0.015) cueWordIntensity = 0;
+  consoleMeter?.style.setProperty("--word-tip-intensity", cueWordIntensity.toFixed(3));
 
-  if (hasLiveAudio || highestLevel > 0.18) {
+  if (hasLiveAudio || highestLevel > 0.18 || cueWordIntensity > 0) {
     meterFrame = requestAnimationFrame(updateAudioMeter);
     return;
   }
@@ -2460,6 +2538,7 @@ function syncSelection({ scrollBehavior = "auto", center = true, updateAudio = t
     loopOption.setAttribute("aria-selected", String(Number(loopOption.dataset.index) === selectedIndex));
   });
 
+  setActiveCueWords(selectedChoice);
   selectedLoop.textContent = displayTitleForChoice(selectedChoice);
   if (updateAudio) {
     updateMainMediaSource(selectedChoice);

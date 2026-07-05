@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v77-playback-ui-parity";
+const CACHE_NAME = "sound-a-tude-v78-word-tip-cues";
 const APP_SHELL = [
   "./",
   "./index.html",

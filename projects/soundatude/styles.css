@@ -26,6 +26,12 @@
   --volume-fill: oklch(58% 0.058 220);
   --volume-thumb: oklch(38% 0.044 226);
   --stop-icon: oklch(66% 0.087 35);
+  --wave-neutral-top: oklch(72% 0.028 96 / 0.92);
+  --wave-neutral-mid: oklch(56% 0.052 219 / 0.88);
+  --wave-neutral-bottom: oklch(34% 0.046 226 / 0.86);
+  --wave-glow: oklch(56% 0.052 219);
+  --word-tip-color: oklch(82% 0.118 76);
+  --word-tip-intensity: 0;
 }
 
 * {
@@ -387,17 +393,17 @@ button:focus-visible {
   overflow: hidden;
   height: 82px;
   display: grid;
-  grid-template-columns: repeat(var(--meter-bars, 56), minmax(2px, 1fr));
+  grid-template-columns: repeat(var(--meter-bars, 96), minmax(1px, 1fr));
   align-items: end;
-  gap: 2px;
+  gap: 1px;
   padding: 10px 9px;
   border-radius: 10px;
   background:
-    linear-gradient(0deg, oklch(60% 0.07 218 / calc(0.04 + var(--meter-intensity, 0.2) * 0.12)), transparent 58%),
+    linear-gradient(0deg, oklch(56% 0.052 219 / calc(0.04 + var(--meter-intensity, 0.2) * 0.13)), transparent 58%),
     oklch(8.5% 0.023 226);
   box-shadow:
     inset 0 0 0 1px oklch(47% 0.048 226 / 0.18),
-    inset 0 -18px 34px oklch(60% 0.07 218 / calc(var(--meter-intensity, 0.2) * 0.08));
+    inset 0 -18px 34px oklch(56% 0.052 219 / calc(var(--meter-intensity, 0.2) * 0.09));
 }
 
 .console-meter span {
@@ -406,9 +412,9 @@ button:focus-visible {
   height: 100%;
   border-radius: 999px;
   background:
-    linear-gradient(180deg, oklch(78% 0.064 90 / 0.96), oklch(60% 0.072 220 / 0.94) 56%, oklch(46% 0.064 226 / 0.9));
+    linear-gradient(180deg, var(--wave-neutral-top), var(--wave-neutral-mid) 56%, var(--wave-neutral-bottom));
   box-shadow:
-    0 0 calc(2px + var(--level, 0.12) * 12px) oklch(62% 0.07 218 / calc(0.10 + var(--level, 0.12) * 0.24));
+    0 0 calc(2px + var(--level, 0.12) * 12px) oklch(56% 0.052 219 / calc(0.10 + var(--level, 0.12) * 0.24));
   opacity: calc(0.44 + (var(--level, 0.12) * 0.56));
   transform: scaleY(var(--level, 0.12));
   transform-origin: bottom;
@@ -416,6 +422,18 @@ button:focus-visible {
     opacity 120ms cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 120ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform, opacity;
+}
+
+.console-meter span::after {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 30%;
+  border-radius: inherit;
+  background: linear-gradient(180deg, var(--word-tip-color), color-mix(in oklch, var(--word-tip-color) 55%, transparent));
+  box-shadow: 0 0 calc(5px + var(--level, 0.12) * 14px) var(--word-tip-color);
+  content: "";
+  opacity: calc(var(--word-tip-intensity, 0) * (0.25 + var(--level, 0.12) * 0.75));
+  transition: opacity 90ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .loop-picker {
@@ -594,7 +612,7 @@ button:focus-visible {
 
 .loop-wheel button:hover,
 .loop-wheel button[aria-selected="true"] {
-  color: oklch(82% 0.032 89 / 0.92);
+  color: var(--phrase-caption);
 }
 
 .loop-wheel button:hover {
@@ -1025,7 +1043,7 @@ button:focus-visible {
 .conversation-progress input::-moz-range-progress {
   height: 5px;
   border-radius: 999px;
-  background: linear-gradient(90deg, oklch(56% 0.034 246), oklch(38% 0.028 226));
+  background: linear-gradient(90deg, var(--volume-fill), oklch(38% 0.028 226));
 }
 
 .conversation-progress input::-moz-range-thumb {
