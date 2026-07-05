@@ -2300,6 +2300,24 @@ function idleMeterLevel(index, time = 0) {
   return hypnoticMeterLevel(index, time, 0.24);
 }
 
+function meterEdgeEnvelope(index) {
+  const edgeBarDistance = Math.min(index, Math.max(METER_BAR_COUNT - 1 - index, 0));
+
+  if (edgeBarDistance < 10) {
+    return 0.035;
+  }
+
+  if (edgeBarDistance < 22) {
+    return 0.035 + Math.pow((edgeBarDistance - 10) / 12, 1.55) * 0.34;
+  }
+
+  if (edgeBarDistance < 42) {
+    return 0.375 + Math.pow((edgeBarDistance - 22) / 20, 1.15) * 0.625;
+  }
+
+  return 1;
+}
+
 function meterMiddleVariation(index, time = 0, level = 0) {
   const position = index / Math.max(METER_BAR_COUNT - 1, 1);
   const centerDistance = Math.abs(position - 0.5) * 2;
@@ -2318,7 +2336,9 @@ function meterMiddleVariation(index, time = 0, level = 0) {
 }
 
 function meterDisplayLevel(level, index = 0, time = 0) {
-  return clamp(level * meterMiddleVariation(index, time, level), 0.055, METER_LEVEL_CEILING);
+  const variedLevel = level * meterMiddleVariation(index, time, level);
+  const edgeEnvelope = meterEdgeEnvelope(index);
+  return clamp(0.038 + Math.max(variedLevel - 0.038, 0) * edgeEnvelope, 0.038, METER_LEVEL_CEILING);
 }
 
 function meterMouthWeight(index) {
@@ -2328,14 +2348,14 @@ function meterMouthWeight(index) {
   let edgeGate;
 
   if (edgeBarDistance < 10) {
-    edgeGate = 0.06;
+    edgeGate = 0.025;
   } else if (edgeBarDistance < 20) {
-    edgeGate = 0.06 + Math.pow((edgeBarDistance - 10) / 10, 1.04) * 0.42;
+    edgeGate = 0.025 + Math.pow((edgeBarDistance - 10) / 10, 1.18) * 0.34;
   } else {
-    edgeGate = Math.min(0.48 + Math.pow(Math.min((edgeBarDistance - 20) / 16, 1), 0.68) * 0.52, 1);
+    edgeGate = Math.min(0.365 + Math.pow(Math.min((edgeBarDistance - 20) / 22, 1), 0.82) * 0.635, 1);
   }
 
-  return clamp(edgeGate * Math.pow(Math.max(1 - edgeDistance * 0.66, 0), 0.36) * 0.92, 0, 0.92);
+  return clamp(edgeGate * Math.pow(Math.max(1 - edgeDistance * 0.66, 0), 0.36) * 0.96, 0, 0.92);
 }
 
 function meterBarLipPalette(index) {
@@ -2378,7 +2398,7 @@ function meterToothWeight(index, level) {
   const centerHighlight = Math.pow(Math.max(1 - Math.abs(position - 0.5) * (2.35 + toothBreak * 0.20), 0), 0.82 + toothBreak * 0.20);
   const levelGate = clamp((level - 0.04) / 0.42, 0, 1);
   const toothPulse = 0.86 + Math.sin(performance.now() / 1000 * 6.2 + index * 0.47) * 0.14;
-  return clamp(centerHighlight * (0.54 + levelGate * 0.64) * (0.92 + toothBreak * 0.34) * toothPulse, 0, 1);
+  return clamp(centerHighlight * meterEdgeEnvelope(index) * (0.54 + levelGate * 0.64) * (0.92 + toothBreak * 0.34) * toothPulse, 0, 1);
 }
 
 function meterToothNoise(index) {

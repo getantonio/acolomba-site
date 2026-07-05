@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v105-contrast-lips";
+const CACHE_NAME = "sound-a-tude-v106-edge-fade";
 const APP_SHELL = [
   "./",
   "./index.html",
