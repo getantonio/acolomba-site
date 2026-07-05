@@ -71,6 +71,7 @@ const pageDots = [...document.querySelectorAll(".page-dots button")];
 const openPlaylistButton = document.querySelector("#openPlaylistButton");
 const openPlayerButton = document.querySelector("#openPlayerButton");
 const openGuideButton = document.querySelector("#openGuideButton");
+const openSettingsButton = document.querySelector("#openSettingsButton");
 const closeGuideButton = document.querySelector("#closeGuideButton");
 const closeSettingsButton = document.querySelector("#closeSettingsButton");
 const waveformStyleButtons = [...document.querySelectorAll("[data-waveform-style-choice]")];
@@ -81,7 +82,7 @@ const PLAYLIST_STORAGE_KEY = "sound-a-tude-playlists-v2";
 const VOICE_STORAGE_KEY = "sound-a-tude-voice-v1";
 const PLAYBACK_STORAGE_KEY = "sound-a-tude-playback-v1";
 const UI_MODE_STORAGE_KEY = "sound-a-tude-ui-mode-v1";
-const WAVEFORM_STORAGE_KEY = "sound-a-tude-waveform-style-v1";
+const WAVEFORM_STORAGE_KEY = "sound-a-tude-waveform-style-v2";
 const LEGACY_RECORDER_STORAGE_KEYS = ["sound-a-tude-recorder-v1"];
 const RECORDER_STORAGE_KEY = "sound-a-tude-recorder-v2";
 const RECORDED_VOICE_DB_NAME = "sound-a-tude-recorded-voices";
@@ -92,7 +93,9 @@ const CUSTOM_RECORDED_SOURCE = "browser-recorded-custom";
 const DEFAULT_CUSTOM_RECORDED_CATEGORY = "My Affirmations";
 const NEW_CUSTOM_CATEGORY_VALUE = "__new-custom-recording-category__";
 const METER_BAR_COUNT = 96;
+const PRIMARY_SPARK_COLORS = ["#ff0000", "#00ff00", "#0000ff", "#00ffff", "#ff00ff", "#ffff00", "#f8fbff"];
 const WAVEFORM_STYLE_OPTIONS = [
+  { id: "classic", spark: "#7faec2" },
   { id: "aurora", spark: "#00ffff" },
   { id: "thread", spark: "#ffff00" },
   { id: "field", spark: "#ff00ff" },
@@ -100,7 +103,7 @@ const WAVEFORM_STYLE_OPTIONS = [
   { id: "halo", spark: "#0000ff" },
 ];
 const WAVEFORM_STYLES = new Set(WAVEFORM_STYLE_OPTIONS.map(({ id }) => id));
-let activeWaveformStyle = "aurora";
+let activeWaveformStyle = "classic";
 let waveformVector = null;
 let waveformFillPath = null;
 let waveformMainPath = null;
@@ -566,13 +569,13 @@ const categoryCueWordsByTitle = {
   "Confidence & Connection": ["confidence", "connection"],
 };
 const cuePrimaryPalette = [
-  "oklch(63% 0.280 29)",   // anger red
-  "oklch(90% 0.215 99)",   // caution yellow
-  "oklch(64% 0.250 258)",  // calm blue
-  "oklch(61% 0.285 303)",  // attitude purple
-  "oklch(80% 0.205 82)",   // effort gold
-  "oklch(77% 0.205 205)",  // cyan
-  "oklch(97% 0.010 250)",  // white
+  "oklch(62% 0.165 32)",   // anger red
+  "oklch(82% 0.125 94)",   // caution yellow
+  "oklch(62% 0.088 246)",  // calm blue
+  "oklch(60% 0.118 300)",  // attitude purple
+  "oklch(76% 0.105 86)",   // effort gold
+  "oklch(66% 0.078 205)",  // cyan
+  "oklch(82% 0.032 89)",   // warm white
 ];
 const cueWordColors = {
   anger: cuePrimaryPalette[0],
@@ -2322,7 +2325,7 @@ function renderAudioMeter() {
   const barsMarkup = meterLevels
     .map((level, index) => {
       const position = index / Math.max(METER_BAR_COUNT - 1, 1);
-      const spark = WAVEFORM_STYLE_OPTIONS[index % WAVEFORM_STYLE_OPTIONS.length].spark;
+      const spark = PRIMARY_SPARK_COLORS[index % PRIMARY_SPARK_COLORS.length];
       return `<span class="meter-bar" style="--level: ${level.toFixed(3)}; --tone: ${position.toFixed(3)}; --spark-color: ${spark}"></span>`;
     })
     .join("");
@@ -2376,7 +2379,7 @@ function syncWaveformStyleButtons() {
 }
 
 function applyWaveformStyle(style, { save = false } = {}) {
-  activeWaveformStyle = WAVEFORM_STYLES.has(style) ? style : "aurora";
+  activeWaveformStyle = WAVEFORM_STYLES.has(style) ? style : "classic";
   consoleMeter?.setAttribute("data-waveform-style", activeWaveformStyle);
   syncWaveformStyleButtons();
   startMeterAnimation();
@@ -2452,7 +2455,7 @@ function primeAudioMeter() {
       audioContext = new AudioContextConstructor();
       analyser = audioContext.createAnalyser();
       analyser.fftSize = 4096;
-      analyser.smoothingTimeConstant = 0.52;
+      analyser.smoothingTimeConstant = 0.30;
       meterData = new Uint8Array(analyser.fftSize);
       meterSource = audioContext.createMediaElementSource(audio);
       meterSource.connect(analyser);
@@ -2517,13 +2520,13 @@ function updateAudioMeter() {
       }
 
       const rms = Math.sqrt(sum / Math.max(sampleEnd - sampleStart, 1));
-      const intensity = clamp(liveEnergy * 7.2 + rms * 3.6, 0.12, 1);
-      const audioLift = clamp(rms * 4.9, 0, 0.72);
-      nextLevel = clamp(hypnoticMeterLevel(index, time, intensity) + audioLift, 0.055, 1);
+      const intensity = clamp(liveEnergy * 18.5 + rms * 12.2, 0.22, 1);
+      const audioLift = clamp(Math.pow(rms * 11.5, 0.64) * 0.86, 0, 0.98);
+      nextLevel = clamp(hypnoticMeterLevel(index, time, intensity) + audioLift, 0.08, 1);
     }
 
     const previousLevel = meterLevels[index] ?? nextLevel;
-    const smoothing = nextLevel > previousLevel ? 0.78 : 0.24;
+    const smoothing = nextLevel > previousLevel ? 0.92 : 0.40;
     const smoothedLevel = previousLevel + (nextLevel - previousLevel) * smoothing;
 
     meterLevels[index] = smoothedLevel;
@@ -3464,6 +3467,7 @@ nextButton.addEventListener("click", skipToNextTrack);
 openPlaylistButton.addEventListener("click", () => goToPage(1));
 openPlayerButton.addEventListener("click", () => goToPage(0));
 openGuideButton?.addEventListener("click", () => goToPage(3));
+openSettingsButton?.addEventListener("click", () => goToPage(4));
 closeGuideButton?.addEventListener("click", () => goToPage(0));
 closeSettingsButton?.addEventListener("click", () => goToPage(0));
 uiModeToggle?.addEventListener("click", toggleUiMode);
