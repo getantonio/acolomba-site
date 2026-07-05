@@ -2303,16 +2303,16 @@ function idleMeterLevel(index, time = 0) {
 function meterEdgeEnvelope(index) {
   const edgeBarDistance = Math.min(index, Math.max(METER_BAR_COUNT - 1 - index, 0));
 
-  if (edgeBarDistance < 10) {
-    return 0.035;
-  }
-
-  if (edgeBarDistance < 22) {
-    return 0.035 + Math.pow((edgeBarDistance - 10) / 12, 1.55) * 0.34;
+  if (edgeBarDistance < 18) {
+    return 0.020;
   }
 
   if (edgeBarDistance < 42) {
-    return 0.375 + Math.pow((edgeBarDistance - 22) / 20, 1.15) * 0.625;
+    return 0.020 + Math.pow((edgeBarDistance - 18) / 24, 1.65) * 0.32;
+  }
+
+  if (edgeBarDistance < 70) {
+    return 0.340 + Math.pow((edgeBarDistance - 42) / 28, 1.15) * 0.660;
   }
 
   return 1;
@@ -2320,13 +2320,14 @@ function meterEdgeEnvelope(index) {
 
 function meterMiddleVariation(index, time = 0, level = 0) {
   const position = index / Math.max(METER_BAR_COUNT - 1, 1);
+  const pairedIndex = Math.min(index, Math.max(METER_BAR_COUNT - 1 - index, 0));
   const centerDistance = Math.abs(position - 0.5) * 2;
   const middleBand = Math.pow(Math.max(1 - centerDistance * 1.72, 0), 0.62);
   const activity = clamp((level - 0.08) / 0.48, 0, 1);
-  const fastDetail = Math.sin(time * 8.40 + index * 0.73);
-  const counterDetail = Math.sin(time * 5.70 - index * 1.17);
-  const slowSculpt = Math.sin(time * 2.45 + position * Math.PI * 10.5);
-  const seed = (((index * 37 + 17) % 100) / 100 - 0.5) * 2;
+  const fastDetail = Math.sin(time * 8.40 + pairedIndex * 0.73);
+  const counterDetail = Math.sin(time * 5.70 - pairedIndex * 1.17);
+  const slowSculpt = Math.sin(time * 2.45 + pairedIndex * 0.39);
+  const seed = (((pairedIndex * 37 + 17) % 100) / 100 - 0.5) * 2;
   return 1 + middleBand * (
     fastDetail * 0.062
     + counterDetail * 0.046
@@ -2347,12 +2348,12 @@ function meterMouthWeight(index) {
   const edgeBarDistance = Math.min(index, Math.max(METER_BAR_COUNT - 1 - index, 0));
   let edgeGate;
 
-  if (edgeBarDistance < 10) {
-    edgeGate = 0.025;
-  } else if (edgeBarDistance < 20) {
-    edgeGate = 0.025 + Math.pow((edgeBarDistance - 10) / 10, 1.18) * 0.34;
+  if (edgeBarDistance < 18) {
+    edgeGate = 0.014;
+  } else if (edgeBarDistance < 42) {
+    edgeGate = 0.014 + Math.pow((edgeBarDistance - 18) / 24, 1.45) * 0.31;
   } else {
-    edgeGate = Math.min(0.365 + Math.pow(Math.min((edgeBarDistance - 20) / 22, 1), 0.82) * 0.635, 1);
+    edgeGate = Math.min(0.324 + Math.pow(Math.min((edgeBarDistance - 42) / 28, 1), 0.92) * 0.676, 1);
   }
 
   return clamp(edgeGate * Math.pow(Math.max(1 - edgeDistance * 0.66, 0), 0.36) * 0.96, 0, 0.92);
@@ -2402,11 +2403,13 @@ function meterToothWeight(index, level) {
 }
 
 function meterToothNoise(index) {
-  return 0.70 + (((index * 53 + 11) % 100) / 100) * 0.55;
+  const pairedIndex = Math.min(index, Math.max(METER_BAR_COUNT - 1 - index, 0));
+  return 0.70 + (((pairedIndex * 53 + 11) % 100) / 100) * 0.55;
 }
 
 function meterToothBreak(index) {
-  return ((index * 89 + 41) % 100) / 100;
+  const pairedIndex = Math.min(index, Math.max(METER_BAR_COUNT - 1 - index, 0));
+  return ((pairedIndex * 89 + 41) % 100) / 100;
 }
 
 function meterToothHeight(index, level) {
@@ -2451,8 +2454,8 @@ function primeAudioMeter() {
       const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
       audioContext = new AudioContextConstructor();
       analyser = audioContext.createAnalyser();
-      analyser.fftSize = 2048;
-      analyser.smoothingTimeConstant = 0.04;
+      analyser.fftSize = 1024;
+      analyser.smoothingTimeConstant = 0;
       meterData = new Float32Array(analyser.fftSize);
       meterSource = audioContext.createMediaElementSource(audio);
       meterSource.connect(analyser);
@@ -2536,6 +2539,15 @@ function updateAudioMeter() {
     nextLevels[index] = nextLevel;
   });
 
+  if (hasLiveAudio) {
+    for (let index = 0; index < Math.floor(METER_BAR_COUNT / 2); index += 1) {
+      const mirrorIndex = METER_BAR_COUNT - 1 - index;
+      const balancedLevel = (nextLevels[index] + nextLevels[mirrorIndex]) * 0.5;
+      nextLevels[index] = balancedLevel;
+      nextLevels[mirrorIndex] = balancedLevel;
+    }
+  }
+
   const rawPeak = Math.max(...nextLevels, 0.08);
   const rawFloor = Math.min(...nextLevels);
   const rawRange = Math.max(rawPeak - rawFloor, 0.001);
@@ -2556,21 +2568,20 @@ function updateAudioMeter() {
       * (Math.sin(time * 7.2 + index * 0.67) * 0.018 + Math.sin(time * 4.8 - index * 1.11) * 0.013)
       * (hasLiveAudio ? 1.65 : 0.92);
     const nextLevel = clamp(shapedLevel + middleLift, 0.065, METER_LEVEL_CEILING);
-    const previousLevel = meterLevels[index] ?? nextLevel;
-    const smoothing = nextLevel > previousLevel ? 1.00 : 0.68;
-    const smoothedLevel = previousLevel + (nextLevel - previousLevel) * smoothing;
+    const smoothedLevel = nextLevel;
+    const visualLevel = meterDisplayLevel(smoothedLevel, index, time);
 
     meterLevels[index] = smoothedLevel;
-    highestLevel = Math.max(highestLevel, smoothedLevel);
-    bar.style.setProperty("--level", smoothedLevel.toFixed(3));
-    bar.style.setProperty("--display-level", meterDisplayLevel(smoothedLevel, index, time).toFixed(3));
-    bar.style.setProperty("--tooth-weight", meterToothWeight(index, smoothedLevel).toFixed(3));
-    bar.style.setProperty("--tooth-height", meterToothHeight(index, smoothedLevel).toFixed(3));
+    highestLevel = Math.max(highestLevel, visualLevel);
+    bar.style.setProperty("--level", visualLevel.toFixed(3));
+    bar.style.setProperty("--display-level", visualLevel.toFixed(3));
+    bar.style.setProperty("--tooth-weight", meterToothWeight(index, visualLevel).toFixed(3));
+    bar.style.setProperty("--tooth-height", meterToothHeight(index, visualLevel).toFixed(3));
     bar.style.setProperty("--tooth-top", `${meterToothTop(index).toFixed(2)}%`);
   });
 
   consoleMeter?.style.setProperty("--meter-intensity", clamp(highestLevel, 0.12, 1).toFixed(3));
-  cueWordIntensity = activeCueWord ? cueWordIntensity * 0.78 : cueWordIntensity * 0.66;
+  cueWordIntensity = activeCueWord ? cueWordIntensity * 0.68 : cueWordIntensity * 0.54;
   if (cueWordIntensity < 0.015) cueWordIntensity = 0;
   consoleMeter?.style.setProperty("--word-tip-intensity", cueWordIntensity.toFixed(3));
 
