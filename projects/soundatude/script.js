@@ -102,6 +102,7 @@ const RECORDER_MIME_TYPES = [
   "audio/mp4",
   "audio/aac",
 ];
+const STARTER_CUSTOM_PHRASE_LIMIT = 10;
 const EXAMPLE_CUSTOM_PHRASE_SETS = {
   "never-quit": {
     title: "I Never Quit",
@@ -123,16 +124,16 @@ const EXAMPLE_CUSTOM_PHRASE_SETS = {
     title: "Quit Smoking",
     category: "Quit Smoking",
     phrases: [
-      "1. I choose health and freedom.",
-      "2. My mind is clearer when my lungs can breathe freely.",
-      "3. I create good things without needing cigarettes.",
-      "4. I do not like the taste of cigarettes.",
-      "5. Each day smoke-free, my energy flows more naturally.",
-      "6. I set a positive example with every smoke-free choice.",
-      "7. My hands build my life, they do not need cigarettes.",
-      "8. I deserve to breathe easily and live without addiction.",
-      "9. I believe in myself, and I can keep going.",
-      "10. Every smoke-free day is a victory I can be proud of.",
+      "1. I release the urge to rely on unhealthy habits.",
+      "2. My determination to heal grows stronger each day.",
+      "3. I fill my life with activities that support my well-being.",
+      "4. I choose freedom over addiction with every decision I make.",
+      "5. My mind and body are aligned in the pursuit of health.",
+      "6. I trust the process of change and embrace it fully.",
+      "7. My inner strength is greater than any external temptation.",
+      "8. I am proud of the person I am becoming.",
+      "9. I am surrounded by support and love on my journey to recovery.",
+      "10. I do not like the taste of cigarettes.",
     ].join("\n"),
   },
 };
@@ -1507,12 +1508,17 @@ function parseNumberedPhraseList(text) {
 function queueCustomPhrasesFromText(text) {
   const phrases = parseNumberedPhraseList(text);
   if (!phrases.length) return false;
+  const limitedPhrases = phrases.slice(0, STARTER_CUSTOM_PHRASE_LIMIT);
 
   recorderMode = "custom";
-  recorderCustomPhraseQueue = phrases;
+  recorderCustomPhraseQueue = limitedPhrases;
   setCustomQueueIndex(0);
   saveRecorderState();
-  setRecorderMessage(`Queued ${phrases.length} phrase${phrases.length === 1 ? "" : "s"}.`);
+  setRecorderMessage(
+    phrases.length > STARTER_CUSTOM_PHRASE_LIMIT
+      ? `Queued the first ${STARTER_CUSTOM_PHRASE_LIMIT} phrases.`
+      : `Queued ${limitedPhrases.length} phrase${limitedPhrases.length === 1 ? "" : "s"}.`
+  );
   renderVoiceRecorder();
   return true;
 }
