@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v118-amp-75-speed-pitch-row";
+const CACHE_NAME = "sound-a-tude-v119-amp-75-sliders-over-labels";
 const APP_SHELL = [
   "./",
   "./index.html",

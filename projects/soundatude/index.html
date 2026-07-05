@@ -9,7 +9,7 @@
     <link rel="canonical" href="https://acolomba.site/projects/soundatude/">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%23060607'/%3E%3Cpath d='M27 22v20l17-10z' fill='%23f2eee7'/%3E%3C/svg%3E">
-    <link rel="stylesheet" href="styles.css?v=amp-75-speed-pitch-row-20260705-v1">
+    <link rel="stylesheet" href="styles.css?v=amp-75-sliders-over-labels-20260705-v1">
   </head>
   <body>
     <main class="app-shell" aria-label="Sound-a-tude player">
@@ -103,6 +103,12 @@
         </div>
 
         <div class="playback-tuning" aria-label="Playback tuning">
+          <div class="tuning-control" aria-label="Speed">
+            <button class="tuning-step" id="speedDownButton" type="button" aria-label="Slow down">-</button>
+            <input id="speedControl" type="range" min="75" max="125" step="5" value="100" aria-label="Speed">
+            <button class="tuning-step" id="speedUpButton" type="button" aria-label="Speed up">+</button>
+          </div>
+
           <div class="tuning-summary-row">
             <div class="tuning-readout">
               <span>Speed</span>
@@ -112,12 +118,6 @@
               <span>Pitch</span>
               <strong id="pitchValue">Steady</strong>
             </button>
-          </div>
-
-          <div class="tuning-control" aria-label="Speed">
-            <button class="tuning-step" id="speedDownButton" type="button" aria-label="Slow down">-</button>
-            <input id="speedControl" type="range" min="75" max="125" step="5" value="100" aria-label="Speed">
-            <button class="tuning-step" id="speedUpButton" type="button" aria-label="Speed up">+</button>
           </div>
         </div>
 
@@ -369,6 +369,6 @@
       </div>
     </main>
 
-        <script src="script.js?v=amp-75-speed-pitch-row-20260705-v1"></script>
+        <script src="script.js?v=amp-75-sliders-over-labels-20260705-v1"></script>
   </body>
 </html>
