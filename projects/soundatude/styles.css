@@ -1496,6 +1496,7 @@ button:focus-visible {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 88px minmax(0, 1fr);
   align-items: center;
+  align-content: center;
   gap: 10px;
   align-self: end;
   min-height: 96px;
@@ -1503,7 +1504,9 @@ button:focus-visible {
 
 .queue-controls {
   display: grid;
+  align-self: center;
   align-items: center;
+  align-content: center;
   gap: 12px;
 }
 
@@ -1519,7 +1522,6 @@ button:focus-visible {
   grid-template-columns: 44px;
   grid-template-rows: repeat(2, 44px);
   align-content: center;
-  align-self: end;
   justify-content: start;
   gap: 6px;
 }
@@ -2210,21 +2212,21 @@ button:focus-visible {
   }
 
   .loop-controls {
-    grid-template-columns: 36px;
-    grid-template-rows: repeat(2, 36px);
+    grid-template-columns: 44px;
+    grid-template-rows: repeat(2, 44px);
     gap: 6px;
   }
 
   .skip-controls {
-    grid-template-columns: 36px;
-    grid-template-rows: repeat(2, 36px);
+    grid-template-columns: 44px;
+    grid-template-rows: repeat(2, 44px);
     gap: 6px;
-    align-self: end;
+    align-self: center;
   }
 
   .queue-button {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
   }
 
   .playback-tuning {
