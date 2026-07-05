@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v114-left-mouth-flatter-buttons";
+const CACHE_NAME = "sound-a-tude-v115-left-mouth-flatter-buttons";
 const APP_SHELL = [
   "./",
   "./index.html",
