@@ -2292,14 +2292,14 @@ function hypnoticMeterLevel(index, time = 0, intensity = 0) {
     + (brokenMiddle * 0.5 + 0.5) * 0.10
   );
   const breath = 0.84 + Math.sin(time * 0.64) * 0.16;
-  const edgeLife = 0.52 + centerLift * 0.48;
-  const floor = 0.054 + centerLift * 0.030;
-  const motion = standingWave * breath * edgeLife * (0.16 + intensity * 0.64);
+  const edgeLife = 0.34 + centerLift * 0.66;
+  const floor = 0.030 + centerLift * 0.016;
+  const motion = standingWave * breath * edgeLife * (0.018 + intensity * 0.120);
   return floor + motion;
 }
 
 function idleMeterLevel(index, time = 0) {
-  return hypnoticMeterLevel(index, time, 0.24);
+  return hypnoticMeterLevel(index, time, 0.06);
 }
 
 function meterEdgeEnvelope(index) {
@@ -2341,7 +2341,7 @@ function meterMiddleVariation(index, time = 0, level = 0) {
 function meterDisplayLevel(level, index = 0, time = 0) {
   const variedLevel = level * meterMiddleVariation(index, time, level);
   const edgeEnvelope = meterEdgeEnvelope(index);
-  return clamp(0.038 + Math.max(variedLevel - 0.038, 0) * edgeEnvelope, 0.038, METER_LEVEL_CEILING);
+  return clamp(0.028 + Math.max(variedLevel - 0.028, 0) * edgeEnvelope, 0.028, METER_LEVEL_CEILING);
 }
 
 function meterMouthWeight(index) {
@@ -2552,30 +2552,11 @@ function updateAudioMeter() {
   });
 
   if (hasLiveAudio) {
-    const audioDrivenLevels = [...nextLevels];
-    const travelOffset = ((audio.currentTime * 0.92 + time * 0.055) % 1) * METER_BAR_COUNT;
-
     for (let index = 0; index < Math.floor(METER_BAR_COUNT / 2); index += 1) {
       const mirrorIndex = METER_BAR_COUNT - 1 - index;
       const balancedLevel = (nextLevels[index] + nextLevels[mirrorIndex]) * 0.5;
       nextLevels[index] = balancedLevel;
       nextLevels[mirrorIndex] = balancedLevel;
-    }
-
-    for (let index = 0; index < METER_BAR_COUNT; index += 1) {
-      const sourceIndex = (index - travelOffset + METER_BAR_COUNT) % METER_BAR_COUNT;
-      const sourceFloor = Math.floor(sourceIndex);
-      const sourceBlend = sourceIndex - sourceFloor;
-      const sourceA = audioDrivenLevels[sourceFloor % METER_BAR_COUNT];
-      const sourceB = audioDrivenLevels[(sourceFloor + 1) % METER_BAR_COUNT];
-      const sourceTrailing = audioDrivenLevels[(sourceFloor - 2 + METER_BAR_COUNT) % METER_BAR_COUNT];
-      const travelingLevel = sourceA * (1 - sourceBlend) + sourceB * sourceBlend;
-      const position = index / Math.max(METER_BAR_COUNT - 1, 1);
-      const centerDistance = Math.abs(position - 0.5) * 2;
-      const travelGate = Math.pow(Math.max(1 - centerDistance * 0.72, 0), 0.38);
-      const travelMix = clamp(0.22 + travelGate * 0.42 + meterEnergyPulse * 0.16, 0.22, 0.72);
-      const travelingDetail = travelingLevel * 0.76 + sourceTrailing * 0.24;
-      nextLevels[index] = nextLevels[index] * (1 - travelMix) + travelingDetail * travelMix;
     }
 
     const halfPoint = Math.floor(METER_BAR_COUNT / 2);
@@ -2593,10 +2574,13 @@ function updateAudioMeter() {
   const rawPeak = Math.max(...nextLevels, 0.08);
   const rawFloor = Math.min(...nextLevels);
   const rawRange = Math.max(rawPeak - rawFloor, 0.001);
+  const reactiveDrive = hasLiveAudio
+    ? clamp(energyLift * 0.62 + peakLift * 0.30 + meterEnergyPulse * 0.34, 0, 1)
+    : 0;
   const targetPeak = hasLiveAudio
-    ? clamp(0.34 + Math.pow(energyLift, 0.60) * 0.32 + Math.pow(peakLift, 0.55) * 0.38 + meterEnergyPulse * 0.30, 0.34, METER_LEVEL_CEILING)
+    ? clamp(0.082 + Math.pow(reactiveDrive, 0.72) * 0.560, 0.082, 0.660)
     : METER_LEVEL_CEILING;
-  const targetFloor = hasLiveAudio ? clamp(0.090 + energyLift * 0.034, 0.090, 0.130) : 0.08;
+  const targetFloor = hasLiveAudio ? clamp(0.030 + reactiveDrive * 0.044, 0.030, 0.076) : 0.08;
   let highestLevel = 0;
 
   meterBars.forEach((bar, index) => {
@@ -2604,23 +2588,16 @@ function updateAudioMeter() {
       ? targetFloor + ((nextLevels[index] - rawFloor) / rawRange) * (targetPeak - targetFloor)
       : nextLevels[index];
     const position = index / Math.max(METER_BAR_COUNT - 1, 1);
+    const pairedIndex = Math.min(index, Math.max(METER_BAR_COUNT - 1 - index, 0));
     const centerDistance = Math.abs(position - 0.5) * 2;
     const middleBand = Math.pow(Math.max(1 - centerDistance * 1.52, 0), 0.70);
     const middleLift = middleBand
-      * (Math.sin(time * 12.8 + index * 0.67) * 0.024 + Math.sin(time * 8.6 - index * 1.11) * 0.017)
-      * (hasLiveAudio ? (0.90 + meterEnergyPulse * 2.20) : 0.92);
-    const rightwardFlow = hasLiveAudio
-      ? middleBand
-        * (
-          Math.sin((position - time * 0.82) * Math.PI * 7.2) * 0.027
-          + Math.sin((position - time * 1.28) * Math.PI * 12.6 + 0.8) * 0.014
-        )
-        * (0.68 + meterEnergyPulse * 2.10)
-      : 0;
+      * (Math.sin(time * 9.8 + pairedIndex * 0.67) * 0.014 + Math.sin(time * 6.6 - pairedIndex * 1.11) * 0.010)
+      * (hasLiveAudio ? (0.68 + meterEnergyPulse * 1.16) : 0.30);
     const restlessMotion = hasLiveAudio
-      ? idleMeterLevel(index, time) * (0.200 + meterEnergyPulse * 0.090)
+      ? idleMeterLevel(index, time) * (0.048 + meterEnergyPulse * 0.036)
       : 0;
-    const nextLevel = clamp(shapedLevel + middleLift + rightwardFlow + restlessMotion, 0.125, METER_LEVEL_CEILING);
+    const nextLevel = clamp(shapedLevel + middleLift + restlessMotion, 0.026, METER_LEVEL_CEILING);
     const smoothedLevel = nextLevel;
     const visualLevel = meterDisplayLevel(smoothedLevel, index, time);
 
