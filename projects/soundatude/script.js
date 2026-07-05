@@ -979,12 +979,24 @@ function voiceWaveformHue(voice = activeVoice()) {
   return 275;
 }
 
+function cssWaveformHue(voiceHue = voiceWaveformHue()) {
+  return (voiceHue + 50) % 360;
+}
+
 function updateWaveformHue() {
   const hue = voiceWaveformHue();
+  const cssHue = cssWaveformHue(hue);
+  const tipHue = (cssHue + 12) % 360;
+  const upperHue = (cssHue + 8) % 360;
+  const lowerHue = (cssHue + 340) % 360;
   document.documentElement.style.setProperty("--wave-hue", hue.toFixed(0));
-  document.documentElement.style.setProperty("--wave-lip-top", `oklch(66% 0.108 ${hue.toFixed(0)} / 0.92)`);
-  document.documentElement.style.setProperty("--wave-lip-bottom", `oklch(55% 0.095 ${((hue + 344) % 360).toFixed(0)} / 0.90)`);
-  document.documentElement.style.setProperty("--word-tip-color", `oklch(72% 0.128 ${((hue + 12) % 360).toFixed(0)})`);
+  document.documentElement.style.setProperty("--wave-lip-tip", `oklch(75% 0.162 ${tipHue.toFixed(0)} / 0.98)`);
+  document.documentElement.style.setProperty("--wave-lip-top", `oklch(69% 0.160 ${cssHue.toFixed(0)} / 0.97)`);
+  document.documentElement.style.setProperty("--wave-lip-upper", `oklch(66% 0.132 ${upperHue.toFixed(0)} / 0.94)`);
+  document.documentElement.style.setProperty("--wave-lip-bottom", `oklch(53% 0.128 ${lowerHue.toFixed(0)} / 0.95)`);
+  document.documentElement.style.setProperty("--wave-glow", `oklch(62% 0.110 ${cssHue.toFixed(0)})`);
+  document.documentElement.style.setProperty("--word-tip-color", `oklch(78% 0.170 ${tipHue.toFixed(0)})`);
+  meterBars?.forEach((bar, index) => applyMeterBarColorVars(bar, index));
 }
 
 function baseOutputVolume() {
@@ -2325,16 +2337,50 @@ function meterMouthWeight(index) {
     edgeGate = Math.min(0.48 + Math.pow(Math.min((edgeBarDistance - 20) / 16, 1), 0.68) * 0.52, 1);
   }
 
-  return clamp(edgeGate * Math.pow(Math.max(1 - edgeDistance * 0.66, 0), 0.36) * 0.85, 0, 0.85);
+  return clamp(edgeGate * Math.pow(Math.max(1 - edgeDistance * 0.66, 0), 0.36) * 0.92, 0, 0.92);
+}
+
+function meterBarLipPalette(index) {
+  const position = index / Math.max(METER_BAR_COUNT - 1, 1);
+  const cssHue = cssWaveformHue();
+  const roseLobe = Math.pow(Math.max(1 - Math.abs(position - 0.34) * 2.00, 0), 1.02);
+  const centerSheen = Math.pow(Math.max(1 - Math.abs(position - 0.50) * 2.80, 0), 1.18);
+  const mauveLobe = Math.pow(Math.max(1 - Math.abs(position - 0.64) * 2.05, 0), 1.00);
+  const plumEdge = Math.pow(Math.max(1 - Math.abs(position - 0.82) * 2.65, 0), 1.12);
+  const tipHue = (cssHue + 6 + roseLobe * 8 + mauveLobe * 15 + plumEdge * 22) % 360;
+  const topHue = (cssHue - 4 + roseLobe * 7 + mauveLobe * 13 + plumEdge * 18) % 360;
+  const upperHue = (cssHue + 3 + roseLobe * 5 + mauveLobe * 16 + plumEdge * 20) % 360;
+  const bottomHue = (cssHue + 340 + roseLobe * 5 + mauveLobe * 18 + plumEdge * 20) % 360;
+
+  return {
+    lipTip: `oklch(${(74 + centerSheen * 3).toFixed(1)}% ${(0.155 + centerSheen * 0.022).toFixed(3)} ${tipHue.toFixed(1)} / 0.98)`,
+    lipTop: `oklch(${(67 + centerSheen * 3).toFixed(1)}% ${(0.142 + roseLobe * 0.020 + centerSheen * 0.012).toFixed(3)} ${topHue.toFixed(1)} / 0.97)`,
+    lipUpper: `oklch(${(63 + centerSheen * 2).toFixed(1)}% ${(0.126 + mauveLobe * 0.018).toFixed(3)} ${upperHue.toFixed(1)} / 0.95)`,
+    lipBottom: `oklch(${(51 + centerSheen * 2).toFixed(1)}% ${(0.112 + mauveLobe * 0.018).toFixed(3)} ${bottomHue.toFixed(1)} / 0.95)`,
+  };
+}
+
+function applyMeterBarColorVars(bar, index) {
+  if (!bar) return;
+  const palette = meterBarLipPalette(index);
+  bar.style.setProperty("--bar-lip-tip", palette.lipTip);
+  bar.style.setProperty("--bar-lip-top", palette.lipTop);
+  bar.style.setProperty("--bar-lip-upper", palette.lipUpper);
+  bar.style.setProperty("--bar-lip-bottom", palette.lipBottom);
+}
+
+function meterBarColorStyle(index) {
+  const palette = meterBarLipPalette(index);
+  return `--bar-lip-tip: ${palette.lipTip}; --bar-lip-top: ${palette.lipTop}; --bar-lip-upper: ${palette.lipUpper}; --bar-lip-bottom: ${palette.lipBottom};`;
 }
 
 function meterToothWeight(index, level) {
   const position = index / Math.max(METER_BAR_COUNT - 1, 1);
   const toothBreak = meterToothBreak(index);
-  const centerHighlight = Math.pow(Math.max(1 - Math.abs(position - 0.5) * (3.00 + toothBreak * 0.24), 0), 1.05 + toothBreak * 0.30);
-  const levelGate = clamp((level - 0.08) / 0.52, 0, 1);
-  const toothPulse = 0.90 + Math.sin(performance.now() / 1000 * 3.8 + index * 0.47) * 0.10;
-  return clamp(centerHighlight * (0.18 + levelGate * 0.82) * (0.82 + toothBreak * 0.32) * toothPulse, 0, 1);
+  const centerHighlight = Math.pow(Math.max(1 - Math.abs(position - 0.5) * (2.85 + toothBreak * 0.26), 0), 1.00 + toothBreak * 0.28);
+  const levelGate = clamp((level - 0.06) / 0.48, 0, 1);
+  const toothPulse = 0.88 + Math.sin(performance.now() / 1000 * 3.8 + index * 0.47) * 0.12;
+  return clamp(centerHighlight * (0.32 + levelGate * 0.68) * (0.88 + toothBreak * 0.34) * toothPulse, 0, 1);
 }
 
 function meterToothNoise(index) {
@@ -2348,7 +2394,7 @@ function meterToothBreak(index) {
 function meterToothHeight(index, level) {
   const levelGate = clamp((level - 0.08) / 0.52, 0, 1);
   const toothWeight = meterToothWeight(index, level);
-  return clamp(0.070 + toothWeight * (0.050 + meterToothNoise(index) * 0.046) + levelGate * 0.016, 0.07, 0.172);
+  return clamp(0.076 + toothWeight * (0.056 + meterToothNoise(index) * 0.050) + levelGate * 0.018, 0.076, 0.188);
 }
 
 function meterToothTop(index) {
@@ -2367,7 +2413,7 @@ function renderAudioMeter() {
   const barsMarkup = meterLevels
     .map((level, index) => {
       const position = index / Math.max(METER_BAR_COUNT - 1, 1);
-      return `<span class="meter-bar" style="--level: ${level.toFixed(3)}; --display-level: ${meterDisplayLevel(level, index, 0).toFixed(3)}; --tone: ${position.toFixed(3)}; --mouth-weight: ${meterMouthWeight(index).toFixed(3)}; --tooth-weight: ${meterToothWeight(index, level).toFixed(3)}; --tooth-noise: ${meterToothNoise(index).toFixed(3)}; --tooth-height: ${meterToothHeight(index, level).toFixed(3)}; --tooth-top: ${meterToothTop(index).toFixed(2)}%;"></span>`;
+      return `<span class="meter-bar" style="${meterBarColorStyle(index)} --level: ${level.toFixed(3)}; --display-level: ${meterDisplayLevel(level, index, 0).toFixed(3)}; --tone: ${position.toFixed(3)}; --mouth-weight: ${meterMouthWeight(index).toFixed(3)}; --tooth-weight: ${meterToothWeight(index, level).toFixed(3)}; --tooth-noise: ${meterToothNoise(index).toFixed(3)}; --tooth-height: ${meterToothHeight(index, level).toFixed(3)}; --tooth-top: ${meterToothTop(index).toFixed(2)}%;"></span>`;
     })
     .join("");
   consoleMeter.innerHTML = barsMarkup;
