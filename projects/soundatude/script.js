@@ -89,7 +89,7 @@ const CUSTOM_RECORDED_SOURCE = "browser-recorded-custom";
 const DEFAULT_CUSTOM_RECORDED_CATEGORY = "My Affirmations";
 const NEW_CUSTOM_CATEGORY_VALUE = "__new-custom-recording-category__";
 const METER_BAR_COUNT = 192;
-const METER_LEVEL_CEILING = 0.62;
+const METER_LEVEL_CEILING = 0.98;
 const RECORDER_AUDIO_CONSTRAINTS = {
   echoCancellation: { ideal: true },
   noiseSuppression: { ideal: true },
@@ -2288,12 +2288,16 @@ function hypnoticMeterLevel(index, time = 0, intensity = 0) {
   );
   const breath = 0.78 + Math.sin(time * 0.72) * 0.22;
   const floor = 0.065 + centerLift * 0.035;
-  const motion = standingWave * breath * (0.065 + intensity * 0.46);
+  const motion = standingWave * breath * (0.10 + intensity * 0.76);
   return clamp(floor + motion, 0.055, METER_LEVEL_CEILING);
 }
 
 function idleMeterLevel(index, time = 0) {
   return hypnoticMeterLevel(index, time, 0.18);
+}
+
+function meterDisplayLevel(level) {
+  return level <= 0.20 ? level : Math.pow(level, 0.62);
 }
 
 function renderAudioMeter() {
@@ -2305,7 +2309,7 @@ function renderAudioMeter() {
   const barsMarkup = meterLevels
     .map((level, index) => {
       const position = index / Math.max(METER_BAR_COUNT - 1, 1);
-      return `<span class="meter-bar" style="--level: ${level.toFixed(3)}; --tone: ${position.toFixed(3)}"></span>`;
+      return `<span class="meter-bar" style="--level: ${level.toFixed(3)}; --display-level: ${meterDisplayLevel(level).toFixed(3)}; --tone: ${position.toFixed(3)}"></span>`;
     })
     .join("");
   consoleMeter.innerHTML = barsMarkup;
@@ -2391,18 +2395,19 @@ function updateAudioMeter() {
       }
 
       const rms = Math.sqrt(sum / Math.max(sampleEnd - sampleStart, 1));
-      const intensity = clamp(liveEnergy * 10 + rms * 6, 0.14, 0.64);
-      const audioLift = clamp(Math.pow(rms * 6.5, 0.78) * 0.28, 0, 0.28);
+      const intensity = clamp(liveEnergy * 18.5 + rms * 12.2, 0.22, 1);
+      const audioLift = clamp(Math.pow(rms * 11.5, 0.64) * 0.86, 0, 0.90);
       nextLevel = clamp(hypnoticMeterLevel(index, time, intensity) + audioLift, 0.08, METER_LEVEL_CEILING);
     }
 
     const previousLevel = meterLevels[index] ?? nextLevel;
-    const smoothing = nextLevel > previousLevel ? 0.58 : 0.30;
+    const smoothing = nextLevel > previousLevel ? 0.92 : 0.40;
     const smoothedLevel = previousLevel + (nextLevel - previousLevel) * smoothing;
 
     meterLevels[index] = smoothedLevel;
     highestLevel = Math.max(highestLevel, smoothedLevel);
     bar.style.setProperty("--level", smoothedLevel.toFixed(3));
+    bar.style.setProperty("--display-level", meterDisplayLevel(smoothedLevel).toFixed(3));
   });
 
   consoleMeter?.style.setProperty("--meter-intensity", clamp(highestLevel, 0.12, 1).toFixed(3));
