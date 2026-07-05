@@ -406,13 +406,13 @@ button:focus-visible {
 
 .ui-mode-icon {
   grid-area: 1 / 1;
-  width: 18px;
-  height: 18px;
+  width: 19px;
+  height: 19px;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 2;
+  stroke-width: 2.25;
 }
 
 .ui-mode-icon-minimal,

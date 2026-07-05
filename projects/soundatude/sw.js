@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v83-focus-align";
+const CACHE_NAME = "sound-a-tude-v84-focus-arrows";
 const APP_SHELL = [
   "./",
   "./index.html",
