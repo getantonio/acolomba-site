@@ -2307,7 +2307,6 @@ function audioSampleLevel(sample) {
 function renderAudioMeter() {
   if (!consoleMeter) return;
 
-  consoleMeter.setAttribute("data-waveform-style", "classic");
   consoleMeter.style.setProperty("--meter-bars", METER_BAR_COUNT);
   meterLevels = Array.from({ length: METER_BAR_COUNT }, (_, index) => idleMeterLevel(index));
   const barsMarkup = meterLevels
