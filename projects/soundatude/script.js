@@ -11,6 +11,7 @@ const modeButtons = [...document.querySelectorAll(".mode-toggle button")];
 const voiceSelect = document.querySelector("#voiceSelect");
 const voiceStatus = document.querySelector("#voiceStatus");
 const voiceControl = document.querySelector(".voice-control");
+const uiModeToggle = document.querySelector("#uiModeToggle");
 const conversationSeek = document.querySelector("#conversationSeek");
 const conversationCurrentTime = document.querySelector("#conversationCurrentTime");
 const conversationDuration = document.querySelector("#conversationDuration");
@@ -77,6 +78,7 @@ const recorderPreviewAudio = new Audio();
 const PLAYLIST_STORAGE_KEY = "sound-a-tude-playlists-v2";
 const VOICE_STORAGE_KEY = "sound-a-tude-voice-v1";
 const PLAYBACK_STORAGE_KEY = "sound-a-tude-playback-v1";
+const UI_MODE_STORAGE_KEY = "sound-a-tude-ui-mode-v1";
 const LEGACY_RECORDER_STORAGE_KEYS = ["sound-a-tude-recorder-v1"];
 const RECORDER_STORAGE_KEY = "sound-a-tude-recorder-v2";
 const RECORDED_VOICE_DB_NAME = "sound-a-tude-recorded-voices";
@@ -926,6 +928,7 @@ let isPageSwiping = false;
 let repeatMode = "all";
 let shuffleEnabled = false;
 let pitchPreserved = true;
+let isMinimalUi = false;
 let previewingId = null;
 let audioContext = null;
 let analyser = null;
@@ -969,6 +972,34 @@ function escapeHTML(value) {
 
 function activeVoice() {
   return voiceOptions.find((voice) => voice.id === activeVoiceId) ?? voiceOptions[0];
+}
+
+function loadUiMode() {
+  try {
+    isMinimalUi = localStorage.getItem(UI_MODE_STORAGE_KEY) === "minimal";
+  } catch {
+    isMinimalUi = false;
+  }
+}
+
+function applyUiMode({ save = false } = {}) {
+  playerPanel.classList.toggle("is-minimal-ui", isMinimalUi);
+  uiModeToggle?.classList.toggle("is-active", isMinimalUi);
+  uiModeToggle?.setAttribute("aria-pressed", String(isMinimalUi));
+  uiModeToggle?.setAttribute("aria-label", isMinimalUi ? "Switch to classic UI" : "Switch to minimal UI");
+
+  if (!save) return;
+
+  try {
+    localStorage.setItem(UI_MODE_STORAGE_KEY, isMinimalUi ? "minimal" : "classic");
+  } catch {
+    // The UI style can still change for this session if storage is unavailable.
+  }
+}
+
+function toggleUiMode() {
+  isMinimalUi = !isMinimalUi;
+  applyUiMode({ save: true });
 }
 
 function baseOutputVolume() {
@@ -3299,6 +3330,7 @@ openPlaylistButton.addEventListener("click", () => goToPage(1));
 openPlayerButton.addEventListener("click", () => goToPage(0));
 openGuideButton?.addEventListener("click", () => goToPage(3));
 closeGuideButton?.addEventListener("click", () => goToPage(0));
+uiModeToggle?.addEventListener("click", toggleUiMode);
 pageRail.addEventListener("pointerdown", startPageSwipe);
 pageRail.addEventListener("pointermove", movePageSwipe);
 pageRail.addEventListener("pointerup", endPageSwipe);
@@ -3409,6 +3441,8 @@ renderAudioMeter();
 applyAudioLooping();
 updateQueueButtons();
 playerPanel.dataset.mode = currentMode;
+loadUiMode();
+applyUiMode();
 loadBrowserRecordedPhrases().catch(() => {
   syncBrowserRecordedVoiceOption();
 });

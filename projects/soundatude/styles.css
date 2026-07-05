@@ -114,6 +114,11 @@ button:focus-visible {
   padding: 14px 0 58px;
 }
 
+.player.is-minimal-ui {
+  gap: 10px;
+  padding-top: 12px;
+}
+
 .playlist-page {
   display: grid;
   grid-template-rows: auto auto auto minmax(0, 1fr);
@@ -299,13 +304,17 @@ button:focus-visible {
   box-shadow: inset 0 0 0 1px oklch(100% 0 0 / 0.025);
 }
 
-.voice-row {
+.player-control-row {
   width: min(100%, 318px);
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: start;
-  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 10px;
   align-self: start;
+}
+
+.voice-row {
+  min-width: 0;
 }
 
 .voice-control {
@@ -374,6 +383,47 @@ button:focus-visible {
   color: oklch(68% 0.035 72);
 }
 
+.ui-mode-toggle {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid oklch(38% 0.041 226 / 0.62);
+  border-radius: 999px;
+  background: var(--queue-control);
+  color: var(--queue-icon);
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 oklch(100% 0 0 / 0.035),
+    0 10px 24px oklch(0% 0 0 / 0.14);
+}
+
+.ui-mode-toggle:hover,
+.ui-mode-toggle.is-active {
+  color: var(--queue-icon-active);
+  background: var(--queue-active);
+}
+
+.ui-mode-icon {
+  grid-area: 1 / 1;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.ui-mode-icon-minimal,
+.ui-mode-toggle.is-active .ui-mode-icon-full {
+  display: none;
+}
+
+.ui-mode-toggle.is-active .ui-mode-icon-minimal {
+  display: block;
+}
+
 .now-console {
   width: min(100%, 318px);
   align-self: start;
@@ -386,6 +436,70 @@ button:focus-visible {
   box-shadow:
     inset 0 1px 0 oklch(100% 0 0 / 0.035),
     0 16px 24px oklch(0% 0 0 / 0.18);
+}
+
+.player.is-minimal-ui .brand-header {
+  opacity: 0.56;
+  transform: scale(0.92);
+}
+
+.player.is-minimal-ui .mode-toggle {
+  width: min(100%, 292px);
+  min-height: 40px;
+  background: transparent;
+  border-color: oklch(44% 0.04 228 / 0.26);
+}
+
+.player.is-minimal-ui .voice-control,
+.player.is-minimal-ui .ui-mode-toggle,
+.player.is-minimal-ui .pitch-toggle,
+.player.is-minimal-ui .tuning-step,
+.player.is-minimal-ui .queue-button {
+  background: oklch(9% 0.022 226 / 0.56);
+}
+
+.player.is-minimal-ui .now-console {
+  gap: 4px;
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.player.is-minimal-ui .console-meter {
+  height: 68px;
+  padding: 7px 4px;
+  background:
+    linear-gradient(0deg, oklch(56% 0.052 219 / calc(0.03 + var(--meter-intensity, 0.2) * 0.10)), transparent 64%),
+    transparent;
+  box-shadow: none;
+}
+
+.player.is-minimal-ui .loop-wheel {
+  height: 74px;
+  padding: 0 8px;
+}
+
+.player.is-minimal-ui .loop-wheel button {
+  min-height: 64px;
+  font-size: 1.2rem;
+}
+
+.player.is-minimal-ui .volume-control,
+.player.is-minimal-ui .playback-tuning {
+  opacity: 0.84;
+}
+
+.player.is-minimal-ui .transport-controls {
+  width: min(100%, 270px);
+  grid-template-columns: minmax(0, 1fr) 78px minmax(0, 1fr);
+}
+
+.player.is-minimal-ui .play-button {
+  width: 78px;
+  height: 78px;
+  background: transparent;
+  box-shadow: 0 14px 34px oklch(0% 0 0 / 0.22);
 }
 
 .console-meter {
@@ -434,6 +548,15 @@ button:focus-visible {
   content: "";
   opacity: calc(var(--word-tip-intensity, 0) * (0.25 + var(--level, 0.12) * 0.75));
   transition: opacity 90ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.player.is-minimal-ui .console-meter {
+  height: 68px;
+  padding: 7px 4px;
+  background:
+    linear-gradient(0deg, oklch(56% 0.052 219 / calc(0.03 + var(--meter-intensity, 0.2) * 0.10)), transparent 64%),
+    transparent;
+  box-shadow: none;
 }
 
 .loop-picker {

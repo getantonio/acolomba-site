@@ -9,7 +9,7 @@
     <link rel="canonical" href="https://acolomba.site/projects/soundatude/">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%23060607'/%3E%3Cpath d='M27 22v20l17-10z' fill='%23f2eee7'/%3E%3C/svg%3E">
-    <link rel="stylesheet" href="styles.css?v=primary-tip-cues-20260705">
+    <link rel="stylesheet" href="styles.css?v=minimal-ui-20260705">
   </head>
   <body>
     <main class="app-shell" aria-label="Sound-a-tude player">
@@ -49,11 +49,26 @@
           <button type="button" data-mode="conversation" aria-pressed="false">Conversation</button>
         </div>
 
-        <div class="voice-row">
-          <label class="voice-control" for="voiceSelect">
-            <span>Voice</span>
-            <select id="voiceSelect" aria-label="Choose voice"></select>
-          </label>
+        <div class="player-control-row">
+          <div class="voice-row">
+            <label class="voice-control" for="voiceSelect">
+              <span>Voice</span>
+              <select id="voiceSelect" aria-label="Choose voice"></select>
+            </label>
+          </div>
+
+          <button class="ui-mode-toggle" id="uiModeToggle" type="button" aria-label="Switch to minimal UI" aria-pressed="false">
+            <svg class="ui-mode-icon ui-mode-icon-full" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 6h14"></path>
+              <path d="M5 12h14"></path>
+              <path d="M5 18h14"></path>
+            </svg>
+            <svg class="ui-mode-icon ui-mode-icon-minimal" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 8h10"></path>
+              <path d="M9 12h6"></path>
+              <path d="M7 16h10"></path>
+            </svg>
+          </button>
         </div>
 
         <section class="now-console" aria-label="Now playing">
@@ -362,6 +377,6 @@
       </div>
     </main>
 
-        <script src="script.js?v=primary-tip-cues-20260705"></script>
+        <script src="script.js?v=minimal-ui-20260705"></script>
   </body>
 </html>
