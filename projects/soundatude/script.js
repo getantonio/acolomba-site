@@ -123,16 +123,16 @@ const EXAMPLE_CUSTOM_PHRASE_SETS = {
     title: "Quit Smoking",
     category: "Quit Smoking",
     phrases: [
-      "1. I choose clean air for my body.",
-      "2. I do not like the taste of cigarettes.",
-      "3. Each craving passes, and I can let it pass.",
-      "4. My breath feels better when I stay smoke-free.",
-      "5. I protect my health one choice at a time.",
-      "6. I can handle stress without smoking.",
-      "7. I am stronger than this old habit.",
-      "8. I like feeling clear, steady, and in control.",
-      "9. I choose freedom over another cigarette.",
-      "10. I can quit smoking one moment at a time.",
+      "1. I choose health and freedom.",
+      "2. My mind is clearer when my lungs can breathe freely.",
+      "3. I create good things without needing cigarettes.",
+      "4. I do not like the taste of cigarettes.",
+      "5. Each day smoke-free, my energy flows more naturally.",
+      "6. I set a positive example with every smoke-free choice.",
+      "7. My hands build my life, they do not need cigarettes.",
+      "8. I deserve to breathe easily and live without addiction.",
+      "9. I believe in myself, and I can keep going.",
+      "10. Every smoke-free day is a victory I can be proud of.",
     ].join("\n"),
   },
 };
@@ -622,10 +622,18 @@ function customRecordedCategoryTitles() {
 }
 
 function categoryTitlesForCustomRecorder() {
+  const activeCustomCategory = normalizeWhitespace(recorderCustomCategory);
+  const activeCategoryShouldStayVisible = (
+    activeCustomCategory
+    && activeCustomCategory !== NEW_CUSTOM_CATEGORY_VALUE
+    && activeCustomCategory !== DEFAULT_CUSTOM_RECORDED_CATEGORY
+    && !builtInMainCategories.some((category) => category.title === activeCustomCategory)
+  );
+
   return [
     DEFAULT_CUSTOM_RECORDED_CATEGORY,
     ...builtInMainCategories.map((category) => category.title),
-    ...Object.values(EXAMPLE_CUSTOM_PHRASE_SETS).map((example) => example.category),
+    ...(activeCategoryShouldStayVisible ? [activeCustomCategory] : []),
     ...customRecordedCategoryTitles(),
   ].filter((title, index, titles) => title && titles.indexOf(title) === index);
 }
@@ -1174,6 +1182,30 @@ function customRecordedChoicesForCategory(category = currentCustomRecorderCatego
   return customRecordedChoices.filter((choice) => choice.category === category);
 }
 
+function isBuiltInCustomRecorderCategory(category) {
+  return builtInMainCategories.some((mainCategory) => mainCategory.title === category);
+}
+
+function canDeleteCurrentCustomCategory() {
+  if (recorderMode !== "custom") return false;
+
+  const category = currentCustomRecorderCategory();
+  const hasSavedRecordings = customRecordedChoicesForCategory(category).length > 0;
+  if (hasSavedRecordings) return true;
+
+  return Boolean(
+    category
+    && category !== DEFAULT_CUSTOM_RECORDED_CATEGORY
+    && !isBuiltInCustomRecorderCategory(category)
+    && (
+      recorderCustomPhraseQueue.length > 0
+      || currentCustomPhraseText()
+      || normalizeWhitespace(recorderCustomCategory) === category
+      || normalizeWhitespace(recorderCustomNewCategory) === category
+    )
+  );
+}
+
 function currentCustomRecorderCategory() {
   const selectedCategory = recorderCustomCategorySelect?.value || recorderCustomCategory;
   if (selectedCategory === NEW_CUSTOM_CATEGORY_VALUE) {
@@ -1555,7 +1587,7 @@ function renderVoiceRecorder() {
     clearPhraseQueueButton.disabled = !hasCustomQueue && !currentCustomPhraseText();
   }
   if (deleteCustomCategoryButton) {
-    deleteCustomCategoryButton.disabled = customRecordedChoicesForCategory().length === 0;
+    deleteCustomCategoryButton.disabled = !canDeleteCurrentCustomCategory();
   }
   recordPhraseButton.classList.toggle("is-recording", isRecordingPhrase);
   recordPhraseButton.setAttribute("aria-label", isRecordingPhrase ? "Stop recording" : (recorderMode === "custom" ? "Record custom phrase" : "Record phrase"));
@@ -1846,12 +1878,19 @@ async function deleteCurrentCustomCategory() {
 
   const category = currentCustomRecorderCategory();
   const choicesToDelete = customRecordedChoicesForCategory(category);
+  const hasSavedRecordings = choicesToDelete.length > 0;
   if (!choicesToDelete.length) {
-    setRecorderMessage(`No saved audio in ${category}.`);
-    return;
+    if (!canDeleteCurrentCustomCategory()) {
+      setRecorderMessage(`No saved audio in ${category}.`);
+      return;
+    }
   }
 
-  const shouldDelete = window.confirm(`Delete ${choicesToDelete.length} saved recording${choicesToDelete.length === 1 ? "" : "s"} in ${category}?`);
+  const shouldDelete = window.confirm(
+    hasSavedRecordings
+      ? `Delete ${choicesToDelete.length} saved recording${choicesToDelete.length === 1 ? "" : "s"} in ${category}?`
+      : `Remove ${category} from the custom recorder?`
+  );
   if (!shouldDelete) return;
 
   try {
@@ -1863,6 +1902,12 @@ async function deleteCurrentCustomCategory() {
       recorderCustomNewCategory = "";
     }
     if (recorderCustomLastPhraseId && choicesToDelete.some((choice) => choice.phraseId === recorderCustomLastPhraseId)) {
+      recorderCustomLastPhraseId = null;
+    }
+    if (!hasSavedRecordings || recorderCustomCategory === DEFAULT_CUSTOM_RECORDED_CATEGORY) {
+      recorderCustomPhraseQueue = [];
+      recorderCustomQueueIndex = 0;
+      recorderCustomPhrase = "";
       recorderCustomLastPhraseId = null;
     }
     saveRecorderState();
