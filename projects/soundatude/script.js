@@ -67,11 +67,13 @@ const selectAllButton = document.querySelector("#selectAllButton");
 const randomCountInput = document.querySelector("#randomCountInput");
 const randomSelectionButton = document.querySelector("#randomSelectionButton");
 const pageRail = document.querySelector(".page-rail");
-const pageDots = [...document.querySelectorAll(".page-dots span")];
+const pageDots = [...document.querySelectorAll(".page-dots button")];
 const openPlaylistButton = document.querySelector("#openPlaylistButton");
 const openPlayerButton = document.querySelector("#openPlayerButton");
 const openGuideButton = document.querySelector("#openGuideButton");
 const closeGuideButton = document.querySelector("#closeGuideButton");
+const closeSettingsButton = document.querySelector("#closeSettingsButton");
+const waveformStyleButtons = [...document.querySelectorAll("[data-waveform-style-choice]")];
 const consoleMeter = document.querySelector(".console-meter");
 const previewAudio = new Audio();
 const recorderPreviewAudio = new Audio();
@@ -79,6 +81,7 @@ const PLAYLIST_STORAGE_KEY = "sound-a-tude-playlists-v2";
 const VOICE_STORAGE_KEY = "sound-a-tude-voice-v1";
 const PLAYBACK_STORAGE_KEY = "sound-a-tude-playback-v1";
 const UI_MODE_STORAGE_KEY = "sound-a-tude-ui-mode-v1";
+const WAVEFORM_STORAGE_KEY = "sound-a-tude-waveform-style-v1";
 const LEGACY_RECORDER_STORAGE_KEYS = ["sound-a-tude-recorder-v1"];
 const RECORDER_STORAGE_KEY = "sound-a-tude-recorder-v2";
 const RECORDED_VOICE_DB_NAME = "sound-a-tude-recorded-voices";
@@ -89,6 +92,21 @@ const CUSTOM_RECORDED_SOURCE = "browser-recorded-custom";
 const DEFAULT_CUSTOM_RECORDED_CATEGORY = "My Affirmations";
 const NEW_CUSTOM_CATEGORY_VALUE = "__new-custom-recording-category__";
 const METER_BAR_COUNT = 96;
+const WAVEFORM_STYLE_OPTIONS = [
+  { id: "aurora", spark: "#00ffff" },
+  { id: "thread", spark: "#ffff00" },
+  { id: "field", spark: "#ff00ff" },
+  { id: "sparks", spark: "#ffffff" },
+  { id: "halo", spark: "#0000ff" },
+];
+const WAVEFORM_STYLES = new Set(WAVEFORM_STYLE_OPTIONS.map(({ id }) => id));
+let activeWaveformStyle = "aurora";
+let waveformVector = null;
+let waveformFillPath = null;
+let waveformMainPath = null;
+let waveformAltPath = null;
+let waveformThirdPath = null;
+let waveformHotPoints = [];
 const RECORDER_AUDIO_CONSTRAINTS = {
   echoCancellation: { ideal: true },
   noiseSuppression: { ideal: true },
@@ -2298,15 +2316,140 @@ function idleMeterLevel(index, time = 0) {
 function renderAudioMeter() {
   if (!consoleMeter) return;
 
+  applyWaveformStyle(preferredWaveformStyle());
   consoleMeter.style.setProperty("--meter-bars", METER_BAR_COUNT);
   meterLevels = Array.from({ length: METER_BAR_COUNT }, (_, index) => idleMeterLevel(index));
-  consoleMeter.innerHTML = meterLevels
+  const barsMarkup = meterLevels
     .map((level, index) => {
       const position = index / Math.max(METER_BAR_COUNT - 1, 1);
-      return `<span style="--level: ${level.toFixed(3)}; --tone: ${position.toFixed(3)}"></span>`;
+      const spark = WAVEFORM_STYLE_OPTIONS[index % WAVEFORM_STYLE_OPTIONS.length].spark;
+      return `<span class="meter-bar" style="--level: ${level.toFixed(3)}; --tone: ${position.toFixed(3)}; --spark-color: ${spark}"></span>`;
     })
     .join("");
-  meterBars = [...consoleMeter.querySelectorAll("span")];
+  consoleMeter.innerHTML = `
+    ${barsMarkup}
+    <svg class="waveform-vector" viewBox="0 0 320 108" preserveAspectRatio="none" aria-hidden="true">
+      <path class="wave-fill"></path>
+      <path class="wave-line wave-main"></path>
+      <path class="wave-line wave-alt"></path>
+      <path class="wave-line wave-third"></path>
+    </svg>
+    <span class="halo-ring halo-ring-one" aria-hidden="true"></span>
+    <span class="halo-ring halo-ring-two" aria-hidden="true"></span>
+    <span class="halo-ring halo-ring-three" aria-hidden="true"></span>
+    <span class="wave-hot wave-hot-a" aria-hidden="true"></span>
+    <span class="wave-hot wave-hot-b" aria-hidden="true"></span>
+    <span class="wave-hot wave-hot-c" aria-hidden="true"></span>
+  `;
+  meterBars = [...consoleMeter.querySelectorAll(".meter-bar, .console-meter > span:not(.halo-ring):not(.wave-hot)")];
+  waveformVector = consoleMeter.querySelector(".waveform-vector");
+  waveformFillPath = consoleMeter.querySelector(".wave-fill");
+  waveformMainPath = consoleMeter.querySelector(".wave-main");
+  waveformAltPath = consoleMeter.querySelector(".wave-alt");
+  waveformThirdPath = consoleMeter.querySelector(".wave-third");
+  waveformHotPoints = [...consoleMeter.querySelectorAll(".wave-hot")];
+  updateVectorWaveform(performance.now() / 1000);
+}
+
+function preferredWaveformStyle() {
+  try {
+    const requestedStyle = new URLSearchParams(window.location.search).get("waveform");
+    if (WAVEFORM_STYLES.has(requestedStyle)) return requestedStyle;
+  } catch {
+    // Ignore malformed or unavailable URL state.
+  }
+
+  try {
+    const savedStyle = localStorage.getItem(WAVEFORM_STORAGE_KEY);
+    if (WAVEFORM_STYLES.has(savedStyle)) return savedStyle;
+  } catch {
+    // Private browsing or blocked storage can fail silently here.
+  }
+
+  return activeWaveformStyle;
+}
+
+function syncWaveformStyleButtons() {
+  waveformStyleButtons.forEach((button) => {
+    const isSelected = button.dataset.waveformStyleChoice === activeWaveformStyle;
+    button.classList.toggle("is-selected", isSelected);
+    button.setAttribute("aria-pressed", String(isSelected));
+  });
+}
+
+function applyWaveformStyle(style, { save = false } = {}) {
+  activeWaveformStyle = WAVEFORM_STYLES.has(style) ? style : "aurora";
+  consoleMeter?.setAttribute("data-waveform-style", activeWaveformStyle);
+  syncWaveformStyleButtons();
+
+  if (save) {
+    try {
+      localStorage.setItem(WAVEFORM_STORAGE_KEY, activeWaveformStyle);
+    } catch {
+      // Storage is a preference nicety; the live selection still applies.
+    }
+  }
+}
+
+window.setSoundATudeWaveformStyle = applyWaveformStyle;
+
+function waveformLinePath({
+  time = 0,
+  baseline = 58,
+  amplitude = 46,
+  phase = 0,
+  step = 3,
+  polarity = 1,
+} = {}) {
+  const pointCount = Math.ceil(METER_BAR_COUNT / step);
+  const points = [];
+  for (let index = 0; index < METER_BAR_COUNT; index += step) {
+    const x = (index / Math.max(METER_BAR_COUNT - 1, 1)) * 320;
+    const level = meterLevels[index] ?? idleMeterLevel(index, time);
+    const drift = Math.sin(index * 0.19 + time * 1.4 + phase) * 5;
+    const y = baseline - (level * amplitude * polarity) + drift;
+    points.push(`${x.toFixed(1)} ${clamp(y, 8, 100).toFixed(1)}`);
+  }
+
+  if (points.length < pointCount) {
+    points.push(`320 ${baseline.toFixed(1)}`);
+  }
+
+  return `M ${points.join(" L ")}`;
+}
+
+function updateWaveHotPoints(time) {
+  if (!waveformHotPoints.length) return;
+
+  const color = activeCueWord ? cueWordColor(activeCueWord) : "#ffffff";
+  waveformHotPoints.forEach((point, index) => {
+    const offset = (time * 0.08 + index * 0.31) % 1;
+    const sampleIndex = Math.min(METER_BAR_COUNT - 1, Math.round(offset * (METER_BAR_COUNT - 1)));
+    const level = meterLevels[sampleIndex] ?? 0.2;
+    point.style.setProperty("--hot-x", `${Math.round(offset * 100)}%`);
+    point.style.setProperty("--hot-y", `${Math.round(78 - level * 54)}%`);
+    point.style.setProperty("--hot-color", color);
+  });
+}
+
+function updateVectorWaveform(time = 0) {
+  if (!waveformVector) return;
+
+  const mainPath = waveformLinePath({
+    time,
+    baseline: activeWaveformStyle === "thread" ? 58 : 76,
+    amplitude: activeWaveformStyle === "thread" ? 30 : 52,
+    phase: 0,
+    step: activeWaveformStyle === "thread" ? 2 : 3,
+  });
+  const altPath = waveformLinePath({ time, baseline: 55, amplitude: 33, phase: 1.7, step: 4, polarity: 0.82 });
+  const thirdPath = waveformLinePath({ time, baseline: 82, amplitude: 28, phase: 3.2, step: 4, polarity: -0.62 });
+
+  waveformMainPath?.setAttribute("d", mainPath);
+  waveformAltPath?.setAttribute("d", altPath);
+  waveformThirdPath?.setAttribute("d", thirdPath);
+  waveformFillPath?.setAttribute("d", `${mainPath} L 320 108 L 0 108 Z`);
+  updateWaveHotPoints(time);
 }
 
 function clamp(value, min, max) {
@@ -2405,6 +2548,7 @@ function updateAudioMeter() {
   cueWordIntensity = activeCueWord ? cueWordIntensity * 0.90 : cueWordIntensity * 0.82;
   if (cueWordIntensity < 0.015) cueWordIntensity = 0;
   consoleMeter?.style.setProperty("--word-tip-intensity", cueWordIntensity.toFixed(3));
+  updateVectorWaveform(time);
 
   if (hasLiveAudio || highestLevel > 0.18 || cueWordIntensity > 0) {
     meterFrame = requestAnimationFrame(updateAudioMeter);
@@ -2458,7 +2602,9 @@ function toggleShuffle() {
 
 function updatePageDots() {
   pageDots.forEach((dot, index) => {
-    dot.classList.toggle("is-active", index === activePageIndex);
+    const isActive = index === activePageIndex;
+    dot.classList.toggle("is-active", isActive);
+    dot.setAttribute("aria-current", isActive ? "page" : "false");
   });
 }
 
@@ -2472,7 +2618,7 @@ function goToPage(pageIndex) {
 
 function isPageSwipeIgnored(target) {
   return Boolean(target.closest(
-    "button, input, select, textarea, label, .loop-wheel, .playlist-editor, .guide-sheet, .voice-recorder-sheet"
+    "button, input, select, textarea, label, .loop-wheel, .playlist-editor, .guide-sheet, .settings-sheet, .voice-recorder-sheet"
   ));
 }
 
@@ -3332,7 +3478,17 @@ openPlaylistButton.addEventListener("click", () => goToPage(1));
 openPlayerButton.addEventListener("click", () => goToPage(0));
 openGuideButton?.addEventListener("click", () => goToPage(3));
 closeGuideButton?.addEventListener("click", () => goToPage(0));
+closeSettingsButton?.addEventListener("click", () => goToPage(0));
 uiModeToggle?.addEventListener("click", toggleUiMode);
+pageDots.forEach((dot, index) => {
+  dot.addEventListener("click", () => goToPage(index));
+});
+waveformStyleButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    applyWaveformStyle(button.dataset.waveformStyleChoice, { save: true });
+    updateVectorWaveform(performance.now() / 1000);
+  });
+});
 pageRail.addEventListener("pointerdown", startPageSwipe);
 pageRail.addEventListener("pointermove", movePageSwipe);
 pageRail.addEventListener("pointerup", endPageSwipe);

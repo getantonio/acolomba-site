@@ -9,7 +9,7 @@
     <link rel="canonical" href="https://acolomba.site/projects/soundatude/">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%23060607'/%3E%3Cpath d='M27 22v20l17-10z' fill='%23f2eee7'/%3E%3C/svg%3E">
-    <link rel="stylesheet" href="styles.css?v=logo-focus-20260705">
+    <link rel="stylesheet" href="styles.css?v=settings-waveforms-20260705">
   </head>
   <body>
     <main class="app-shell" aria-label="Sound-a-tude player">
@@ -369,16 +369,66 @@
             <p class="guide-note">Use Sound-a-tude as a mindset practice, not medical care. Keep the volume safe and skip background playback anywhere you need full attention.</p>
           </article>
         </section>
+
+        <section class="settings-page app-page" aria-labelledby="settingsTitle">
+          <button class="page-switch settings-player-switch" id="closeSettingsButton" type="button" aria-label="Back to player">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"></path>
+            </svg>
+          </button>
+
+          <div class="brand-header compact" aria-label="Sound-a-tude settings">
+            <span class="brand-line" aria-hidden="true"></span>
+            <p class="brand">Settings</p>
+            <span class="brand-line" aria-hidden="true"></span>
+          </div>
+
+          <article class="settings-sheet">
+            <header class="settings-head">
+              <p>Sound-a-tude</p>
+              <h1 id="settingsTitle">Waveform Style</h1>
+            </header>
+
+            <div class="waveform-choice-grid" id="waveformStyleChoices" aria-label="Choose waveform style">
+              <button class="waveform-choice is-selected" type="button" data-waveform-style-choice="aurora" aria-pressed="true">
+                <span class="waveform-choice-preview preview-aurora" aria-hidden="true"></span>
+                <strong>Aurora Ribbon</strong>
+                <em>soft flowing color</em>
+              </button>
+              <button class="waveform-choice" type="button" data-waveform-style-choice="thread" aria-pressed="false">
+                <span class="waveform-choice-preview preview-thread" aria-hidden="true"></span>
+                <strong>Pulse Thread</strong>
+                <em>single hypnotic line</em>
+              </button>
+              <button class="waveform-choice" type="button" data-waveform-style-choice="field" aria-pressed="false">
+                <span class="waveform-choice-preview preview-field" aria-hidden="true"></span>
+                <strong>Magnetic Field</strong>
+                <em>layered calm waves</em>
+              </button>
+              <button class="waveform-choice" type="button" data-waveform-style-choice="sparks" aria-pressed="false">
+                <span class="waveform-choice-preview preview-sparks" aria-hidden="true"></span>
+                <strong>Primary Sparks</strong>
+                <em>RGB + CMY energy</em>
+              </button>
+              <button class="waveform-choice" type="button" data-waveform-style-choice="halo" aria-pressed="false">
+                <span class="waveform-choice-preview preview-halo" aria-hidden="true"></span>
+                <strong>Sonic Halo</strong>
+                <em>breathing rings</em>
+              </button>
+            </div>
+          </article>
+        </section>
       </div>
 
-      <div class="page-dots" aria-hidden="true">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+      <div class="page-dots" aria-label="App pages">
+        <button type="button" aria-label="Player page"></button>
+        <button type="button" aria-label="Playlist page"></button>
+        <button type="button" aria-label="Recorder page"></button>
+        <button type="button" aria-label="Guide page"></button>
+        <button type="button" aria-label="Settings page"></button>
       </div>
     </main>
 
-        <script src="script.js?v=logo-focus-20260705"></script>
+        <script src="script.js?v=settings-waveforms-20260705"></script>
   </body>
 </html>
