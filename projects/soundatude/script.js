@@ -88,6 +88,7 @@ const DEFAULT_CUSTOM_RECORDED_CATEGORY = "My Affirmations";
 const NEW_CUSTOM_CATEGORY_VALUE = "__new-custom-recording-category__";
 const METER_BAR_COUNT = 192;
 const METER_LEVEL_CEILING = 0.98;
+const METER_VISUAL_AMPLITUDE = 0.75;
 const RECORDER_AUDIO_CONSTRAINTS = {
   echoCancellation: { ideal: true },
   noiseSuppression: { ideal: true },
@@ -2349,7 +2350,7 @@ function meterMiddleVariation(index, time = 0, level = 0) {
 function meterDisplayLevel(level, index = 0, time = 0) {
   const variedLevel = level * meterMiddleVariation(index, time, level);
   const edgeEnvelope = meterEdgeEnvelope(index);
-  return clamp(0.020 + Math.max(variedLevel - 0.020, 0) * edgeEnvelope, 0.020, METER_LEVEL_CEILING);
+  return clamp(0.020 + Math.max(variedLevel - 0.020, 0) * edgeEnvelope * METER_VISUAL_AMPLITUDE, 0.020, METER_LEVEL_CEILING);
 }
 
 function meterMouthWeight(index) {

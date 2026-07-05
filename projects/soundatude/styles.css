@@ -1198,7 +1198,7 @@ button:focus-visible {
   border: 1px solid oklch(20% 0.026 226 / 0.82);
   border-radius: 50%;
   background:
-    radial-gradient(ellipse 62% 30% at 50% 9%, oklch(100% 0 0 / 0.060), transparent 58%),
+    linear-gradient(180deg, oklch(100% 0 0 / 0.105) 0 1px, transparent 1px 35%, oklch(0% 0 0 / 0.16) 36% 100%),
     linear-gradient(180deg, oklch(18% 0.030 226 / 0.98), oklch(9% 0.018 226 / 0.98) 56%, oklch(4% 0.010 226 / 0.98));
   color: oklch(76% 0.053 90 / 0.92);
   font-size: 0.86rem;
@@ -1233,29 +1233,28 @@ button:focus-visible {
   grid-template-columns: 1fr;
   align-items: center;
   justify-items: center;
-  gap: 7px;
+  gap: 8px;
   align-self: center;
 }
 
-.pitch-row {
-  width: 100%;
+.tuning-summary-row {
+  width: min(100%, 210px);
   min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 18px;
 }
 
 .tuning-control {
   width: min(100%, 292px);
-  min-height: 68px;
+  min-height: 44px;
   display: grid;
   grid-template-columns: 44px minmax(0, 156px) 44px;
-  grid-template-areas:
-    "readout readout readout"
-    "down slider up";
+  grid-template-areas: "down slider up";
   align-items: center;
   justify-content: center;
-  gap: 4px 16px;
+  gap: 16px;
   padding: 0;
   color: var(--muted);
   font-size: 0.64rem;
@@ -1268,7 +1267,6 @@ button:focus-visible {
 }
 
 .tuning-readout {
-  grid-area: readout;
   min-height: 18px;
   display: flex;
   align-items: baseline;
@@ -1350,7 +1348,7 @@ button:focus-visible {
   border: 1px solid oklch(20% 0.026 226 / 0.78);
   border-radius: 999px;
   background:
-    radial-gradient(ellipse 64% 32% at 50% 10%, oklch(100% 0 0 / 0.052), transparent 60%),
+    linear-gradient(180deg, oklch(100% 0 0 / 0.092) 0 1px, transparent 1px 36%, oklch(0% 0 0 / 0.14) 37% 100%),
     linear-gradient(180deg, oklch(18% 0.030 226 / 0.96), oklch(8% 0.016 226 / 0.96) 62%, oklch(4% 0.010 226 / 0.96));
   color: var(--muted);
   cursor: pointer;
@@ -1372,7 +1370,7 @@ button:focus-visible {
 
 .pitch-toggle.is-active {
   background:
-    radial-gradient(ellipse 64% 32% at 50% 10%, oklch(100% 0 0 / 0.058), transparent 60%),
+    linear-gradient(180deg, oklch(100% 0 0 / 0.102) 0 1px, transparent 1px 36%, oklch(0% 0 0 / 0.15) 37% 100%),
     linear-gradient(180deg, oklch(20% 0.034 226 / 0.96), oklch(9% 0.018 226 / 0.96) 62%, oklch(4% 0.010 226 / 0.96));
 }
 
@@ -1420,7 +1418,7 @@ button:focus-visible {
   border: 1px solid oklch(22% 0.030 226 / 0.86);
   border-radius: 50%;
   background:
-    radial-gradient(ellipse 62% 30% at 50% 9%, oklch(100% 0 0 / 0.052), transparent 58%),
+    linear-gradient(180deg, oklch(100% 0 0 / 0.096) 0 1px, transparent 1px 35%, oklch(0% 0 0 / 0.16) 36% 100%),
     linear-gradient(180deg, oklch(18% 0.030 226 / 0.98), oklch(8% 0.018 226 / 0.98) 58%, oklch(4% 0.010 226 / 0.98));
   color: var(--queue-icon);
   cursor: pointer;
@@ -1443,7 +1441,7 @@ button:focus-visible {
 .queue-button.is-active {
   border-color: oklch(31% 0.038 226 / 0.88);
   background:
-    radial-gradient(ellipse 62% 30% at 50% 9%, oklch(100% 0 0 / 0.060), transparent 58%),
+    linear-gradient(180deg, oklch(100% 0 0 / 0.110) 0 1px, transparent 1px 35%, oklch(0% 0 0 / 0.17) 36% 100%),
     linear-gradient(180deg, oklch(22% 0.040 226 / 0.98), oklch(10% 0.024 226 / 0.98) 58%, oklch(4% 0.010 226 / 0.98));
   color: var(--queue-icon-active);
 }
@@ -1492,7 +1490,7 @@ button:focus-visible {
   border: 1px solid var(--button-border);
   border-radius: 50%;
   background:
-    radial-gradient(ellipse 62% 30% at 50% 9%, oklch(100% 0 0 / 0.060), transparent 58%),
+    linear-gradient(180deg, oklch(100% 0 0 / 0.105) 0 1px, transparent 1px 35%, oklch(0% 0 0 / 0.16) 36% 100%),
     linear-gradient(180deg, oklch(21% 0.038 226), oklch(9% 0.020 226) 58%, oklch(4% 0.010 226));
   color: var(--button-icon);
   cursor: pointer;
@@ -1512,7 +1510,7 @@ button:focus-visible {
 
 .play-button.is-playing {
   background:
-    radial-gradient(ellipse 62% 30% at 50% 9%, oklch(100% 0 0 / 0.056), transparent 58%),
+    linear-gradient(180deg, oklch(100% 0 0 / 0.098) 0 1px, transparent 1px 35%, oklch(0% 0 0 / 0.16) 36% 100%),
     linear-gradient(180deg, oklch(21% 0.038 226), oklch(9% 0.020 226) 58%, oklch(4% 0.010 226));
   color: var(--stop-icon);
 }
@@ -2130,7 +2128,7 @@ button:focus-visible {
   .playback-tuning {
     width: min(100%, 292px);
     grid-template-columns: 1fr;
-    gap: 7px;
+    gap: 8px;
   }
 
   .volume-control {
@@ -2206,7 +2204,7 @@ button:focus-visible {
 
   .tuning-control {
     grid-template-columns: 44px minmax(0, 150px) 44px;
-    gap: 4px 14px;
+    gap: 14px;
     padding: 0;
   }
 
