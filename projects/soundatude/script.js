@@ -2552,11 +2552,41 @@ function updateAudioMeter() {
   });
 
   if (hasLiveAudio) {
+    const audioDrivenLevels = [...nextLevels];
+    const travelOffset = ((audio.currentTime * 0.92 + time * 0.055) % 1) * METER_BAR_COUNT;
+
     for (let index = 0; index < Math.floor(METER_BAR_COUNT / 2); index += 1) {
       const mirrorIndex = METER_BAR_COUNT - 1 - index;
       const balancedLevel = (nextLevels[index] + nextLevels[mirrorIndex]) * 0.5;
       nextLevels[index] = balancedLevel;
       nextLevels[mirrorIndex] = balancedLevel;
+    }
+
+    for (let index = 0; index < METER_BAR_COUNT; index += 1) {
+      const sourceIndex = (index - travelOffset + METER_BAR_COUNT) % METER_BAR_COUNT;
+      const sourceFloor = Math.floor(sourceIndex);
+      const sourceBlend = sourceIndex - sourceFloor;
+      const sourceA = audioDrivenLevels[sourceFloor % METER_BAR_COUNT];
+      const sourceB = audioDrivenLevels[(sourceFloor + 1) % METER_BAR_COUNT];
+      const sourceTrailing = audioDrivenLevels[(sourceFloor - 2 + METER_BAR_COUNT) % METER_BAR_COUNT];
+      const travelingLevel = sourceA * (1 - sourceBlend) + sourceB * sourceBlend;
+      const position = index / Math.max(METER_BAR_COUNT - 1, 1);
+      const centerDistance = Math.abs(position - 0.5) * 2;
+      const travelGate = Math.pow(Math.max(1 - centerDistance * 0.72, 0), 0.38);
+      const travelMix = clamp(0.22 + travelGate * 0.42 + meterEnergyPulse * 0.16, 0.22, 0.72);
+      const travelingDetail = travelingLevel * 0.76 + sourceTrailing * 0.24;
+      nextLevels[index] = nextLevels[index] * (1 - travelMix) + travelingDetail * travelMix;
+    }
+
+    const halfPoint = Math.floor(METER_BAR_COUNT / 2);
+    const leftTotal = nextLevels.slice(0, halfPoint).reduce((sum, level) => sum + level, 0);
+    const rightTotal = nextLevels.slice(halfPoint).reduce((sum, level) => sum + level, 0);
+    const balancedHalfTotal = (leftTotal + rightTotal) * 0.5;
+    const leftGain = leftTotal > 0 ? clamp(balancedHalfTotal / leftTotal, 0.88, 1.12) : 1;
+    const rightGain = rightTotal > 0 ? clamp(balancedHalfTotal / rightTotal, 0.88, 1.12) : 1;
+
+    for (let index = 0; index < METER_BAR_COUNT; index += 1) {
+      nextLevels[index] *= index < halfPoint ? leftGain : rightGain;
     }
   }
 
@@ -2579,10 +2609,18 @@ function updateAudioMeter() {
     const middleLift = middleBand
       * (Math.sin(time * 12.8 + index * 0.67) * 0.024 + Math.sin(time * 8.6 - index * 1.11) * 0.017)
       * (hasLiveAudio ? (0.90 + meterEnergyPulse * 2.20) : 0.92);
+    const rightwardFlow = hasLiveAudio
+      ? middleBand
+        * (
+          Math.sin((position - time * 0.82) * Math.PI * 7.2) * 0.027
+          + Math.sin((position - time * 1.28) * Math.PI * 12.6 + 0.8) * 0.014
+        )
+        * (0.68 + meterEnergyPulse * 2.10)
+      : 0;
     const restlessMotion = hasLiveAudio
       ? idleMeterLevel(index, time) * (0.200 + meterEnergyPulse * 0.090)
       : 0;
-    const nextLevel = clamp(shapedLevel + middleLift + restlessMotion, 0.125, METER_LEVEL_CEILING);
+    const nextLevel = clamp(shapedLevel + middleLift + rightwardFlow + restlessMotion, 0.125, METER_LEVEL_CEILING);
     const smoothedLevel = nextLevel;
     const visualLevel = meterDisplayLevel(smoothedLevel, index, time);
 
