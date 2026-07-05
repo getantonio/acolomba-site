@@ -9,7 +9,7 @@
     <link rel="canonical" href="https://acolomba.site/projects/soundatude/">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%23060607'/%3E%3Cpath d='M27 22v20l17-10z' fill='%23f2eee7'/%3E%3C/svg%3E">
-    <link rel="stylesheet" href="styles.css?v=single-original-waveform-20260705">
+    <link rel="stylesheet" href="styles.css?v=voice-hue-motion-20260705-v2">
   </head>
   <body>
     <main class="app-shell" aria-label="Sound-a-tude player">
@@ -56,22 +56,6 @@
               <select id="voiceSelect" aria-label="Choose voice"></select>
             </label>
           </div>
-
-          <button class="ui-mode-toggle" id="uiModeToggle" type="button" aria-label="Switch to focus UI" aria-pressed="false">
-            <svg class="ui-mode-icon ui-mode-icon-full" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 4l6 6"></path>
-              <path d="M10 4v6H4"></path>
-              <path d="M20 20l-6-6"></path>
-              <path d="M14 20v-6h6"></path>
-            </svg>
-            <svg class="ui-mode-icon ui-mode-icon-minimal" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M10 10L4 4"></path>
-              <path d="M4 10V4h6"></path>
-              <path d="M14 14l6 6"></path>
-              <path d="M20 14v6h-6"></path>
-            </svg>
-          </button>
-
         </div>
 
         <section class="now-console" aria-label="Now playing">
@@ -127,10 +111,12 @@
             <button class="tuning-step" id="speedUpButton" type="button" aria-label="Speed up">+</button>
           </div>
 
-          <button class="pitch-toggle is-active" id="pitchToggle" type="button" aria-label="Pitch steady" aria-pressed="true">
-            <span>Pitch</span>
-            <strong id="pitchValue">Steady</strong>
-          </button>
+          <div class="pitch-row">
+            <button class="pitch-toggle is-active" id="pitchToggle" type="button" aria-label="Pitch steady" aria-pressed="true">
+              <span>Pitch</span>
+              <strong id="pitchValue">Steady</strong>
+            </button>
+          </div>
         </div>
 
         <div class="transport-controls" aria-label="Playback options">
@@ -381,6 +367,6 @@
       </div>
     </main>
 
-        <script src="script.js?v=single-original-waveform-20260705"></script>
+        <script src="script.js?v=voice-hue-motion-20260705-v2"></script>
   </body>
 </html>

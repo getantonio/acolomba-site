@@ -11,7 +11,6 @@ const modeButtons = [...document.querySelectorAll(".mode-toggle button")];
 const voiceSelect = document.querySelector("#voiceSelect");
 const voiceStatus = document.querySelector("#voiceStatus");
 const voiceControl = document.querySelector(".voice-control");
-const uiModeToggle = document.querySelector("#uiModeToggle");
 const conversationSeek = document.querySelector("#conversationSeek");
 const conversationCurrentTime = document.querySelector("#conversationCurrentTime");
 const conversationDuration = document.querySelector("#conversationDuration");
@@ -78,7 +77,6 @@ const recorderPreviewAudio = new Audio();
 const PLAYLIST_STORAGE_KEY = "sound-a-tude-playlists-v2";
 const VOICE_STORAGE_KEY = "sound-a-tude-voice-v1";
 const PLAYBACK_STORAGE_KEY = "sound-a-tude-playback-v1";
-const UI_MODE_STORAGE_KEY = "sound-a-tude-ui-mode-v1";
 const LEGACY_RECORDER_STORAGE_KEYS = ["sound-a-tude-recorder-v1"];
 const RECORDER_STORAGE_KEY = "sound-a-tude-recorder-v2";
 const RECORDED_VOICE_DB_NAME = "sound-a-tude-recorded-voices";
@@ -931,7 +929,6 @@ let isPageSwiping = false;
 let repeatMode = "all";
 let shuffleEnabled = false;
 let pitchPreserved = true;
-let isMinimalUi = false;
 let previewingId = null;
 let audioContext = null;
 let analyser = null;
@@ -977,32 +974,17 @@ function activeVoice() {
   return voiceOptions.find((voice) => voice.id === activeVoiceId) ?? voiceOptions[0];
 }
 
-function loadUiMode() {
-  try {
-    isMinimalUi = localStorage.getItem(UI_MODE_STORAGE_KEY) === "minimal";
-  } catch {
-    isMinimalUi = false;
-  }
+function voiceWaveformHue(voice = activeVoice()) {
+  if (voice?.group === "Male" || voice?.sourceVoiceId?.startsWith("am_")) return 225;
+  return 275;
 }
 
-function applyUiMode({ save = false } = {}) {
-  playerPanel.classList.toggle("is-minimal-ui", isMinimalUi);
-  uiModeToggle?.classList.toggle("is-active", isMinimalUi);
-  uiModeToggle?.setAttribute("aria-pressed", String(isMinimalUi));
-  uiModeToggle?.setAttribute("aria-label", isMinimalUi ? "Switch to classic UI" : "Switch to focus UI");
-
-  if (!save) return;
-
-  try {
-    localStorage.setItem(UI_MODE_STORAGE_KEY, isMinimalUi ? "minimal" : "classic");
-  } catch {
-    // The UI style can still change for this session if storage is unavailable.
-  }
-}
-
-function toggleUiMode() {
-  isMinimalUi = !isMinimalUi;
-  applyUiMode({ save: true });
+function updateWaveformHue() {
+  const hue = voiceWaveformHue();
+  document.documentElement.style.setProperty("--wave-hue", hue.toFixed(0));
+  document.documentElement.style.setProperty("--wave-lip-top", `oklch(66% 0.108 ${hue.toFixed(0)} / 0.92)`);
+  document.documentElement.style.setProperty("--wave-lip-bottom", `oklch(55% 0.095 ${((hue + 344) % 360).toFixed(0)} / 0.90)`);
+  document.documentElement.style.setProperty("--word-tip-color", `oklch(72% 0.128 ${((hue + 12) % 360).toFixed(0)})`);
 }
 
 function baseOutputVolume() {
@@ -1093,6 +1075,7 @@ function setVoice(voiceId) {
   if (voiceSelect) {
     voiceSelect.value = activeVoiceId;
   }
+  updateWaveformHue();
   syncSelection({ scrollBehavior: "auto", updateAudio: true });
 
   if (shouldResume) {
@@ -1403,6 +1386,7 @@ function syncBrowserRecordedVoiceOption() {
 
   renderVoiceOptions();
   updateVoiceStatus();
+  updateWaveformHue();
 }
 
 function recorderChoices() {
@@ -2234,6 +2218,7 @@ function updatePlaybackTuning({ save = true } = {}) {
   applyPlaybackTuningToMedia(recorderPreviewAudio, speed);
 
   speedValue.textContent = `${speed.toFixed(2)}x`;
+  updateWaveformHue();
   pitchValue.textContent = pitchPreserved ? "Steady" : "Natural";
   pitchToggle.classList.toggle("is-active", pitchPreserved);
   pitchToggle.setAttribute("aria-pressed", String(pitchPreserved));
@@ -2277,27 +2262,97 @@ updatePlaybackTuning({ save: false });
 function hypnoticMeterLevel(index, time = 0, intensity = 0) {
   const position = index / Math.max(METER_BAR_COUNT - 1, 1);
   const centerDistance = Math.abs(position - 0.5) * 2;
-  const centerLift = 1 - Math.pow(centerDistance, 1.8);
-  const slowWave = Math.sin(time * 1.45 + position * Math.PI * 6);
-  const counterWave = Math.sin(time * 2.1 - position * Math.PI * 9);
-  const shimmer = Math.sin(time * 3.35 + index * 1.732);
+  const centerLift = 1 - Math.pow(centerDistance, 1.62);
+  const wrappedDistance = (a, b) => Math.min(Math.abs(a - b), 1 - Math.abs(a - b));
+  const sweepA = (time * 0.128) % 1;
+  const sweepB = (1 - ((time * 0.092 + 0.38) % 1)) % 1;
+  const travelA = Math.exp(-Math.pow(wrappedDistance(position, sweepA) / 0.185, 2));
+  const travelB = Math.exp(-Math.pow(wrappedDistance(position, sweepB) / 0.235, 2));
+  const slowWave = Math.sin(time * 1.18 - position * Math.PI * 5.6);
+  const counterWave = Math.sin(time * 1.72 + position * Math.PI * 7.4);
+  const shimmer = Math.sin(time * 3.80 + index * 1.217);
+  const brokenMiddle = Math.sin(time * 2.56 - index * 0.83) * Math.pow(Math.max(1 - centerDistance * 1.42, 0), 0.72);
   const standingWave = (
-    Math.pow(slowWave * 0.5 + 0.5, 1.35) * 0.46
-    + Math.pow(counterWave * 0.5 + 0.5, 1.8) * 0.34
-    + (shimmer * 0.5 + 0.5) * 0.20
+    Math.pow(slowWave * 0.5 + 0.5, 1.22) * 0.28
+    + Math.pow(counterWave * 0.5 + 0.5, 1.44) * 0.24
+    + (shimmer * 0.5 + 0.5) * 0.14
+    + (travelA * 0.22 + travelB * 0.12)
+    + (brokenMiddle * 0.5 + 0.5) * 0.10
   );
-  const breath = 0.78 + Math.sin(time * 0.72) * 0.22;
-  const floor = 0.065 + centerLift * 0.035;
-  const motion = standingWave * breath * (0.10 + intensity * 0.76);
+  const breath = 0.84 + Math.sin(time * 0.64) * 0.16;
+  const edgeLife = 0.52 + centerLift * 0.48;
+  const floor = 0.054 + centerLift * 0.030;
+  const motion = standingWave * breath * edgeLife * (0.16 + intensity * 0.64);
   return floor + motion;
 }
 
 function idleMeterLevel(index, time = 0) {
-  return hypnoticMeterLevel(index, time, 0.18);
+  return hypnoticMeterLevel(index, time, 0.24);
 }
 
-function meterDisplayLevel(level) {
-  return level;
+function meterMiddleVariation(index, time = 0, level = 0) {
+  const position = index / Math.max(METER_BAR_COUNT - 1, 1);
+  const centerDistance = Math.abs(position - 0.5) * 2;
+  const middleBand = Math.pow(Math.max(1 - centerDistance * 1.72, 0), 0.62);
+  const activity = clamp((level - 0.08) / 0.48, 0, 1);
+  const fastDetail = Math.sin(time * 4.85 + index * 0.73);
+  const counterDetail = Math.sin(time * 3.15 - index * 1.17);
+  const slowSculpt = Math.sin(time * 1.38 + position * Math.PI * 10.5);
+  const seed = (((index * 37 + 17) % 100) / 100 - 0.5) * 2;
+  return 1 + middleBand * (
+    fastDetail * 0.062
+    + counterDetail * 0.046
+    + slowSculpt * 0.040
+    + seed * 0.052
+  ) * (0.86 + activity * 0.76);
+}
+
+function meterDisplayLevel(level, index = 0, time = 0) {
+  return clamp(level * meterMiddleVariation(index, time, level), 0.055, METER_LEVEL_CEILING);
+}
+
+function meterMouthWeight(index) {
+  const position = index / Math.max(METER_BAR_COUNT - 1, 1);
+  const edgeDistance = Math.min(Math.abs(position - 0.5) * 2, 1);
+  const edgeBarDistance = Math.min(index, Math.max(METER_BAR_COUNT - 1 - index, 0));
+  let edgeGate;
+
+  if (edgeBarDistance < 10) {
+    edgeGate = 0.06;
+  } else if (edgeBarDistance < 20) {
+    edgeGate = 0.06 + Math.pow((edgeBarDistance - 10) / 10, 1.04) * 0.42;
+  } else {
+    edgeGate = Math.min(0.48 + Math.pow(Math.min((edgeBarDistance - 20) / 16, 1), 0.68) * 0.52, 1);
+  }
+
+  return clamp(edgeGate * Math.pow(Math.max(1 - edgeDistance * 0.66, 0), 0.36) * 0.85, 0, 0.85);
+}
+
+function meterToothWeight(index, level) {
+  const position = index / Math.max(METER_BAR_COUNT - 1, 1);
+  const toothBreak = meterToothBreak(index);
+  const centerHighlight = Math.pow(Math.max(1 - Math.abs(position - 0.5) * (3.00 + toothBreak * 0.24), 0), 1.05 + toothBreak * 0.30);
+  const levelGate = clamp((level - 0.08) / 0.52, 0, 1);
+  const toothPulse = 0.90 + Math.sin(performance.now() / 1000 * 3.8 + index * 0.47) * 0.10;
+  return clamp(centerHighlight * (0.18 + levelGate * 0.82) * (0.82 + toothBreak * 0.32) * toothPulse, 0, 1);
+}
+
+function meterToothNoise(index) {
+  return 0.70 + (((index * 53 + 11) % 100) / 100) * 0.55;
+}
+
+function meterToothBreak(index) {
+  return ((index * 89 + 41) % 100) / 100;
+}
+
+function meterToothHeight(index, level) {
+  const levelGate = clamp((level - 0.08) / 0.52, 0, 1);
+  const toothWeight = meterToothWeight(index, level);
+  return clamp(0.070 + toothWeight * (0.050 + meterToothNoise(index) * 0.046) + levelGate * 0.016, 0.07, 0.172);
+}
+
+function meterToothTop(index) {
+  return 45.8 + (meterToothBreak(index) - 0.5) * 3.2;
 }
 
 function audioSampleLevel(sample) {
@@ -2312,7 +2367,7 @@ function renderAudioMeter() {
   const barsMarkup = meterLevels
     .map((level, index) => {
       const position = index / Math.max(METER_BAR_COUNT - 1, 1);
-      return `<span class="meter-bar" style="--level: ${level.toFixed(3)}; --display-level: ${meterDisplayLevel(level).toFixed(3)}; --tone: ${position.toFixed(3)}"></span>`;
+      return `<span class="meter-bar" style="--level: ${level.toFixed(3)}; --display-level: ${meterDisplayLevel(level, index, 0).toFixed(3)}; --tone: ${position.toFixed(3)}; --mouth-weight: ${meterMouthWeight(index).toFixed(3)}; --tooth-weight: ${meterToothWeight(index, level).toFixed(3)}; --tooth-noise: ${meterToothNoise(index).toFixed(3)}; --tooth-height: ${meterToothHeight(index, level).toFixed(3)}; --tooth-top: ${meterToothTop(index).toFixed(2)}%;"></span>`;
     })
     .join("");
   consoleMeter.innerHTML = barsMarkup;
@@ -2410,7 +2465,7 @@ function updateAudioMeter() {
         + Math.pow(clamp((rms / energyScale) / 2.8, 0, 1), 1.10) * 0.22
       );
       const sampleShape = Math.pow(absoluteShape, 0.78) * 0.42 + relativeShape * 0.58;
-      const polish = idleMeterLevel(index, time) * 0.012;
+      const polish = idleMeterLevel(index, time) * 0.022;
       nextLevel = sampleShape + polish;
     }
 
@@ -2430,7 +2485,13 @@ function updateAudioMeter() {
     const shapedLevel = hasLiveAudio
       ? targetFloor + ((nextLevels[index] - rawFloor) / rawRange) * (targetPeak - targetFloor)
       : nextLevels[index];
-    const nextLevel = clamp(shapedLevel, 0.08, METER_LEVEL_CEILING);
+    const position = index / Math.max(METER_BAR_COUNT - 1, 1);
+    const centerDistance = Math.abs(position - 0.5) * 2;
+    const middleBand = Math.pow(Math.max(1 - centerDistance * 1.52, 0), 0.70);
+    const middleLift = middleBand
+      * (Math.sin(time * 4.1 + index * 0.67) * 0.012 + Math.sin(time * 2.35 - index * 1.11) * 0.009)
+      * (hasLiveAudio ? 1.34 : 0.92);
+    const nextLevel = clamp(shapedLevel + middleLift, 0.065, METER_LEVEL_CEILING);
     const previousLevel = meterLevels[index] ?? nextLevel;
     const smoothing = nextLevel > previousLevel ? 0.92 : 0.40;
     const smoothedLevel = previousLevel + (nextLevel - previousLevel) * smoothing;
@@ -2438,7 +2499,10 @@ function updateAudioMeter() {
     meterLevels[index] = smoothedLevel;
     highestLevel = Math.max(highestLevel, smoothedLevel);
     bar.style.setProperty("--level", smoothedLevel.toFixed(3));
-    bar.style.setProperty("--display-level", meterDisplayLevel(smoothedLevel).toFixed(3));
+    bar.style.setProperty("--display-level", meterDisplayLevel(smoothedLevel, index, time).toFixed(3));
+    bar.style.setProperty("--tooth-weight", meterToothWeight(index, smoothedLevel).toFixed(3));
+    bar.style.setProperty("--tooth-height", meterToothHeight(index, smoothedLevel).toFixed(3));
+    bar.style.setProperty("--tooth-top", `${meterToothTop(index).toFixed(2)}%`);
   });
 
   consoleMeter?.style.setProperty("--meter-intensity", clamp(highestLevel, 0.12, 1).toFixed(3));
@@ -2446,12 +2510,7 @@ function updateAudioMeter() {
   if (cueWordIntensity < 0.015) cueWordIntensity = 0;
   consoleMeter?.style.setProperty("--word-tip-intensity", cueWordIntensity.toFixed(3));
 
-  if (hasLiveAudio || highestLevel > 0.18 || cueWordIntensity > 0) {
-    meterFrame = requestAnimationFrame(updateAudioMeter);
-    return;
-  }
-
-  meterFrame = null;
+  meterFrame = requestAnimationFrame(updateAudioMeter);
 }
 
 function setPlayingState(isPlaying) {
@@ -3374,7 +3433,6 @@ openPlaylistButton.addEventListener("click", () => goToPage(1));
 openPlayerButton.addEventListener("click", () => goToPage(0));
 openGuideButton?.addEventListener("click", () => goToPage(3));
 closeGuideButton?.addEventListener("click", () => goToPage(0));
-uiModeToggle?.addEventListener("click", toggleUiMode);
 pageDots.forEach((dot, index) => {
   dot.addEventListener("click", () => goToPage(index));
 });
@@ -3488,8 +3546,6 @@ renderAudioMeter();
 applyAudioLooping();
 updateQueueButtons();
 playerPanel.dataset.mode = currentMode;
-loadUiMode();
-applyUiMode();
 loadBrowserRecordedPhrases().catch(() => {
   syncBrowserRecordedVoiceOption();
 });
