@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v90-soft-wave-settings";
+const CACHE_NAME = "sound-a-tude-v91-original-fine-wave";
 const APP_SHELL = [
   "./",
   "./index.html",

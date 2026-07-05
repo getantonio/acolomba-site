@@ -99,8 +99,7 @@ button:focus-visible {
 .player,
 .playlist-page,
 .recorder-page,
-.guide-page,
-.settings-page {
+.guide-page {
   width: min(100%, 390px);
   min-height: min(640px, calc(100svh - 48px));
 }
@@ -135,8 +134,7 @@ button:focus-visible {
   padding: 12px 0 4px;
 }
 
-.guide-page,
-.settings-page {
+.guide-page {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   align-items: start;
@@ -264,10 +262,6 @@ button:focus-visible {
   left: 0;
 }
 
-.settings-player-switch {
-  left: 0;
-}
-
 .player > .guide-switch,
 .player > .playlist-switch {
   top: auto;
@@ -316,9 +310,9 @@ button:focus-visible {
 .player-control-row {
   width: min(100%, 318px);
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 44px 44px;
+  grid-template-columns: minmax(0, 1fr) 44px;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   align-self: start;
 }
 
@@ -392,8 +386,7 @@ button:focus-visible {
   color: oklch(68% 0.035 72);
 }
 
-.ui-mode-toggle,
-.settings-toggle {
+.ui-mode-toggle {
   width: 44px;
   height: 44px;
   display: grid;
@@ -409,15 +402,13 @@ button:focus-visible {
 }
 
 .ui-mode-toggle:hover,
-.ui-mode-toggle.is-active,
-.settings-toggle:hover {
+.ui-mode-toggle.is-active {
   border-color: oklch(43% 0.037 226 / 0.58);
   color: oklch(74% 0.033 92 / 0.86);
   background: oklch(10% 0.022 226 / 0.70);
 }
 
-.ui-mode-icon,
-.settings-toggle svg {
+.ui-mode-icon {
   grid-area: 1 / 1;
   width: 19px;
   height: 19px;
@@ -472,7 +463,6 @@ button:focus-visible {
 
 .player.is-minimal-ui .voice-control,
 .player.is-minimal-ui .ui-mode-toggle,
-.player.is-minimal-ui .settings-toggle,
 .player.is-minimal-ui .pitch-toggle,
 .player.is-minimal-ui .tuning-step,
 .player.is-minimal-ui .queue-button {
@@ -657,339 +647,6 @@ button:focus-visible {
   content: "";
   opacity: calc(var(--word-tip-intensity, 0) * (0.25 + var(--level, 0.12) * 0.75));
   transition: opacity 90ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.console-meter[data-waveform-style="needles"] {
-  gap: 2px;
-  padding-inline: 12px;
-}
-
-.console-meter[data-waveform-style="needles"] .meter-bar {
-  width: 2px;
-  justify-self: center;
-  border-radius: 2px;
-  background:
-    linear-gradient(180deg, oklch(82% 0.058 88 / 0.92), oklch(55% 0.078 222 / 0.88) 52%, oklch(30% 0.055 236 / 0.86));
-  box-shadow: 0 0 calc(1px + var(--level, 0.12) * 8px) oklch(58% 0.07 220 / 0.24);
-  opacity: calc(0.34 + (var(--level, 0.12) * 0.66));
-  transform: scaleY(calc(0.10 + var(--level, 0.12) * 1.28));
-}
-
-.console-meter[data-waveform-style="beads"] {
-  align-items: center;
-  gap: 1px;
-}
-
-.console-meter[data-waveform-style="beads"] .meter-bar {
-  height: 100%;
-  background: transparent;
-  box-shadow: none;
-  opacity: 1;
-  transform: none;
-}
-
-.console-meter[data-waveform-style="beads"] .meter-bar::before {
-  position: absolute;
-  left: 50%;
-  bottom: calc((var(--level, 0.12) * 64%) + 16%);
-  width: calc(3px + var(--level, 0.12) * 6px);
-  height: calc(3px + var(--level, 0.12) * 6px);
-  border-radius: 50%;
-  background: linear-gradient(180deg, oklch(82% 0.052 90 / 0.92), oklch(50% 0.063 220 / 0.82));
-  box-shadow:
-    0 0 calc(2px + var(--level, 0.12) * 9px) oklch(58% 0.07 220 / 0.24),
-    0 8px 12px oklch(46% 0.060 220 / 0.08);
-  content: "";
-  transform: translateX(-50%);
-}
-
-.console-meter[data-waveform-style="beads"] .meter-bar::after {
-  inset: auto auto calc((var(--level, 0.12) * 64%) + 16%) 50%;
-  width: calc(3px + var(--level, 0.12) * 6px);
-  height: calc(3px + var(--level, 0.12) * 6px);
-  transform: translateX(-50%);
-}
-
-.console-meter[data-waveform-style="mirror"] {
-  align-items: center;
-  background:
-    linear-gradient(90deg, transparent, oklch(43% 0.032 226 / 0.16), transparent),
-    linear-gradient(0deg, oklch(56% 0.052 219 / calc(0.03 + var(--meter-intensity, 0.2) * 0.10)), transparent 70%),
-    transparent;
-}
-
-.console-meter[data-waveform-style="mirror"]::before {
-  position: absolute;
-  inset: 50% 10px auto;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, oklch(70% 0.035 96 / 0.24), transparent);
-  content: "";
-}
-
-.console-meter[data-waveform-style="mirror"] .meter-bar {
-  height: 76%;
-  border-radius: 999px;
-  background:
-    linear-gradient(180deg, oklch(78% 0.046 92 / 0.82), oklch(44% 0.058 220 / 0.86) 50%, oklch(78% 0.046 92 / 0.82));
-  transform-origin: center;
-  opacity: calc(0.28 + (var(--level, 0.12) * 0.62));
-  transform: scaleY(calc(0.16 + var(--level, 0.12) * 1.55));
-}
-
-.console-meter[data-waveform-style="mirror"] .meter-bar::after {
-  inset: 0 0 auto;
-  height: 18%;
-}
-
-.console-meter[data-waveform-style="ribbon"] {
-  gap: 0;
-  padding-inline: 10px;
-  filter: saturate(1.08);
-}
-
-.console-meter[data-waveform-style="ribbon"] .meter-bar {
-  margin-inline: -0.5px;
-  border-radius: 4px 4px 999px 999px;
-  background:
-    linear-gradient(180deg, oklch(80% 0.050 89 / 0.86), oklch(53% 0.072 216 / 0.72) 58%, oklch(24% 0.045 232 / 0.72));
-  box-shadow:
-    0 -6px calc(3px + var(--level, 0.12) * 12px) oklch(72% 0.055 92 / 0.08),
-    0 8px calc(4px + var(--level, 0.12) * 14px) oklch(46% 0.070 220 / 0.16);
-  opacity: calc(0.22 + (var(--level, 0.12) * 0.58));
-}
-
-.console-meter[data-waveform-style="ribbon"]::after {
-  position: absolute;
-  inset: auto 10px 9px;
-  height: 22px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, transparent, oklch(54% 0.080 220 / 0.16), oklch(76% 0.055 92 / 0.08), transparent);
-  content: "";
-  filter: blur(10px);
-}
-
-.waveform-vector,
-.halo-ring,
-.halo-orb {
-  position: absolute;
-  pointer-events: none;
-}
-
-.waveform-vector {
-  inset: 7px 9px;
-  z-index: 2;
-  display: none;
-  overflow: visible;
-}
-
-.wave-fill {
-  fill: transparent;
-}
-
-.wave-line {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-}
-
-.console-meter[data-waveform-style="aurora"] .wave-line,
-.console-meter[data-waveform-style="thread"] .wave-line,
-.console-meter[data-waveform-style="field"] .wave-line {
-  stroke-dasharray: 8 12;
-  animation: waveformDash 2.8s linear infinite;
-}
-
-.console-meter[data-waveform-style="thread"] .wave-main {
-  stroke-dasharray: 16 10;
-  animation-duration: 2.1s;
-}
-
-@keyframes waveformDash {
-  to {
-    stroke-dashoffset: -60;
-  }
-}
-
-.halo-orb {
-  left: var(--halo-scan-x, 8%);
-  top: var(--halo-scan-y, 54%);
-  z-index: 3;
-  display: none;
-  width: calc(9px + var(--meter-intensity, 0.2) * 10px);
-  height: calc(9px + var(--meter-intensity, 0.2) * 10px);
-  border-radius: 50%;
-  background: #0000ff;
-  box-shadow:
-    0 0 12px #0000ff,
-    0 0 24px rgb(0 255 255 / 0.42);
-  opacity: 0.92;
-  transform: translate(-50%, -50%);
-  transition: left 70ms linear, top 70ms linear, width 90ms linear, height 90ms linear;
-}
-
-.console-meter[data-waveform-style="aurora"] {
-  background:
-    radial-gradient(circle at 22% 90%, oklch(63% 0.26 195 / calc(0.10 + var(--meter-intensity, 0.2) * 0.20)), transparent 38%),
-    radial-gradient(circle at 76% 18%, oklch(71% 0.30 330 / calc(0.09 + var(--meter-intensity, 0.2) * 0.17)), transparent 42%),
-    oklch(7.5% 0.025 226);
-}
-
-.console-meter[data-waveform-style="aurora"] .meter-bar,
-.console-meter[data-waveform-style="thread"] .meter-bar,
-.console-meter[data-waveform-style="field"] .meter-bar,
-.console-meter[data-waveform-style="halo"] .meter-bar {
-  display: none;
-}
-
-.console-meter[data-waveform-style="aurora"] .waveform-vector,
-.console-meter[data-waveform-style="thread"] .waveform-vector,
-.console-meter[data-waveform-style="field"] .waveform-vector {
-  display: block;
-}
-
-.console-meter[data-waveform-style="aurora"] .wave-fill {
-  fill: url("#aurora-fill");
-  fill: oklch(63% 0.24 195 / calc(0.08 + var(--meter-intensity, 0.2) * 0.22));
-}
-
-.console-meter[data-waveform-style="aurora"] .wave-main {
-  stroke: oklch(86% 0.19 92);
-  stroke-width: 2.4;
-  filter: drop-shadow(0 0 8px oklch(86% 0.19 92 / 0.44));
-}
-
-.console-meter[data-waveform-style="aurora"] .wave-alt {
-  stroke: oklch(73% 0.24 195 / 0.56);
-  stroke-width: 1.2;
-}
-
-.console-meter[data-waveform-style="aurora"] .wave-third {
-  stroke: oklch(69% 0.26 330 / 0.42);
-  stroke-width: 1.1;
-}
-
-.console-meter[data-waveform-style="thread"] {
-  background:
-    linear-gradient(90deg, transparent, oklch(97% 0.19 104 / 0.08), transparent),
-    oklch(6.5% 0.021 226);
-}
-
-.console-meter[data-waveform-style="thread"] .wave-main {
-  stroke: oklch(96% 0.20 104);
-  stroke-width: 2.2;
-  filter: drop-shadow(0 0 10px oklch(96% 0.20 104 / 0.54));
-}
-
-.console-meter[data-waveform-style="thread"] .wave-alt {
-  stroke: oklch(65% 0.26 30 / 0.42);
-  stroke-width: 0.9;
-}
-
-.console-meter[data-waveform-style="thread"] .wave-third {
-  stroke: oklch(72% 0.24 195 / 0.28);
-  stroke-width: 0.8;
-}
-
-.console-meter[data-waveform-style="field"] {
-  background:
-    radial-gradient(circle at 50% 52%, oklch(55% 0.31 300 / calc(0.08 + var(--meter-intensity, 0.2) * 0.14)), transparent 48%),
-    oklch(7% 0.026 226);
-}
-
-.console-meter[data-waveform-style="field"] .wave-main {
-  stroke: oklch(70% 0.31 300);
-  stroke-width: 1.9;
-  filter: drop-shadow(0 0 9px oklch(70% 0.31 300 / 0.5));
-}
-
-.console-meter[data-waveform-style="field"] .wave-alt {
-  stroke: oklch(86% 0.22 195 / 0.72);
-  stroke-width: 1.4;
-}
-
-.console-meter[data-waveform-style="field"] .wave-third {
-  stroke: oklch(86% 0.20 92 / 0.58);
-  stroke-width: 1.2;
-}
-
-.console-meter[data-waveform-style="sparks"] {
-  gap: 2px;
-  background:
-    linear-gradient(0deg, oklch(100% 0 0 / calc(0.02 + var(--meter-intensity, 0.2) * 0.07)), transparent 68%),
-    oklch(6.5% 0.022 226);
-}
-
-.console-meter[data-waveform-style="sparks"] .meter-bar {
-  background:
-    linear-gradient(180deg, var(--spark-color), color-mix(in srgb, var(--spark-color) 58%, #111927) 55%, #142231);
-  box-shadow:
-    0 0 calc(3px + var(--level, 0.12) * 16px) color-mix(in srgb, var(--spark-color) 54%, transparent);
-  opacity: calc(0.34 + var(--level, 0.12) * 0.66);
-}
-
-.console-meter[data-waveform-style="sparks"] .meter-bar::after {
-  display: block;
-}
-
-.console-meter[data-waveform-style="halo"] {
-  display: block;
-  background:
-    radial-gradient(circle at center, oklch(86% 0.22 264 / calc(0.06 + var(--meter-intensity, 0.2) * 0.18)), transparent 58%),
-    oklch(6.2% 0.023 226);
-}
-
-.console-meter[data-waveform-style="halo"] .halo-ring {
-  left: 50%;
-  top: 50%;
-  display: block;
-  border: 1px solid oklch(82% 0.23 264 / 0.72);
-  border-radius: 50%;
-  box-shadow:
-    inset 0 0 18px oklch(72% 0.23 264 / 0.18),
-    0 0 calc(14px + var(--meter-intensity, 0.2) * 24px) oklch(72% 0.23 264 / 0.30);
-  opacity: calc(0.28 + var(--meter-intensity, 0.2) * 0.38);
-  transform: translate(-50%, -50%) scale(calc(0.82 + var(--meter-intensity, 0.2) * 0.42));
-}
-
-.console-meter[data-waveform-style="halo"] .halo-ring-one {
-  animation: haloPulse 2.6s ease-in-out infinite;
-}
-
-.console-meter[data-waveform-style="halo"] .halo-ring-two {
-  animation: haloPulse 3.2s ease-in-out infinite reverse;
-}
-
-.console-meter[data-waveform-style="halo"] .halo-ring-three {
-  animation: haloPulse 3.8s ease-in-out infinite;
-}
-
-.console-meter[data-waveform-style="halo"] .halo-orb {
-  display: block;
-}
-
-@keyframes haloPulse {
-  50% {
-    opacity: calc(0.40 + var(--meter-intensity, 0.2) * 0.44);
-    transform: translate(-50%, -50%) scale(calc(0.98 + var(--meter-intensity, 0.2) * 0.34));
-  }
-}
-
-.halo-ring-one {
-  width: 52px;
-  height: 52px;
-}
-
-.halo-ring-two {
-  width: 92px;
-  height: 92px;
-  border-color: oklch(87% 0.21 195 / 0.58);
-}
-
-.halo-ring-three {
-  width: 136px;
-  height: 136px;
-  border-color: oklch(86% 0.18 92 / 0.42);
 }
 
 .player.is-minimal-ui .console-meter {
@@ -2518,180 +2175,6 @@ button:focus-visible {
   color: oklch(56% 0.018 96);
 }
 
-.settings-sheet {
-  width: min(100%, 338px);
-  max-height: calc(100svh - 118px);
-  overflow: auto;
-  padding: 18px;
-  border: 1px solid oklch(34% 0.023 240 / 0.62);
-  border-radius: 18px;
-  background: oklch(8.5% 0.023 226 / 0.58);
-  box-shadow: inset 0 1px 0 oklch(100% 0 0 / 0.035);
-}
-
-.settings-head {
-  display: grid;
-  gap: 3px;
-  margin-bottom: 16px;
-}
-
-.settings-head p,
-.waveform-choice em {
-  margin: 0;
-  color: oklch(56% 0.018 96);
-  font-size: 0.66rem;
-  font-style: normal;
-  font-weight: 800;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
-.settings-head h1 {
-  margin: 0;
-  color: oklch(82% 0.032 89);
-  font-size: 1.34rem;
-  line-height: 1.08;
-  letter-spacing: 0;
-}
-
-.waveform-choice-grid {
-  display: grid;
-  gap: 9px;
-}
-
-.waveform-choice {
-  display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
-  grid-template-rows: auto auto;
-  gap: 2px 12px;
-  align-items: center;
-  min-height: 72px;
-  padding: 10px;
-  border: 1px solid oklch(32% 0.031 236 / 0.58);
-  border-radius: 10px;
-  color: oklch(77% 0.029 92);
-  text-align: left;
-  background: oklch(11% 0.025 226 / 0.72);
-}
-
-.waveform-choice.is-selected {
-  border-color: oklch(72% 0.115 92 / 0.76);
-  background:
-    linear-gradient(90deg, oklch(72% 0.115 92 / 0.11), transparent),
-    oklch(13% 0.028 226 / 0.86);
-}
-
-.waveform-choice:active {
-  transform: translateY(1px);
-}
-
-.waveform-choice strong {
-  min-width: 0;
-  overflow-wrap: anywhere;
-  font-size: 0.9rem;
-  line-height: 1.08;
-  letter-spacing: 0;
-}
-
-.waveform-choice em {
-  grid-column: 2;
-  font-size: 0.58rem;
-  text-transform: none;
-}
-
-.waveform-choice-preview {
-  grid-row: 1 / span 2;
-  position: relative;
-  overflow: hidden;
-  height: 44px;
-  border-radius: 8px;
-  background: oklch(6.5% 0.022 226);
-}
-
-.waveform-choice-preview::before,
-.waveform-choice-preview::after {
-  position: absolute;
-  content: "";
-}
-
-.preview-classic::before {
-  inset: 8px 7px;
-  background:
-    linear-gradient(90deg, oklch(56% 0.070 220), oklch(82% 0.048 92) 55%, oklch(61% 0.080 219));
-  clip-path: polygon(0 100%, 0 52%, 5% 52%, 5% 100%, 9% 100%, 9% 36%, 14% 36%, 14% 100%, 18% 100%, 18% 62%, 23% 62%, 23% 100%, 27% 100%, 27% 22%, 32% 22%, 32% 100%, 36% 100%, 36% 44%, 41% 44%, 41% 100%, 45% 100%, 45% 66%, 50% 66%, 50% 100%, 54% 100%, 54% 30%, 59% 30%, 59% 100%, 63% 100%, 63% 58%, 68% 58%, 68% 100%, 72% 100%, 72% 40%, 77% 40%, 77% 100%, 81% 100%, 81% 24%, 86% 24%, 86% 100%, 90% 100%, 90% 52%, 95% 52%, 95% 100%, 100% 100%, 100% 34%);
-}
-
-.preview-classic::after {
-  inset: auto 7px 8px;
-  height: 1px;
-  border-radius: 999px;
-  background: oklch(82% 0.048 92 / 0.62);
-}
-
-.preview-aurora::before {
-  inset: 11px 5px 8px;
-  border-radius: 50%;
-  background: linear-gradient(90deg, #00ffff, #ffff00 48%, #ff00ff);
-  filter: blur(5px);
-}
-
-.preview-aurora::after {
-  inset: 22px 5px auto;
-  height: 2px;
-  border-radius: 999px;
-  background: #ffff00;
-  box-shadow: 0 0 8px #ffff00;
-}
-
-.preview-thread::before {
-  inset: 50% 6px auto;
-  height: 2px;
-  border-radius: 999px;
-  background: #ffff00;
-  box-shadow: 0 0 9px #ffff00;
-  transform: translateY(-50%);
-}
-
-.preview-field::before {
-  inset: 13px 5px auto;
-  height: 18px;
-  border-block: 2px solid #ff00ff;
-  border-radius: 50%;
-  box-shadow: 0 0 8px #00ffff;
-}
-
-.preview-field::after {
-  inset: 20px 6px auto;
-  height: 1px;
-  background: #00ffff;
-}
-
-.preview-sparks::before {
-  inset: 8px 8px;
-  background:
-    linear-gradient(90deg, #ff0000 0 10%, #00ff00 10% 20%, #0000ff 20% 30%, #00ffff 30% 40%, #ff00ff 40% 50%, #ffff00 50% 60%, #fff 60% 70%, #ff0000 70% 80%, #00ff00 80% 90%, #0000ff 90% 100%);
-  clip-path: polygon(0 100%, 0 38%, 8% 52%, 8% 100%, 15% 100%, 15% 22%, 23% 42%, 23% 100%, 31% 100%, 31% 58%, 40% 28%, 40% 100%, 49% 100%, 49% 18%, 57% 45%, 57% 100%, 65% 100%, 65% 36%, 73% 62%, 73% 100%, 82% 100%, 82% 26%, 91% 48%, 91% 100%, 100% 100%, 100% 34%);
-}
-
-.preview-halo::before {
-  inset: 7px 21px;
-  border: 2px solid #0000ff;
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 8px rgb(0 255 255 / 0.18),
-    0 0 14px #0000ff;
-}
-
-.preview-halo::after {
-  inset: 50% 50% auto auto;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 0 12px #ffffff;
-  transform: translate(50%, -50%);
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -2717,8 +2200,7 @@ button:focus-visible {
 
   .playlist-page,
   .recorder-page,
-  .guide-page,
-  .settings-page {
+  .guide-page {
     min-height: min(610px, calc(100svh - 28px));
   }
 
