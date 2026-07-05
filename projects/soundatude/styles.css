@@ -342,73 +342,6 @@ button:focus-visible {
   color: oklch(68% 0.035 72);
 }
 
-.visual-choice {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
-  padding: 4px;
-  border: 1px solid oklch(34% 0.022 240 / 0.44);
-  border-radius: 999px;
-  background: oklch(10.5% 0.014 235 / 0.62);
-}
-
-.visual-choice button {
-  min-width: 0;
-  min-height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  padding: 0 7px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: oklch(53% 0.017 96);
-  font: inherit;
-  font-size: 0.66rem;
-  font-weight: 720;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.visual-choice button.is-selected {
-  background: oklch(22% 0.024 240 / 0.86);
-  color: oklch(74% 0.032 94);
-  box-shadow: inset 0 0 0 1px oklch(100% 0 0 / 0.035);
-}
-
-.visual-swatch {
-  width: 16px;
-  height: 16px;
-  flex: 0 0 auto;
-  border: 1px solid oklch(48% 0.024 240 / 0.36);
-  border-radius: 999px;
-  background: oklch(15% 0.018 235);
-  box-shadow: inset 0 1px 0 oklch(100% 0 0 / 0.05);
-}
-
-.visual-swatch-box {
-  border-radius: 5px;
-  background:
-    repeating-linear-gradient(90deg, oklch(44% 0.038 226) 0 2px, transparent 2px 5px),
-    oklch(9.5% 0.015 235);
-}
-
-.visual-swatch-male,
-.visual-swatch-female {
-  background-position: center;
-  background-size: cover;
-}
-
-.visual-swatch-male {
-  background-image: url("assets/images/avatars/soundatude-avatar-male-v001.png");
-}
-
-.visual-swatch-female {
-  background-image: url("assets/images/avatars/soundatude-avatar-female-v001.png");
-}
-
 .now-console {
   width: min(100%, 318px);
   align-self: start;
@@ -423,83 +356,6 @@ button:focus-visible {
   box-shadow:
     inset 0 1px 0 oklch(100% 0 0 / 0.04),
     0 20px 44px oklch(0% 0 0 / 0.18);
-}
-
-.avatar-stage {
-  min-height: 0;
-  display: none;
-  place-items: center;
-  padding: 4px 0 0;
-}
-
-.avatar-head,
-.avatar-video {
-  display: none;
-  width: min(220px, 78%);
-  aspect-ratio: 1;
-  object-fit: cover;
-  border: 1px solid oklch(47% 0.024 240 / 0.4);
-  border-radius: 28px;
-  background: oklch(10% 0.015 235);
-  box-shadow:
-    inset 0 1px 0 oklch(100% 0 0 / 0.04),
-    0 18px 34px oklch(0% 0 0 / 0.18);
-}
-
-.avatar-video {
-  background: oklch(10% 0.015 235);
-}
-
-.player[data-player-visual="male"] .now-console,
-.player[data-player-visual="female"] .now-console {
-  min-height: 290px;
-  align-content: start;
-  padding-top: 14px;
-}
-
-.player[data-player-visual="male"] .avatar-stage,
-.player[data-player-visual="female"] .avatar-stage {
-  display: grid;
-}
-
-.player[data-player-visual="male"] .avatar-head-male,
-.player[data-player-visual="female"] .avatar-head-female {
-  display: block;
-}
-
-.player.has-avatar-video .avatar-head {
-  display: none;
-}
-
-.player.has-avatar-video .avatar-video {
-  display: block;
-}
-
-.player[data-player-visual="male"] .console-meter,
-.player[data-player-visual="female"] .console-meter {
-  display: none;
-}
-
-.player[data-player-visual="male"] .loop-wheel,
-.player[data-player-visual="female"] .loop-wheel {
-  height: 56px;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-.player[data-player-visual="male"] .loop-wheel button,
-.player[data-player-visual="female"] .loop-wheel button {
-  min-height: 48px;
-  font-size: 1.08rem;
-  color: var(--phrase-caption);
-  opacity: 1;
-}
-
-.player[data-player-visual="male"] .loop-wheel button:hover,
-.player[data-player-visual="male"] .loop-wheel button[aria-selected="true"],
-.player[data-player-visual="female"] .loop-wheel button:hover,
-.player[data-player-visual="female"] .loop-wheel button[aria-selected="true"] {
-  color: var(--phrase-caption);
 }
 
 .console-meter {
@@ -1052,7 +908,7 @@ button:focus-visible {
 }
 
 .volume-control {
-  width: min(100%, 318px);
+  width: min(100%, 348px);
   min-height: 32px;
   display: grid;
   grid-template-columns: 24px 18px minmax(0, 1fr) 22px 24px;
@@ -1699,6 +1555,11 @@ button:focus-visible {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
+}
+
+.recorder-custom-actions select {
+  grid-column: 1 / -1;
+  min-height: 40px;
 }
 
 .recorder-custom-actions button {

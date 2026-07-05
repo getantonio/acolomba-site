@@ -1,7 +1,6 @@
 const audio = document.querySelector("#sampleAudio");
 const playerPanel = document.querySelector("#sample");
 const playButton = document.querySelector("#playButton");
-const avatarVideo = document.querySelector("#avatarVideo");
 const loopPicker = document.querySelector("#loopPicker");
 const loopTrigger = document.querySelector("#loopTrigger");
 const loopWheel = document.querySelector("#loopWheel");
@@ -12,7 +11,6 @@ const modeButtons = [...document.querySelectorAll(".mode-toggle button")];
 const voiceSelect = document.querySelector("#voiceSelect");
 const voiceStatus = document.querySelector("#voiceStatus");
 const voiceControl = document.querySelector(".voice-control");
-const playerVisualButtons = [...document.querySelectorAll(".visual-choice [data-player-visual]")];
 const conversationSeek = document.querySelector("#conversationSeek");
 const conversationCurrentTime = document.querySelector("#conversationCurrentTime");
 const conversationDuration = document.querySelector("#conversationDuration");
@@ -26,6 +24,7 @@ const recorderCustomCategorySelect = document.querySelector("#recorderCustomCate
 const recorderNewCategoryField = document.querySelector("#recorderNewCategoryField");
 const recorderCustomCategoryInput = document.querySelector("#recorderCustomCategoryInput");
 const recorderCustomPhraseInput = document.querySelector("#recorderCustomPhraseInput");
+const examplePhraseSetSelect = document.querySelector("#examplePhraseSetSelect");
 const loadExamplePhraseSetButton = document.querySelector("#loadExamplePhraseSetButton");
 const clearPhraseQueueButton = document.querySelector("#clearPhraseQueueButton");
 const deleteCustomCategoryButton = document.querySelector("#deleteCustomCategoryButton");
@@ -78,7 +77,6 @@ const recorderPreviewAudio = new Audio();
 const PLAYLIST_STORAGE_KEY = "sound-a-tude-playlists-v2";
 const VOICE_STORAGE_KEY = "sound-a-tude-voice-v1";
 const PLAYBACK_STORAGE_KEY = "sound-a-tude-playback-v1";
-const PLAYER_VISUAL_STORAGE_KEY = "sound-a-tude-player-visual-v1";
 const LEGACY_RECORDER_STORAGE_KEYS = ["sound-a-tude-recorder-v1"];
 const RECORDER_STORAGE_KEY = "sound-a-tude-recorder-v2";
 const RECORDED_VOICE_DB_NAME = "sound-a-tude-recorded-voices";
@@ -88,7 +86,6 @@ const BROWSER_RECORDED_FALLBACK_VOICE_ID = "af_nicole";
 const CUSTOM_RECORDED_SOURCE = "browser-recorded-custom";
 const DEFAULT_CUSTOM_RECORDED_CATEGORY = "My Affirmations";
 const NEW_CUSTOM_CATEGORY_VALUE = "__new-custom-recording-category__";
-const AVATAR_VIDEO_VERSION = "avatar-video-seedance-480p-v008";
 const METER_BAR_COUNT = 56;
 const RECORDER_AUDIO_CONSTRAINTS = {
   echoCancellation: { ideal: true },
@@ -105,40 +102,42 @@ const RECORDER_MIME_TYPES = [
   "audio/mp4",
   "audio/aac",
 ];
-const EXAMPLE_CUSTOM_PHRASE_SET = [
-  "1. I never give up on myself.",
-  "2. I keep going even when it gets hard.",
-  "3. Every setback makes me stronger.",
-  "4. I choose persistence over doubt.",
-  "5. I rise after every fall.",
-  "6. I am stronger than my fears.",
-  "7. I refuse to let go of hope.",
-  "8. I stay committed to my path.",
-  "9. I am capable of handling anything.",
-  "10. I keep moving forward with faith.",
-].join("\n");
+const EXAMPLE_CUSTOM_PHRASE_SETS = {
+  "never-quit": {
+    title: "I Never Quit",
+    category: "I Never Quit",
+    phrases: [
+      "1. I never give up on myself.",
+      "2. I keep going even when it gets hard.",
+      "3. Every setback makes me stronger.",
+      "4. I choose persistence over doubt.",
+      "5. I rise after every fall.",
+      "6. I am stronger than my fears.",
+      "7. I refuse to let go of hope.",
+      "8. I stay committed to my path.",
+      "9. I am capable of handling anything.",
+      "10. I keep moving forward with faith.",
+    ].join("\n"),
+  },
+  "quit-smoking": {
+    title: "Quit Smoking",
+    category: "Quit Smoking",
+    phrases: [
+      "1. I choose clean air for my body.",
+      "2. I do not like the taste of cigarettes.",
+      "3. Each craving passes, and I can let it pass.",
+      "4. My breath feels better when I stay smoke-free.",
+      "5. I protect my health one choice at a time.",
+      "6. I can handle stress without smoking.",
+      "7. I am stronger than this old habit.",
+      "8. I like feeling clear, steady, and in control.",
+      "9. I choose freedom over another cigarette.",
+      "10. I can quit smoking one moment at a time.",
+    ].join("\n"),
+  },
+};
 
 clearLegacyRecorderState();
-const MALE_AVATAR_PHRASE_IDS = Object.freeze([
-  "sat-p004",
-  "sat-p006",
-  "sat-p009",
-  "sat-p018",
-  "sat-p021",
-  "sat-p024",
-  "sat-p031",
-  "sat-p032",
-  "sat-p041",
-  "sat-p042",
-]);
-const WAVEFORM_MATCHED_MALE_AVATAR_VOICE_IDS = Object.freeze([
-  "am_echo",
-  "am_eric",
-  "am_fenrir",
-  "am_onyx",
-  "am_puck",
-  "am_santa",
-]);
 
 const choices = {
   loop: [
@@ -626,6 +625,7 @@ function categoryTitlesForCustomRecorder() {
   return [
     DEFAULT_CUSTOM_RECORDED_CATEGORY,
     ...builtInMainCategories.map((category) => category.title),
+    ...Object.values(EXAMPLE_CUSTOM_PHRASE_SETS).map((example) => example.category),
     ...customRecordedCategoryTitles(),
   ].filter((title, index, titles) => title && titles.indexOf(title) === index);
 }
@@ -711,55 +711,6 @@ const recordedVoicePacks = [
   // Add free/offline recorded packs after processing them with scripts/process_recorded_voice.py.
   // { id: "antonio-v001", label: "Antonio", shortLabel: "Antonio", group: "Recorded" },
 ];
-const avatarVideoFilesByVisual = {
-  male: {
-    // Add generated clips as: "<voice-id>:<phrase-id>": "assets/video/avatars/male/<voice-id>/<phrase-id>-avatar-male-<voice-id>.mp4?v=avatar-video-v001"
-    [avatarVideoKey("kokoro-am_michael-v001", "sat-p004")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p004-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_michael-v001", "sat-p006")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p006-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_michael-v001", "sat-p009")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p009-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_michael-v001", "sat-p018")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p018-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_michael-v001", "sat-p021")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p021-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_michael-v001", "sat-p024")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p024-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_michael-v001", "sat-p031")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p031-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_michael-v001", "sat-p032")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p032-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_michael-v001", "sat-p041")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p041-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_michael-v001", "sat-p042")]: `assets/video/avatars/male/kokoro-am_michael-v001/sat-p042-avatar-male-kokoro-am_michael-seedance-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_adam-v001", "sat-p004")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p004-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_adam-v001", "sat-p006")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p006-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_adam-v001", "sat-p009")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p009-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_adam-v001", "sat-p018")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p018-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_adam-v001", "sat-p021")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p021-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_adam-v001", "sat-p024")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p024-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_adam-v001", "sat-p031")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p031-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_adam-v001", "sat-p032")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p032-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_adam-v001", "sat-p041")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p041-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_adam-v001", "sat-p042")]: `assets/video/avatars/male/kokoro-am_adam-v001/sat-p042-avatar-male-kokoro-am_adam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_liam-v001", "sat-p004")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p004-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_liam-v001", "sat-p006")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p006-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_liam-v001", "sat-p009")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p009-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_liam-v001", "sat-p018")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p018-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_liam-v001", "sat-p021")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p021-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_liam-v001", "sat-p024")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p024-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_liam-v001", "sat-p031")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p031-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_liam-v001", "sat-p032")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p032-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_liam-v001", "sat-p041")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p041-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-am_liam-v001", "sat-p042")]: `assets/video/avatars/male/kokoro-am_liam-v001/sat-p042-avatar-male-am_liam-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    ...waveformMatchedMaleAvatarVideoEntries(WAVEFORM_MATCHED_MALE_AVATAR_VOICE_IDS),
-  },
-  female: {
-    // Add generated clips as: "<voice-id>:<phrase-id>": "assets/video/avatars/female/<voice-id>/<phrase-id>-avatar-female-<voice-id>.mp4?v=avatar-video-v001"
-    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p004")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p004-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p006")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p006-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p009")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p009-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p018")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p018-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p021")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p021-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p024")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p024-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p031")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p031-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p032")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p032-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p041")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p041-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    [avatarVideoKey("kokoro-af_nicole-v001", "sat-p042")]: `assets/video/avatars/female/kokoro-af_nicole-v001/sat-p042-avatar-female-kokoro-af_nicole-seedance-480p-v002.mp4?v=${AVATAR_VIDEO_VERSION}`,
-  },
-};
 const browserRecordedPhraseUrls = new Map();
 const browserRecordedPhraseMetadata = new Map();
 let recordedVoiceDatabasePromise = null;
@@ -825,9 +776,7 @@ let voiceOptions = [...baseVoiceOptions];
 
 let currentMode = "loop";
 let activeVoiceId = localStorage.getItem(VOICE_STORAGE_KEY) || voiceOptions[0].id;
-let activePlayerVisual = localStorage.getItem(PLAYER_VISUAL_STORAGE_KEY) || "box";
 let currentResolvedSource = null;
-let isAvatarVideoSourceActive = false;
 let isSeekingConversation = false;
 let selectedIndexByMode = {
   loop: 0,
@@ -937,7 +886,8 @@ function activeVoice() {
 }
 
 function baseOutputVolume() {
-  return Number(volumeControl.value) / 100;
+  const sliderPosition = clamp(Number(volumeControl.value), 0, 100) / 100;
+  return sliderPosition * sliderPosition;
 }
 
 const RECORDED_VOICE_VOLUME_BOOST = 1.8;
@@ -948,41 +898,6 @@ function recordedVoiceOutputVolume(baseVolume = baseOutputVolume()) {
 
 function outputVolumeForSource(source, baseVolume = baseOutputVolume()) {
   return source?.isBrowserRecordedVoiceFile ? recordedVoiceOutputVolume(baseVolume) : baseVolume;
-}
-
-function avatarVideoKey(voiceId, phraseId) {
-  return `${voiceId}:${phraseId}`;
-}
-
-function waveformMatchedMaleAvatarVideoEntries(sourceVoiceIds) {
-  return Object.fromEntries(sourceVoiceIds.flatMap((sourceVoiceId) => {
-    const voiceId = `kokoro-${sourceVoiceId}-v001`;
-    return MALE_AVATAR_PHRASE_IDS.map((phraseId) => [
-      avatarVideoKey(voiceId, phraseId),
-      `assets/video/avatars/male/${voiceId}/${phraseId}-avatar-male-kokoro-${sourceVoiceId}-waveform-matched-480p-v001.mp4?v=${AVATAR_VIDEO_VERSION}`,
-    ]);
-  }));
-}
-
-function avatarVoiceIdsFor(voice) {
-  return [
-    voice?.id,
-    voice?.sourceVoiceId ? `kokoro-${voice.sourceVoiceId}-v001` : null,
-  ].filter(Boolean);
-}
-
-function resolveAvatarVideoSource(choice, voice = activeVoice()) {
-  if (currentMode !== "loop" || !choice?.phraseId || !["male", "female"].includes(activePlayerVisual)) {
-    return null;
-  }
-
-  const avatarFiles = avatarVideoFilesByVisual[activePlayerVisual] ?? {};
-  for (const voiceId of avatarVoiceIdsFor(voice)) {
-    const avatarFile = avatarFiles[avatarVideoKey(voiceId, choice.phraseId)];
-    if (avatarFile) return avatarFile;
-  }
-
-  return null;
 }
 
 function resolveAudioSource(choice) {
@@ -1064,26 +979,6 @@ function setVoice(voiceId) {
     const media = activeMainMedia();
     media.currentTime = 0;
     media.play().catch(() => setPlayingState(false));
-  }
-}
-
-function setPlayerVisual(visual, { save = true } = {}) {
-  const validVisuals = new Set(["box", "male", "female"]);
-  activePlayerVisual = validVisuals.has(visual) ? visual : "box";
-  playerPanel.dataset.playerVisual = activePlayerVisual;
-
-  playerVisualButtons.forEach((button) => {
-    const isSelected = button.dataset.playerVisual === activePlayerVisual;
-    button.classList.toggle("is-selected", isSelected);
-    button.setAttribute("aria-checked", String(isSelected));
-  });
-
-  if (save) {
-    localStorage.setItem(PLAYER_VISUAL_STORAGE_KEY, activePlayerVisual);
-  }
-
-  if (loopOptions.length) {
-    syncSelection({ scrollBehavior: "auto", center: false, updateAudio: true });
   }
 }
 
@@ -2099,12 +1994,16 @@ function clampSelectedIndex() {
   selectedIndexByMode[currentMode] = Math.min(Math.max(selectedIndexByMode[currentMode], 0), optionCount - 1);
 }
 
+function volumePercentText(volume) {
+  const percent = volume * 100;
+  return percent > 0 && percent < 1 ? "under 1 percent" : `${Math.round(percent)} percent`;
+}
+
 function updateVolume() {
   const baseVolume = baseOutputVolume();
+  volumeControl.setAttribute("aria-valuetext", volumePercentText(baseVolume));
   const currentChoice = currentChoices()[selectedIndexByMode[currentMode]];
   audio.volume = currentChoice ? outputVolumeForSource(resolveAudioSource(currentChoice), baseVolume) : baseVolume;
-  avatarVideo.volume = baseVolume;
-  avatarVideo.muted = false;
 
   const previewChoice = previewingId ? findChoice(previewingId) : null;
   previewAudio.volume = previewChoice ? outputVolumeForSource(resolveAudioSource(previewChoice), baseVolume) : baseVolume;
@@ -2169,7 +2068,6 @@ function updatePlaybackTuning({ save = true } = {}) {
   const speed = Number(speedControl.value) / 100;
 
   applyPlaybackTuningToMedia(audio, speed);
-  applyPlaybackTuningToMedia(avatarVideo, speed);
   applyPlaybackTuningToMedia(previewAudio, speed);
   applyPlaybackTuningToMedia(recorderPreviewAudio, speed);
 
@@ -2321,7 +2219,6 @@ function setPlayingState(isPlaying) {
 
 function applyAudioLooping() {
   audio.loop = repeatMode === "single";
-  avatarVideo.loop = repeatMode === "single";
 }
 
 function updateQueueButtons() {
@@ -2451,18 +2348,11 @@ function updateSelectionFromScroll({ updateAudio = false } = {}) {
 }
 
 function updateAudioSource(file) {
-  if (audio.getAttribute("src") === file && !isAvatarVideoSourceActive) {
+  if (audio.getAttribute("src") === file) {
     updatePlaybackTuning({ save: false });
     updateConversationProgress();
     return;
   }
-
-  avatarVideo.pause();
-  avatarVideo.currentTime = 0;
-  avatarVideo.removeAttribute("src");
-  avatarVideo.load();
-  playerPanel.classList.remove("has-avatar-video");
-  isAvatarVideoSourceActive = false;
 
   audio.setAttribute("src", file);
   audio.load();
@@ -2472,33 +2362,12 @@ function updateAudioSource(file) {
 
 function updateMainMediaSource(choice) {
   const source = resolveAudioSource(choice);
-  const avatarVideoFile = resolveAvatarVideoSource(choice, source.voice);
   currentResolvedSource = source;
-
-  if (avatarVideoFile) {
-    if (avatarVideo.getAttribute("src") === avatarVideoFile && isAvatarVideoSourceActive) {
-      updatePlaybackTuning({ save: false });
-      return;
-    }
-
-    audio.pause();
-    audio.currentTime = 0;
-    avatarVideo.setAttribute("src", avatarVideoFile);
-    avatarVideo.load();
-    avatarVideo.muted = false;
-    playerPanel.classList.add("has-avatar-video");
-    isAvatarVideoSourceActive = true;
-    updatePlaybackTuning({ save: false });
-    updateVolume();
-    updateConversationProgress();
-    return;
-  }
-
   updateAudioSource(source.file);
 }
 
 function activeMainMedia() {
-  return isAvatarVideoSourceActive ? avatarVideo : audio;
+  return audio;
 }
 
 function formatMediaTime(time) {
@@ -2558,8 +2427,6 @@ function seekConversationFromPointer(event) {
 function stopMainMedia() {
   audio.pause();
   audio.currentTime = 0;
-  avatarVideo.pause();
-  avatarVideo.currentTime = 0;
   setPlayingState(false);
   updateConversationProgress();
 }
@@ -3112,9 +2979,6 @@ modeButtons.forEach((button) => {
 });
 
 voiceSelect?.addEventListener("change", () => setVoice(voiceSelect.value));
-playerVisualButtons.forEach((button) => {
-  button.addEventListener("click", () => setPlayerVisual(button.dataset.playerVisual));
-});
 openVoiceRecorderButton?.addEventListener("click", openVoiceRecorder);
 closeVoiceRecorderButton?.addEventListener("click", closeVoiceRecorder);
 recorderModeButtons.forEach((button) => {
@@ -3169,7 +3033,11 @@ recorderCustomPhraseInput?.addEventListener("paste", (event) => {
 });
 loadExamplePhraseSetButton?.addEventListener("click", () => {
   recorderPreviewAudio.pause();
-  queueCustomPhrasesFromText(EXAMPLE_CUSTOM_PHRASE_SET);
+  const selectedExample = EXAMPLE_CUSTOM_PHRASE_SETS[examplePhraseSetSelect?.value] ?? EXAMPLE_CUSTOM_PHRASE_SETS["never-quit"];
+  recorderCustomCategory = selectedExample.category || DEFAULT_CUSTOM_RECORDED_CATEGORY;
+  recorderCustomNewCategory = "";
+  queueCustomPhrasesFromText(selectedExample.phrases);
+  setRecorderMessage(`Loaded ${selectedExample.title}.`);
 });
 clearPhraseQueueButton?.addEventListener("click", () => {
   clearCustomPhraseQueue();
@@ -3182,8 +3050,8 @@ recordPhraseButton?.addEventListener("click", toggleBrowserPhraseRecording);
 playRecordedPhraseButton?.addEventListener("click", playCurrentBrowserRecording);
 retakeRecordedPhraseButton?.addEventListener("click", retakeCurrentBrowserRecording);
 useRecordedVoiceButton?.addEventListener("click", useBrowserRecordedVoice);
-volumeDownButton.addEventListener("click", () => adjustVolume(-5));
-volumeUpButton.addEventListener("click", () => adjustVolume(5));
+volumeDownButton.addEventListener("click", () => adjustVolume(-1));
+volumeUpButton.addEventListener("click", () => adjustVolume(1));
 volumeControl.parentElement.addEventListener("pointerdown", startVolumeDrag);
 repeatModeButton.addEventListener("click", cycleRepeatMode);
 shuffleButton.addEventListener("click", toggleShuffle);
@@ -3283,35 +3151,21 @@ audio.addEventListener("loadedmetadata", () => {
   updatePlaybackTuning({ save: false });
   updateConversationProgress();
 });
-avatarVideo.addEventListener("loadedmetadata", () => {
-  updatePlaybackTuning({ save: false });
-  updateConversationProgress();
-});
 previewAudio.addEventListener("loadedmetadata", () => updatePlaybackTuning({ save: false }));
 recorderPreviewAudio.addEventListener("loadedmetadata", () => updatePlaybackTuning({ save: false }));
 audio.addEventListener("timeupdate", updateConversationProgress);
-avatarVideo.addEventListener("timeupdate", updateConversationProgress);
 audio.addEventListener("play", () => {
   primeAudioMeter();
   setPlayingState(true);
   updateConversationProgress();
 });
-avatarVideo.addEventListener("play", () => {
-  setPlayingState(true);
-  updateConversationProgress();
-});
 audio.addEventListener("pause", startMeterAnimation);
 audio.addEventListener("pause", updateConversationProgress);
-avatarVideo.addEventListener("pause", () => {
-  startMeterAnimation();
-  updateConversationProgress();
-});
 
 renderAudioMeter();
 applyAudioLooping();
 updateQueueButtons();
 playerPanel.dataset.mode = currentMode;
-setPlayerVisual(activePlayerVisual, { save: false });
 loadBrowserRecordedPhrases().catch(() => {
   syncBrowserRecordedVoiceOption();
 });
@@ -3341,10 +3195,6 @@ document.addEventListener("keydown", (event) => {
 });
 
 function handleMainMediaEnded(event) {
-  if (event?.target === avatarVideo && activeMainMedia() !== avatarVideo) {
-    return;
-  }
-
   if (repeatMode !== "all") {
     setPlayingState(false);
     return;
@@ -3354,4 +3204,3 @@ function handleMainMediaEnded(event) {
 }
 
 audio.addEventListener("ended", handleMainMediaEnded);
-avatarVideo.addEventListener("ended", handleMainMediaEnded);
