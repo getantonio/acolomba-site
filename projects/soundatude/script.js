@@ -713,7 +713,7 @@ const coreVoiceAliases = [
   { id: "core-theo-v001", label: "Theo.", shortLabel: "Theo.", group: "Core", sourceVoiceId: "am_michael" },
 ];
 
-const KOKORO_AUDIO_VERSION = "tail-space-20260702-v1";
+const KOKORO_AUDIO_VERSION = "ae-0001-0003-tail-repair-20260705";
 const RECORDED_AUDIO_VERSION = "recorded-v001";
 
 const recordedVoicePacks = [
