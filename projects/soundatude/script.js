@@ -86,7 +86,7 @@ const BROWSER_RECORDED_FALLBACK_VOICE_ID = "af_nicole";
 const CUSTOM_RECORDED_SOURCE = "browser-recorded-custom";
 const DEFAULT_CUSTOM_RECORDED_CATEGORY = "My Affirmations";
 const NEW_CUSTOM_CATEGORY_VALUE = "__new-custom-recording-category__";
-const METER_BAR_COUNT = 56;
+const METER_BAR_COUNT = 64;
 const RECORDER_AUDIO_CONSTRAINTS = {
   echoCancellation: { ideal: true },
   noiseSuppression: { ideal: true },
@@ -2163,9 +2163,26 @@ function adjustSpeed(delta) {
 loadPlaybackTuning();
 updatePlaybackTuning({ save: false });
 
-function idleMeterLevel(index) {
-  const phase = (index / METER_BAR_COUNT) * Math.PI * 4;
-  return 0.08 + Math.pow(Math.sin(phase) * 0.5 + 0.5, 2) * 0.08;
+function hypnoticMeterLevel(index, time = 0, intensity = 0) {
+  const position = index / Math.max(METER_BAR_COUNT - 1, 1);
+  const centerDistance = Math.abs(position - 0.5) * 2;
+  const centerLift = 1 - Math.pow(centerDistance, 1.8);
+  const slowWave = Math.sin(time * 1.45 + position * Math.PI * 6);
+  const counterWave = Math.sin(time * 2.1 - position * Math.PI * 9);
+  const shimmer = Math.sin(time * 3.35 + index * 1.732);
+  const standingWave = (
+    Math.pow(slowWave * 0.5 + 0.5, 1.35) * 0.46
+    + Math.pow(counterWave * 0.5 + 0.5, 1.8) * 0.34
+    + (shimmer * 0.5 + 0.5) * 0.20
+  );
+  const breath = 0.78 + Math.sin(time * 0.72) * 0.22;
+  const floor = 0.10 + centerLift * 0.05;
+  const motion = standingWave * breath * (0.16 + intensity * 0.62);
+  return clamp(floor + motion, 0.08, 1);
+}
+
+function idleMeterLevel(index, time = 0) {
+  return hypnoticMeterLevel(index, time, 0.18);
 }
 
 function renderAudioMeter() {
@@ -2174,7 +2191,10 @@ function renderAudioMeter() {
   consoleMeter.style.setProperty("--meter-bars", METER_BAR_COUNT);
   meterLevels = Array.from({ length: METER_BAR_COUNT }, (_, index) => idleMeterLevel(index));
   consoleMeter.innerHTML = meterLevels
-    .map((level) => `<span style="--level: ${level.toFixed(3)}"></span>`)
+    .map((level, index) => {
+      const position = index / Math.max(METER_BAR_COUNT - 1, 1);
+      return `<span style="--level: ${level.toFixed(3)}; --tone: ${position.toFixed(3)}"></span>`;
+    })
     .join("");
   meterBars = [...consoleMeter.querySelectorAll("span")];
 }
@@ -2217,16 +2237,22 @@ function startMeterAnimation() {
 function updateAudioMeter() {
   const hasLiveAudio = analyser && meterData && !audio.paused && !audio.ended;
   const time = performance.now() / 1000;
+  let liveEnergy = 0;
 
   if (hasLiveAudio) {
     analyser.getByteTimeDomainData(meterData);
+    for (let sampleIndex = 0; sampleIndex < meterData.length; sampleIndex += 1) {
+      const centeredSample = (meterData[sampleIndex] - 128) / 128;
+      liveEnergy += centeredSample * centeredSample;
+    }
+    liveEnergy = Math.sqrt(liveEnergy / meterData.length);
   }
 
   let highestLevel = 0;
   const samplesPerBar = meterData ? Math.max(1, Math.floor(meterData.length / METER_BAR_COUNT)) : 1;
 
   meterBars.forEach((bar, index) => {
-    let nextLevel = idleMeterLevel(index + time * 0.45);
+    let nextLevel = idleMeterLevel(index, time);
 
     if (hasLiveAudio) {
       let sum = 0;
@@ -2239,17 +2265,21 @@ function updateAudioMeter() {
       }
 
       const rms = Math.sqrt(sum / Math.max(sampleEnd - sampleStart, 1));
-      nextLevel = clamp(0.08 + rms * 4.8, 0.08, 1);
+      const intensity = clamp(liveEnergy * 5.2 + rms * 2.4, 0.16, 1);
+      const audioLift = clamp(rms * 3.1, 0, 0.58);
+      nextLevel = clamp(hypnoticMeterLevel(index, time, intensity) + audioLift, 0.08, 1);
     }
 
     const previousLevel = meterLevels[index] ?? nextLevel;
-    const smoothing = nextLevel > previousLevel ? 0.56 : 0.2;
+    const smoothing = nextLevel > previousLevel ? 0.64 : 0.30;
     const smoothedLevel = previousLevel + (nextLevel - previousLevel) * smoothing;
 
     meterLevels[index] = smoothedLevel;
     highestLevel = Math.max(highestLevel, smoothedLevel);
     bar.style.setProperty("--level", smoothedLevel.toFixed(3));
   });
+
+  consoleMeter?.style.setProperty("--meter-intensity", clamp(highestLevel, 0.12, 1).toFixed(3));
 
   if (hasLiveAudio || highestLevel > 0.18) {
     meterFrame = requestAnimationFrame(updateAudioMeter);

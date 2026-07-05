@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v75-all-kokoro-ending-gap";
+const CACHE_NAME = "sound-a-tude-v76-hypnotic-waveform";
 const APP_SHELL = [
   "./",
   "./index.html",
