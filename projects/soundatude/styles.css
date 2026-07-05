@@ -762,8 +762,7 @@ button:focus-visible {
 
 .waveform-vector,
 .halo-ring,
-.halo-orb,
-.wave-hot {
+.halo-orb {
   position: absolute;
   pointer-events: none;
 }
@@ -802,20 +801,6 @@ button:focus-visible {
   to {
     stroke-dashoffset: -60;
   }
-}
-
-.wave-hot {
-  left: var(--hot-x, 50%);
-  top: var(--hot-y, 48%);
-  z-index: 3;
-  display: none;
-  width: calc(5px + var(--word-tip-intensity, 0) * 12px);
-  height: calc(5px + var(--word-tip-intensity, 0) * 12px);
-  border-radius: 50%;
-  background: var(--hot-color, var(--word-tip-color));
-  box-shadow: 0 0 calc(6px + var(--word-tip-intensity, 0) * 24px) var(--hot-color, var(--word-tip-color));
-  opacity: calc(var(--word-tip-intensity, 0) * 0.95);
-  transform: translate(-50%, -50%);
 }
 
 .halo-orb {
@@ -935,12 +920,7 @@ button:focus-visible {
   opacity: calc(0.34 + var(--level, 0.12) * 0.66);
 }
 
-.console-meter[data-waveform-style="sparks"] .meter-bar::after,
-.console-meter[data-waveform-style="aurora"] .wave-hot,
-.console-meter[data-waveform-style="thread"] .wave-hot,
-.console-meter[data-waveform-style="field"] .wave-hot,
-.console-meter[data-waveform-style="sparks"] .wave-hot,
-.console-meter[data-waveform-style="halo"] .wave-hot {
+.console-meter[data-waveform-style="sparks"] .meter-bar::after {
   display: block;
 }
 

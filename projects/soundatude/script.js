@@ -106,7 +106,6 @@ let waveformFillPath = null;
 let waveformMainPath = null;
 let waveformAltPath = null;
 let waveformThirdPath = null;
-let waveformHotPoints = [];
 let haloOrb = null;
 const RECORDER_AUDIO_CONSTRAINTS = {
   echoCancellation: { ideal: true },
@@ -2339,17 +2338,13 @@ function renderAudioMeter() {
     <span class="halo-ring halo-ring-two" aria-hidden="true"></span>
     <span class="halo-ring halo-ring-three" aria-hidden="true"></span>
     <span class="halo-orb" aria-hidden="true"></span>
-    <span class="wave-hot wave-hot-a" aria-hidden="true"></span>
-    <span class="wave-hot wave-hot-b" aria-hidden="true"></span>
-    <span class="wave-hot wave-hot-c" aria-hidden="true"></span>
   `;
-  meterBars = [...consoleMeter.querySelectorAll(".meter-bar, .console-meter > span:not(.halo-ring):not(.halo-orb):not(.wave-hot)")];
+  meterBars = [...consoleMeter.querySelectorAll(".meter-bar, .console-meter > span:not(.halo-ring):not(.halo-orb)")];
   waveformVector = consoleMeter.querySelector(".waveform-vector");
   waveformFillPath = consoleMeter.querySelector(".wave-fill");
   waveformMainPath = consoleMeter.querySelector(".wave-main");
   waveformAltPath = consoleMeter.querySelector(".wave-alt");
   waveformThirdPath = consoleMeter.querySelector(".wave-third");
-  waveformHotPoints = [...consoleMeter.querySelectorAll(".wave-hot")];
   haloOrb = consoleMeter.querySelector(".halo-orb");
   updateVectorWaveform(performance.now() / 1000);
 }
@@ -2422,20 +2417,6 @@ function waveformLinePath({
   return `M ${points.join(" L ")}`;
 }
 
-function updateWaveHotPoints(time) {
-  if (!waveformHotPoints.length) return;
-
-  const color = activeCueWord ? cueWordColor(activeCueWord) : "#ffffff";
-  waveformHotPoints.forEach((point, index) => {
-    const offset = (time * 0.08 + index * 0.31) % 1;
-    const sampleIndex = Math.min(METER_BAR_COUNT - 1, Math.round(offset * (METER_BAR_COUNT - 1)));
-    const level = meterLevels[sampleIndex] ?? 0.2;
-    point.style.setProperty("--hot-x", `${Math.round(offset * 100)}%`);
-    point.style.setProperty("--hot-y", `${Math.round(78 - level * 54)}%`);
-    point.style.setProperty("--hot-color", color);
-  });
-}
-
 function updateVectorWaveform(time = 0) {
   if (!waveformVector) return;
 
@@ -2456,7 +2437,6 @@ function updateVectorWaveform(time = 0) {
   const scan = (Math.sin(time * 1.15) + 1) / 2;
   consoleMeter?.style.setProperty("--halo-scan-x", `${Math.round(8 + scan * 84)}%`);
   consoleMeter?.style.setProperty("--halo-scan-y", `${Math.round(54 + Math.sin(time * 2.1) * 16)}%`);
-  updateWaveHotPoints(time);
 }
 
 function clamp(value, min, max) {
