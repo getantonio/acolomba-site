@@ -116,8 +116,8 @@ button:focus-visible {
 }
 
 .player.is-minimal-ui {
-  gap: 13px;
-  padding-top: 14px;
+  gap: 9px;
+  padding-top: 8px;
 }
 
 .playlist-page {
@@ -452,7 +452,7 @@ button:focus-visible {
 .player.is-minimal-ui .player-control-row {
   order: 1;
   width: min(100%, 318px);
-  margin-top: 14px;
+  margin-top: 8px;
 }
 
 .player.is-minimal-ui .mode-toggle {
@@ -476,8 +476,8 @@ button:focus-visible {
   width: min(100%, 318px);
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin: 4px 0 0;
+  gap: 8px;
+  margin: 0;
   padding: 0;
   border-color: transparent;
   background: transparent;
@@ -489,12 +489,12 @@ button:focus-visible {
 }
 
 .player.is-minimal-ui .loop-wheel {
-  height: 144px;
+  height: 132px;
   padding: 0;
 }
 
 .player.is-minimal-ui .loop-wheel button {
-  min-height: 144px;
+  min-height: 132px;
   color: oklch(82% 0.032 89 / 0.16);
   font-size: 1.62rem;
   transform: scale(0.88);
@@ -506,7 +506,7 @@ button:focus-visible {
 }
 
 .player.is-minimal-ui .loop-wheel button[aria-selected="true"] {
-  font-size: 2rem;
+  font-size: 1.9rem;
 }
 
 .player.is-minimal-ui .loop-picker {
@@ -2703,12 +2703,14 @@ button:focus-visible {
 
 @media (max-width: 420px) {
   .app-shell {
-    padding: 14px;
+    gap: 8px;
+    padding: 10px 14px 8px;
   }
 
   .player {
     min-height: min(610px, calc(100svh - 28px));
     gap: 10px;
+    padding-bottom: 50px;
   }
 
   .playlist-page,
