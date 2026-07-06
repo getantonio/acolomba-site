@@ -1,59 +1,26 @@
-const CACHE_NAME = "sound-a-tude-v125-development-home";
-const APP_SHELL = [
-  "./",
-  "./index.html",
-  "./marketing.html",
-  "./privacy.html",
-  "./styles.css",
-  "./marketing.css",
-  "./script.js",
-  "./manifest.webmanifest",
-  "./icons/icon.svg",
-  "./assets/images/marketing/iphone-player.png"
-];
+const CACHE_NAME = "sound-a-tude-legacy-redirect-v126";
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL))
-  );
+  event.waitUntil(caches.open(CACHE_NAME));
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => Promise.all(
-      cacheNames
-        .filter((cacheName) => cacheName !== CACHE_NAME)
-        .map((cacheName) => caches.delete(cacheName))
-    )).then(() => self.clients.claim())
+    caches.keys()
+      .then((cacheNames) => Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName))))
+      .then(() => self.clients.claim())
   );
 });
 
 self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
-
-  if (event.request.headers.has("range")) {
-    return;
-  }
-
   if (event.request.mode === "navigate") {
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put("./", copy));
-          return response;
-        })
-        .catch(() => caches.match(event.request).then((cachedResponse) => (
-          cachedResponse || caches.match("./")
-        )))
-    );
-    return;
+    const url = new URL(event.request.url);
+    const suffix = url.pathname.endsWith("/marketing.html")
+      ? "marketing.html"
+      : url.pathname.endsWith("/privacy.html")
+        ? "privacy.html"
+        : "";
+    event.respondWith(Response.redirect(`/development/soundatude/${suffix}${url.search}${url.hash}`, 302));
   }
-
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => (
-      cachedResponse || fetch(event.request)
-    ))
-  );
 });
