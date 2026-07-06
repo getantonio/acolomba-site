@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v119-amp-75-sliders-over-labels";
+const CACHE_NAME = "sound-a-tude-v124-discreet-lip-hue";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -9,18 +9,7 @@ const APP_SHELL = [
   "./script.js",
   "./manifest.webmanifest",
   "./icons/icon.svg",
-  "./assets/images/marketing/iphone-player.png",
-  "./assets/audio/attitude-effort-sample.mp3",
-  "./assets/audio/positive_affirmations1.mp3",
-  "./assets/audio/positive_affirmations2.mp3",
-  "./assets/audio/positive_affirmations3.mp3",
-  "./assets/audio/positive_affirmations4.mp3",
-  "./assets/audio/positive_affirmations5.mp3",
-  "./assets/audio/positive_affirmations6.mp3",
-  "./assets/audio/positive_affirmations7.mp3",
-  "./assets/audio/positive_affirmations8.mp3",
-  "./assets/audio/conversations/sat-c001-confidence-connection-conversation-mara-v001-theo-v001-mix-v003.mp3",
-  "./assets/audio/conversations/sat-c002-attitude-effort-conversation-mara-v001-theo-v001-mix-v001.mp3"
+  "./assets/images/marketing/iphone-player.png"
 ];
 
 self.addEventListener("install", (event) => {
@@ -42,6 +31,10 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
+
+  if (event.request.headers.has("range")) {
+    return;
+  }
 
   if (event.request.mode === "navigate") {
     event.respondWith(

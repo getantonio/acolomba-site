@@ -49,6 +49,7 @@ const speedDownButton = document.querySelector("#speedDownButton");
 const speedControl = document.querySelector("#speedControl");
 const speedValue = document.querySelector("#speedValue");
 const speedUpButton = document.querySelector("#speedUpButton");
+const lipHueControl = document.querySelector("#lipHueControl");
 const pitchToggle = document.querySelector("#pitchToggle");
 const pitchValue = document.querySelector("#pitchValue");
 const shuffleButton = document.querySelector("#shuffleButton");
@@ -986,19 +987,29 @@ function cssWaveformHue(voiceHue = voiceWaveformHue()) {
   return voiceHue === 225 ? 350 : 326;
 }
 
+function lipHueOffset() {
+  return clamp(Number(lipHueControl?.value ?? 0), -18, 18);
+}
+
+function currentCssWaveformHue() {
+  return (cssWaveformHue() + lipHueOffset() + 360) % 360;
+}
+
 function updateWaveformHue() {
   const hue = voiceWaveformHue();
-  const cssHue = cssWaveformHue(hue);
+  const offset = lipHueOffset();
+  const cssHue = (cssWaveformHue(hue) + offset + 360) % 360;
   const tipHue = (cssHue + 12) % 360;
   const upperHue = (cssHue + 8) % 360;
   const lowerHue = (cssHue + 340) % 360;
-  document.documentElement.style.setProperty("--wave-hue", hue.toFixed(0));
+  document.documentElement.style.setProperty("--wave-hue", cssHue.toFixed(0));
   document.documentElement.style.setProperty("--wave-lip-tip", `oklch(80% 0.280 ${tipHue.toFixed(0)} / 0.99)`);
   document.documentElement.style.setProperty("--wave-lip-top", `oklch(71% 0.250 ${cssHue.toFixed(0)} / 0.98)`);
   document.documentElement.style.setProperty("--wave-lip-upper", `oklch(66% 0.220 ${upperHue.toFixed(0)} / 0.97)`);
   document.documentElement.style.setProperty("--wave-lip-bottom", `oklch(50% 0.190 ${lowerHue.toFixed(0)} / 0.97)`);
   document.documentElement.style.setProperty("--wave-glow", `oklch(64% 0.210 ${cssHue.toFixed(0)})`);
   document.documentElement.style.setProperty("--word-tip-color", `oklch(81% 0.280 ${tipHue.toFixed(0)})`);
+  lipHueControl?.setAttribute("aria-valuetext", offset === 0 ? "Automatic" : `${Math.abs(offset)} degrees ${offset > 0 ? "warmer" : "cooler"}`);
   meterBars?.forEach((bar, index) => applyMeterBarColorVars(bar, index));
 }
 
@@ -2217,6 +2228,7 @@ function savePlaybackTuning() {
   localStorage.setItem(PLAYBACK_STORAGE_KEY, JSON.stringify({
     speed: Number(speedControl.value),
     pitchPreserved,
+    lipHueOffset: lipHueOffset(),
   }));
 }
 
@@ -2253,6 +2265,9 @@ function loadPlaybackTuning() {
 
     if (typeof savedTuning.pitchPreserved === "boolean") {
       pitchPreserved = savedTuning.pitchPreserved;
+    }
+    if (typeof savedTuning.lipHueOffset === "number") {
+      lipHueControl.value = String(clamp(savedTuning.lipHueOffset, -18, 18));
     }
   } catch {
     localStorage.removeItem(PLAYBACK_STORAGE_KEY);
@@ -2372,7 +2387,7 @@ function meterMouthWeight(index) {
 
 function meterBarLipPalette(index) {
   const position = index / Math.max(METER_BAR_COUNT - 1, 1);
-  const cssHue = cssWaveformHue();
+  const cssHue = currentCssWaveformHue();
   const roseLobe = Math.pow(Math.max(1 - Math.abs(position - 0.34) * 2.00, 0), 1.02);
   const centerSheen = Math.pow(Math.max(1 - Math.abs(position - 0.50) * 2.80, 0), 1.18);
   const mauveLobe = Math.pow(Math.max(1 - Math.abs(position - 0.64) * 2.05, 0), 1.00);
@@ -3640,6 +3655,8 @@ conversationSeek?.addEventListener("keydown", (event) => {
 });
 speedControl.addEventListener("input", updatePlaybackTuning);
 speedControl.addEventListener("change", updatePlaybackTuning);
+lipHueControl.addEventListener("input", updatePlaybackTuning);
+lipHueControl.addEventListener("change", updatePlaybackTuning);
 pitchToggle.addEventListener("click", togglePitchMode);
 audio.addEventListener("loadedmetadata", () => {
   updatePlaybackTuning({ save: false });
