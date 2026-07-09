@@ -146,7 +146,7 @@ p = right.paragraphs[0]
 p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
 set_para(p, before=8, after=2, line=1.0)
 add_text(p, "NYC / Remote", size=9.5, bold=True, color=INK)
-for text in ["(561) 271-1163", "getantonio@gmail.com", "project walkthroughs available"]:
+for text in ["(561) 271-1163", "getantonio@gmail.com", "www.acolomba.com", "project walkthroughs available"]:
     p = right.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     set_para(p, after=2, line=1.0)

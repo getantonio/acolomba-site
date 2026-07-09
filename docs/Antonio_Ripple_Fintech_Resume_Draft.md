@@ -1,6 +1,7 @@
 # Antonio Colomba
 
-[City, State] | [Phone] | [Email] | [LinkedIn URL] | [GitHub / Portfolio / Website]
+[City, State] | [Phone] | [Email]  
+www.acolomba.com | [LinkedIn URL] | [GitHub / Portfolio]
 
 ## Creative Technology & AI Workflow Operator
 

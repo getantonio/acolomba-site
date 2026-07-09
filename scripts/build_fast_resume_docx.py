@@ -106,6 +106,8 @@ add_text(name, "ANTONIO COLOMBA", size=27, bold=True)
 contact = doc.add_paragraph()
 set_para(contact, after=3, line=1.0)
 add_text(contact, "NYC / Remote  |  (561) 271-1163  |  getantonio@gmail.com", size=9.2, color=MUTED)
+contact.add_run().add_break()
+add_text(contact, "www.acolomba.com", size=9.2, color=MUTED)
 
 title = doc.add_paragraph()
 set_para(title, after=9, line=1.0)

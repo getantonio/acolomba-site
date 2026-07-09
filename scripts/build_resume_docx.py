@@ -77,7 +77,10 @@ set_run(r, size=18, bold=True, color="0B2545")
 contact = doc.add_paragraph()
 contact.alignment = WD_ALIGN_PARAGRAPH.CENTER
 set_paragraph(contact, before=0, after=4, line=1.0)
-r = contact.add_run("[City, State] | [Phone] | [Email] | [LinkedIn] | [GitHub / Portfolio]")
+r = contact.add_run("[City, State] | [Phone] | [Email]")
+set_run(r, size=9.4, color="555555")
+contact.add_run().add_break()
+r = contact.add_run("www.acolomba.com | [LinkedIn] | [GitHub / Portfolio]")
 set_run(r, size=9.4, color="555555")
 
 headline = doc.add_paragraph()
