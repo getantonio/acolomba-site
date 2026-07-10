@@ -464,11 +464,15 @@ input[type="range"]:focus-visible {
 }
 
 .player-footer {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
   width: min(100%, 324px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 8px 2px 0;
+  transform: translateX(-50%);
 }
 
 .player-footer .footer-switch {
