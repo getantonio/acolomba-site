@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v132-remove-speed-readout";
+const CACHE_NAME = "sound-a-tude-v133-icon-speaker-footer";
 const APP_SHELL = [
   "./",
   "./index.html",

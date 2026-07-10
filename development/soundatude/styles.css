@@ -387,13 +387,13 @@ input[type="range"]:focus-visible {
 
 .voice-control {
   position: relative;
-  width: 100%;
+  width: 52px;
   display: grid;
-  grid-template-columns: 20px minmax(0, 1fr);
+  grid-template-columns: 1fr;
   align-items: center;
-  gap: 7px;
+  justify-items: center;
   min-height: 44px;
-  padding: 0 10px 0 12px;
+  padding: 0;
   border: 1px solid oklch(44% 0.04 228 / 0.24);
   border-radius: 999px;
   background: oklch(15% 0.027 226 / 0.76);
@@ -422,20 +422,20 @@ input[type="range"]:focus-visible {
 }
 
 .voice-control select {
-  grid-column: 2;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
   width: 100%;
-  min-width: 0;
-  min-height: 44px;
+  height: 100%;
   appearance: none;
-  padding: 0 22px 0 0;
+  padding: 0;
   border: 0;
   border-radius: 999px;
-  background:
-    linear-gradient(45deg, transparent 50%, oklch(62% 0.04 220) 50%) calc(100% - 12px) 19px / 4px 4px no-repeat,
-    linear-gradient(135deg, oklch(62% 0.04 220) 50%, transparent 50%) calc(100% - 8px) 19px / 4px 4px no-repeat;
-  color: var(--ink);
+  background: transparent;
+  color: transparent;
   font: inherit;
   cursor: pointer;
+  opacity: 0;
 }
 
 .voice-control select:focus-visible {
@@ -443,14 +443,7 @@ input[type="range"]:focus-visible {
 }
 
 .voice-fixed-label {
-  grid-column: 2;
-  display: none;
-  min-width: 0;
-  overflow: hidden;
-  color: oklch(66% 0.021 218 / 0.84);
-  font-size: 0.72rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: none !important;
 }
 
 .voice-control.is-fixed {
@@ -462,12 +455,26 @@ input[type="range"]:focus-visible {
 }
 
 .voice-control.is-fixed .voice-fixed-label {
-  display: block;
+  display: none !important;
 }
 
 .voice-control:focus-within {
   outline: 2px solid var(--selected);
   outline-offset: 4px;
+}
+
+.player-footer {
+  width: min(100%, 324px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 2px 0;
+}
+
+.player-footer .footer-switch {
+  position: relative;
+  inset: auto;
+  transform: none;
 }
 
 .now-console {

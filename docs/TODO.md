@@ -243,3 +243,4 @@ Last updated: 2026-07-10
 - Prepare a weekly application tracker.
 - Draft cover notes for the top 5 roles after Antonio selects targets.
 - 2026-07-10 [Done] Removed only the circled Speed/Pitch readout row while preserving the speed slider and steady-pitch playback behavior.
+- 2026-07-10 [Done] Simplified the player voice control to icon-only and consolidated guide, settings, and playlist navigation into a footer icon row.
