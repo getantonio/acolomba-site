@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v126-compact-player-controller";
+const CACHE_NAME = "sound-a-tude-v128-steady-pitch-speed";
 const APP_SHELL = [
   "./",
   "./index.html",

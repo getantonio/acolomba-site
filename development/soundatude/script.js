@@ -49,9 +49,6 @@ const speedDownButton = document.querySelector("#speedDownButton");
 const speedControl = document.querySelector("#speedControl");
 const speedValue = document.querySelector("#speedValue");
 const speedUpButton = document.querySelector("#speedUpButton");
-const lipHueControl = document.querySelector("#lipHueControl");
-const pitchToggle = document.querySelector("#pitchToggle");
-const pitchValue = document.querySelector("#pitchValue");
 const shuffleButton = document.querySelector("#shuffleButton");
 const repeatModeButton = document.querySelector("#repeatModeButton");
 const repeatModeLabel = document.querySelector("#repeatModeLabel");
@@ -930,7 +927,6 @@ let pageSwipeOffset = 0;
 let isPageSwiping = false;
 let repeatMode = "all";
 let shuffleEnabled = false;
-let pitchPreserved = true;
 let previewingId = null;
 let audioContext = null;
 let analyser = null;
@@ -987,18 +983,13 @@ function cssWaveformHue(voiceHue = voiceWaveformHue()) {
   return voiceHue === 225 ? 350 : 326;
 }
 
-function lipHueOffset() {
-  return clamp(Number(lipHueControl?.value ?? 0), -18, 18);
-}
-
 function currentCssWaveformHue() {
-  return (cssWaveformHue() + lipHueOffset() + 360) % 360;
+  return cssWaveformHue();
 }
 
 function updateWaveformHue() {
   const hue = voiceWaveformHue();
-  const offset = lipHueOffset();
-  const cssHue = (cssWaveformHue(hue) + offset + 360) % 360;
+  const cssHue = cssWaveformHue(hue);
   const tipHue = (cssHue + 12) % 360;
   const upperHue = (cssHue + 8) % 360;
   const lowerHue = (cssHue + 340) % 360;
@@ -1009,7 +1000,6 @@ function updateWaveformHue() {
   document.documentElement.style.setProperty("--wave-lip-bottom", `oklch(50% 0.190 ${lowerHue.toFixed(0)} / 0.97)`);
   document.documentElement.style.setProperty("--wave-glow", `oklch(64% 0.210 ${cssHue.toFixed(0)})`);
   document.documentElement.style.setProperty("--word-tip-color", `oklch(81% 0.280 ${tipHue.toFixed(0)})`);
-  lipHueControl?.setAttribute("aria-valuetext", offset === 0 ? "Automatic" : `${Math.abs(offset)} degrees ${offset > 0 ? "warmer" : "cooler"}`);
   meterBars?.forEach((bar, index) => applyMeterBarColorVars(bar, index));
 }
 
@@ -1972,7 +1962,7 @@ async function playCurrentBrowserRecording() {
   previewAudio.pause();
   recorderPreviewAudio.src = file;
   recorderPreviewAudio.volume = recordedVoiceOutputVolume();
-  applyPlaybackTuningToMedia(recorderPreviewAudio, Number(speedControl.value) / 100);
+  applyPlaybackTuningToMedia(recorderPreviewAudio, playbackRateFromSpeedSlider());
 
   try {
     await recorderPreviewAudio.play();
@@ -2219,27 +2209,44 @@ function stopVolumeDrag() {
   window.removeEventListener("pointermove", handleVolumePointer);
 }
 
-function setPreservesPitch(media, shouldPreserve) {
-  media.preservesPitch = shouldPreserve;
-  media.mozPreservesPitch = shouldPreserve;
-  media.webkitPreservesPitch = shouldPreserve;
+function setPreservesPitch(media) {
+  media.preservesPitch = true;
+  media.mozPreservesPitch = true;
+  media.webkitPreservesPitch = true;
+}
+
+function playbackRateFromSpeedSlider() {
+  const sliderValue = clamp(Number(speedControl.value) || 0, -100, 100);
+  return sliderValue < 0
+    ? 1 + sliderValue * 0.005
+    : 1 + sliderValue * 0.0075;
+}
+
+function speedSliderValueFromPlaybackRate(speed) {
+  const normalizedSpeed = speed > 10 ? speed / 100 : speed;
+  const clampedSpeed = clamp(normalizedSpeed || 1, 0.5, 1.75);
+  const sliderValue = clampedSpeed < 1
+    ? (clampedSpeed - 1) / 0.005
+    : (clampedSpeed - 1) / 0.0075;
+  return Math.round(sliderValue / 5) * 5;
 }
 
 function savePlaybackTuning() {
+  const speed = playbackRateFromSpeedSlider();
   localStorage.setItem(PLAYBACK_STORAGE_KEY, JSON.stringify({
-    speed: Number(speedControl.value),
-    pitchPreserved,
-    lipHueOffset: lipHueOffset(),
+    speed: Math.round(speed * 100),
   }));
 }
 
 function applyPlaybackTuningToMedia(media, speed) {
   media.playbackRate = speed;
-  setPreservesPitch(media, pitchPreserved);
+  setPreservesPitch(media);
 }
 
 function updatePlaybackTuning({ save = true } = {}) {
-  const speed = Number(speedControl.value) / 100;
+  const speed = playbackRateFromSpeedSlider();
+  const speedProgress = ((Number(speedControl.value) + 100) / 200) * 100;
+  speedControl.style.setProperty("--speed-progress", `${speedProgress}%`);
 
   applyPlaybackTuningToMedia(audio, speed);
   applyPlaybackTuningToMedia(previewAudio, speed);
@@ -2247,10 +2254,6 @@ function updatePlaybackTuning({ save = true } = {}) {
 
   speedValue.textContent = `${speed.toFixed(2)}x`;
   updateWaveformHue();
-  pitchValue.textContent = pitchPreserved ? "Steady" : "Natural";
-  pitchToggle.classList.toggle("is-active", pitchPreserved);
-  pitchToggle.setAttribute("aria-pressed", String(pitchPreserved));
-  pitchToggle.setAttribute("aria-label", pitchPreserved ? "Pitch steady" : "Pitch natural");
 
   if (save) {
     savePlaybackTuning();
@@ -2258,30 +2261,23 @@ function updatePlaybackTuning({ save = true } = {}) {
 }
 
 function loadPlaybackTuning() {
+  speedControl.value = "0";
+
   try {
     const savedTuning = JSON.parse(localStorage.getItem(PLAYBACK_STORAGE_KEY));
     if (!savedTuning) return;
 
-    speedControl.value = "100";
-
-    if (typeof savedTuning.pitchPreserved === "boolean") {
-      pitchPreserved = savedTuning.pitchPreserved;
-    }
-    if (typeof savedTuning.lipHueOffset === "number") {
-      lipHueControl.value = String(clamp(savedTuning.lipHueOffset, -18, 18));
+    if (typeof savedTuning.speed === "number") {
+      speedControl.value = String(speedSliderValueFromPlaybackRate(savedTuning.speed));
     }
   } catch {
     localStorage.removeItem(PLAYBACK_STORAGE_KEY);
   }
 }
 
-function togglePitchMode() {
-  pitchPreserved = !pitchPreserved;
-  updatePlaybackTuning();
-}
-
 function adjustSpeed(delta) {
-  speedControl.value = String(clamp(Number(speedControl.value) + delta, 75, 125));
+  const nextSpeed = clamp(playbackRateFromSpeedSlider() + delta / 100, 0.5, 1.75);
+  speedControl.value = String(speedSliderValueFromPlaybackRate(nextSpeed));
   updatePlaybackTuning();
 }
 
@@ -3656,9 +3652,6 @@ conversationSeek?.addEventListener("keydown", (event) => {
 });
 speedControl.addEventListener("input", updatePlaybackTuning);
 speedControl.addEventListener("change", updatePlaybackTuning);
-lipHueControl.addEventListener("input", updatePlaybackTuning);
-lipHueControl.addEventListener("change", updatePlaybackTuning);
-pitchToggle.addEventListener("click", togglePitchMode);
 audio.addEventListener("loadedmetadata", () => {
   updatePlaybackTuning({ save: false });
   updateConversationProgress();
