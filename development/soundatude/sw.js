@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v134-radiating-ribbon-waveform";
+const CACHE_NAME = "sound-a-tude-v135-center-pulse-emission";
 const APP_SHELL = [
   "./",
   "./index.html",

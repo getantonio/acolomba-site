@@ -2430,7 +2430,7 @@ function applyWaveformStyle() {
   if (flowingWaveformToggle) flowingWaveformToggle.checked = waveformStyle === "flowing";
 }
 
-function drawFlowingWaveform(time, hasLiveAudio) {
+function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
   if (!flowingWaveform || waveformStyle !== "flowing") return;
   const rect = flowingWaveform.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
@@ -2444,20 +2444,32 @@ function drawFlowingWaveform(time, hasLiveAudio) {
   if (!context) return;
   context.setTransform(dpr, 0, 0, dpr, 0, 0);
   context.clearRect(0, 0, rect.width, rect.height);
-  const centerX = rect.width * 0.68;
+  const centerX = rect.width * 0.5;
   const centerY = rect.height * 0.5;
   const maxRadius = Math.hypot(rect.width, rect.height) * 0.95;
   const ribbonCount = 24;
-  const activity = hasLiveAudio ? (0.72 + meterEnergyPulse * 1.4) : 0.56;
+  const energy = hasLiveAudio ? clamp((liveEnergy - 0.0007) * 280, 0, 1) : 0;
+  const emission = clamp(energy * 0.72 + meterEnergyPulse * 0.92, 0, 1);
+  const activity = 0.42 + emission * 1.8;
+  const activeRadius = maxRadius * clamp(0.12 + emission * 1.12, 0.12, 1);
 
   context.save();
   context.globalCompositeOperation = "lighter";
-  const centerGlow = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, rect.height * 0.42);
-  centerGlow.addColorStop(0, "rgba(255, 236, 176, 0.98)");
-  centerGlow.addColorStop(0.05, "rgba(104, 197, 255, 0.78)");
+  const pulse = 0.78 + Math.sin(time * 2.1) * 0.12 + emission * 0.22;
+  const glowRadius = rect.height * (0.11 + emission * 0.24);
+  const centerGlow = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, glowRadius);
+  centerGlow.addColorStop(0, `rgba(255, 240, 190, ${0.72 * pulse})`);
+  centerGlow.addColorStop(0.08, `rgba(115, 207, 255, ${0.62 * pulse})`);
+  centerGlow.addColorStop(0.42, `rgba(38, 133, 237, ${0.20 * pulse})`);
   centerGlow.addColorStop(1, "rgba(20, 94, 190, 0)");
   context.fillStyle = centerGlow;
   context.fillRect(0, 0, rect.width, rect.height);
+
+  if (!hasLiveAudio || emission < 0.08) {
+    context.restore();
+    context.shadowBlur = 0;
+    return;
+  }
 
   for (let ribbonIndex = 0; ribbonIndex < ribbonCount; ribbonIndex += 1) {
     const angle = (ribbonIndex / ribbonCount) * Math.PI * 2 + Math.sin(ribbonIndex * 7.1) * 0.035;
@@ -2469,8 +2481,8 @@ function drawFlowingWaveform(time, hasLiveAudio) {
     const normalY = Math.cos(angle);
     const drawRibbon = (offset, lineWidth, opacity, filament = false) => {
       context.beginPath();
-      for (let radius = 0; radius <= maxRadius; radius += 3) {
-        const progress = radius / maxRadius;
+      for (let radius = 0; radius <= activeRadius; radius += 3) {
+        const progress = radius / Math.max(activeRadius, 1);
         const meterIndex = Math.min(meterLevels.length - 1, Math.floor(progress * meterLevels.length));
         const level = meterLevels[meterIndex] || 0.08;
         const envelope = Math.pow(Math.sin(Math.min(progress, 1) * Math.PI * 0.78), 0.52);
@@ -2483,7 +2495,7 @@ function drawFlowingWaveform(time, hasLiveAudio) {
         if (radius === 0) context.moveTo(x, y);
         else context.lineTo(x, y);
       }
-      context.strokeStyle = `hsla(${hue}, 94%, ${lightness}%, ${opacity * (hasLiveAudio ? 1 : 0.72)})`;
+      context.strokeStyle = `hsla(${hue}, 94%, ${lightness}%, ${opacity * emission})`;
       context.lineWidth = lineWidth;
       context.shadowColor = `hsla(${hue}, 95%, 72%, ${opacity * 0.82})`;
       context.shadowBlur = filament ? 3 : 10;
@@ -2684,7 +2696,7 @@ function updateAudioMeter() {
   });
 
   consoleMeter?.style.setProperty("--meter-intensity", clamp(highestLevel, 0.12, 1).toFixed(3));
-  drawFlowingWaveform(time, hasLiveAudio);
+  drawFlowingWaveform(time, hasLiveAudio, liveEnergy);
   cueWordIntensity = activeCueWord ? cueWordIntensity * 0.68 : cueWordIntensity * 0.54;
   if (cueWordIntensity < 0.015) cueWordIntensity = 0;
   consoleMeter?.style.setProperty("--word-tip-intensity", cueWordIntensity.toFixed(3));
