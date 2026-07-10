@@ -922,6 +922,8 @@ let meterLevels = [];
 let previousMeterEnergy = 0;
 let meterEnergyPulse = 0;
 let waveformEmission = 0;
+let waveformTrailEnergy = 0;
+let waveformHasStarted = false;
 let waveformStyle = localStorage.getItem(WAVEFORM_STYLE_STORAGE_KEY) === "flowing" ? "flowing" : "bars";
 let activeCueWords = [];
 let activeCueStep = -1;
@@ -2457,8 +2459,13 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
   const smoothing = targetEmission > waveformEmission ? 0.04 : 0.14;
   waveformEmission += (targetEmission - waveformEmission) * smoothing;
   const emission = clamp(waveformEmission, 0, 1);
-  const activity = 0.42 + emission * 1.8;
-  const activeRadius = maxRadius * clamp(0.12 + emission * 0.88, 0.12, 1);
+  if (targetEmission > 0.08) waveformHasStarted = true;
+  waveformTrailEnergy = waveformHasStarted
+    ? Math.max(waveformTrailEnergy * 0.996, emission * 0.92, 0.035)
+    : 0;
+  const trailEnergy = clamp(waveformTrailEnergy, 0, 1);
+  const trailOpacity = clamp(0.14 + trailEnergy * 0.86, 0.14, 1);
+  const activity = 0.28 + emission * 1.8 + trailEnergy * 0.48;
 
   context.save();
   context.globalCompositeOperation = "lighter";
@@ -2472,7 +2479,7 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
   context.fillStyle = centerGlow;
   context.fillRect(0, 0, rect.width, rect.height);
 
-  if (!hasLiveAudio || emission < 0.08) {
+  if (!waveformHasStarted) {
     context.restore();
     context.shadowBlur = 0;
     return;
@@ -2488,21 +2495,22 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
     const normalY = Math.cos(angle);
     const drawRibbon = (offset, lineWidth, opacity, filament = false) => {
       context.beginPath();
-      for (let radius = 0; radius <= activeRadius; radius += 3) {
-        const progress = radius / Math.max(activeRadius, 1);
+      for (let radius = 0; radius <= maxRadius; radius += 3) {
+        const progress = radius / Math.max(maxRadius, 1);
         const meterIndex = Math.min(meterLevels.length - 1, Math.floor(progress * meterLevels.length));
         const level = meterLevels[meterIndex] || 0.08;
-        const envelope = Math.pow(Math.sin(Math.min(progress, 1) * Math.PI * 0.78), 0.52);
-        const broadBend = Math.sin(radius * 0.023 + time * speed + ribbonIndex * 1.7) * (5 + radius * 0.035);
+        const envelope = 0.42 + Math.pow(Math.sin(Math.min(progress, 1) * Math.PI), 0.52) * 0.58;
+        const broadBend = Math.sin(radius * 0.023 + time * speed + ribbonIndex * 1.7) * (4 + radius * 0.035);
         const fineBend = Math.sin(radius * 0.082 - time * speed * 1.7 + ribbonIndex) * (filament ? 1.8 : 3.2);
+        const outwardWave = Math.sin(radius * 0.018 - time * 0.58 + ribbonIndex * 0.7) * (2 + radius * 0.018);
         const audioBend = (level - 0.08) * rect.height * 0.28 * activity * (0.28 + envelope);
-        const bend = (broadBend + fineBend + audioBend) * envelope + offset;
+        const bend = (broadBend + fineBend + outwardWave + audioBend) * envelope + offset;
         const x = centerX + Math.cos(angle) * radius + normalX * bend;
         const y = centerY + Math.sin(angle) * radius + normalY * bend;
         if (radius === 0) context.moveTo(x, y);
         else context.lineTo(x, y);
       }
-      context.strokeStyle = `hsla(${hue}, 94%, ${lightness}%, ${opacity * emission})`;
+      context.strokeStyle = `hsla(${hue}, 94%, ${lightness}%, ${opacity * trailOpacity})`;
       context.lineWidth = lineWidth;
       context.shadowColor = `hsla(${hue}, 95%, 72%, ${opacity * 0.82})`;
       context.shadowBlur = filament ? 3 : 10;

@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v138-footer-anchor";
+const CACHE_NAME = "sound-a-tude-v139-continuous-wave-trails";
 const APP_SHELL = [
   "./",
   "./index.html",

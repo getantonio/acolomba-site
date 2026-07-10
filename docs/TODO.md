@@ -249,3 +249,4 @@ Last updated: 2026-07-10
 - 2026-07-10 [Done] Damped flowing waveform sensitivity with a higher noise floor, volume-aware scaling, and smoothed outward emission.
 - 2026-07-10 [Done] Further reduced waveform sensitivity by raising the gate and reducing transient gain and ramp speed.
 - 2026-07-10 [Done] Anchored the player footer to the bottom edge so Guide, Settings, and Playlist icons remain visible on short screens.
+- 2026-07-10 [Done] Kept emitted ribbons traveling across the full waveform window with a persistent low-level sine trail that re-energizes on the next audio burst.
