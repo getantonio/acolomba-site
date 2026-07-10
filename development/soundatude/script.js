@@ -2489,6 +2489,7 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
 
   for (let ribbonIndex = 0; ribbonIndex < ribbonCount; ribbonIndex += 1) {
     const angle = (ribbonIndex / ribbonCount) * Math.PI * 2 + Math.sin(ribbonIndex * 7.1) * 0.035;
+    const ribbonDelay = Math.round(Math.sin(ribbonIndex * 9.17) * 5 + Math.cos(ribbonIndex * 2.41) * 3);
     const hue = ribbonIndex % 5 === 0 || ribbonIndex % 7 === 0 ? 42 : 207 + (ribbonIndex % 3) * 8;
     const lightness = hue === 42 ? 78 : 70;
     const alpha = hue === 42 ? 0.56 : 0.48;
@@ -2498,7 +2499,10 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
       context.beginPath();
       for (let radius = 0; radius <= maxRadius; radius += 3) {
         const progress = radius / Math.max(maxRadius, 1);
-        const meterIndex = Math.min(meterLevels.length - 1, Math.floor(progress * meterLevels.length));
+        const meterIndex = Math.min(
+          meterLevels.length - 1,
+          Math.max(0, Math.floor(progress * meterLevels.length) + ribbonDelay)
+        );
         const level = meterLevels[meterIndex] || 0.08;
         const envelope = 0.42 + Math.pow(Math.sin(Math.min(progress, 1) * Math.PI), 0.52) * 0.58;
         const broadBend = Math.sin(radius * 0.023 + ribbonIndex * 1.7) * (4 + radius * 0.035);
@@ -2518,10 +2522,11 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
       context.stroke();
     };
 
-    drawRibbon(0, 3.2 + (ribbonIndex % 3) * 0.8, alpha * 0.30);
-    drawRibbon(0, 1.05 + (ribbonIndex % 2) * 0.45, alpha, true);
-    drawRibbon(-2.5, 0.55, alpha * 0.52, true);
-    drawRibbon(2.5, 0.55, alpha * 0.52, true);
+    drawRibbon(0, 6.2 + (ribbonIndex % 3) * 1.2, alpha * 0.16);
+    drawRibbon(0, 3.8 + (ribbonIndex % 3) * 0.8, alpha * 0.34);
+    drawRibbon(0, 1.35 + (ribbonIndex % 2) * 0.55, alpha, true);
+    drawRibbon(-3, 0.7, alpha * 0.52, true);
+    drawRibbon(3, 0.7, alpha * 0.52, true);
   }
   context.restore();
   context.shadowBlur = 0;

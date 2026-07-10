@@ -4,6 +4,7 @@ Last updated: 2026-07-10
 
 ## Active
 
+- 2026-07-10 [Done] Balanced the lower footer spacing against the upper card spacing and enriched the static radial waveform with thicker cores, blurred under-bands, and per-ribbon response offsets; published live.
 - 2026-07-10 [Done] Centered the Sound-a-tude mode and speaker controls as a balanced group above the player controller; published live.
 - 2026-07-10 [Done] Tightened the Sound-a-tude card-to-controls spacing and removed the flowing waveform’s time-based ribbon drift so its radial bands remain static while audio shapes them; published live.
 - 2026-07-10 [Done] Slimmed and centered the Sound-a-tude five-icon footer, matching its dark gradient, border, and shadow to the player controller frame; published live.

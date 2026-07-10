@@ -466,7 +466,7 @@ input[type="range"]:focus-visible {
 .player-footer {
   position: absolute;
   left: 50%;
-  bottom: 0;
+  bottom: clamp(28px, 7svh, 58px);
   width: min(100%, 324px);
   min-height: 52px;
   display: flex;
