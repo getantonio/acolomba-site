@@ -4,6 +4,7 @@ Last updated: 2026-07-10
 
 ## Active
 
+- 2026-07-10 [Done] Added an optional flowing waveform renderer and a Settings page toggle for switching between the existing bar meter and luminous waveform ribbons; the choice persists locally.
 - 2026-07-10 [Done] Published the ten marked voices and restored one Sound Effort-style speed slider with pitch locked steady.
 - 2026-07-10 [Done] Refined and published the dark Sound-a-tude web player only: removed the stacked speaker-picker focus treatment after voice changes, replaced the Lip and clickable Pitch controls with one playback-speed slider, and locked pitch steady at every speed.
 - 2026-07-10 [Done] Published the dark Sound-a-tude web UI update to GitHub Pages: Sound Effort remains separate, Loop/Conversation and speaker selection now sit in a compact row above a bounded player controller, and the existing waveform, tuning, recorder, navigation, and playback behavior are preserved.

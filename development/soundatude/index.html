@@ -9,7 +9,7 @@
     <link rel="canonical" href="https://acolomba.com/development/soundatude/">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%23060607'/%3E%3Cpath d='M27 22v20l17-10z' fill='%23f2eee7'/%3E%3C/svg%3E">
-    <link rel="stylesheet" href="styles.css?v=voice-set-speed-slider-20260710-v4">
+    <link rel="stylesheet" href="styles.css?v=flowing-waveform-settings-20260710-v5">
   </head>
   <body>
     <main class="app-shell" aria-label="Sound-a-tude player">
@@ -34,6 +34,13 @@
             </svg>
           </button>
 
+          <button class="page-switch settings-switch" id="openSettingsButton" type="button" aria-label="Open settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"></path>
+              <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.7 1.7-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2.4v-.2a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.7-1.7.06-.06A1.7 1.7 0 0 0 8.4 15a1.7 1.7 0 0 0-1.56-1.03H6.6v-2.4h.24A1.7 1.7 0 0 0 8.4 10a1.7 1.7 0 0 0-.34-1.88L8 8.06l1.7-1.7.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 12.67 5.2V5h2.4v.2a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.7 1.7-.06.06A1.7 1.7 0 0 0 19.4 10a1.7 1.7 0 0 0 1.56 1.03h.24v2.4h-.24A1.7 1.7 0 0 0 19.4 15z"></path>
+            </svg>
+          </button>
+
           <div class="brand-header" aria-label="Sound-a-tude">
             <span class="brand-line" aria-hidden="true"></span>
             <span class="brand-mark" aria-hidden="true">
@@ -46,6 +53,7 @@
 
         <section class="now-console" aria-label="Now playing">
           <div class="console-meter" aria-hidden="true">
+            <canvas class="flowing-waveform" id="flowingWaveform" aria-hidden="true"></canvas>
           </div>
 
           <div class="loop-picker" id="loopPicker">
@@ -390,6 +398,38 @@
           </article>
         </section>
 
+        <section class="settings-page app-page" aria-labelledby="settingsTitle">
+          <button class="page-switch settings-player-switch" id="closeSettingsButton" type="button" aria-label="Back to player">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"></path>
+            </svg>
+          </button>
+
+          <div class="brand-header compact" aria-label="Sound-a-tude settings">
+            <span class="brand-line" aria-hidden="true"></span>
+            <p class="brand">Settings</p>
+            <span class="brand-line" aria-hidden="true"></span>
+          </div>
+
+          <article class="settings-sheet">
+            <header class="settings-hero">
+              <p>Shape the listening moment</p>
+              <h1 id="settingsTitle">Visuals</h1>
+            </header>
+            <div class="settings-option">
+              <div>
+                <strong>Flowing waveform</strong>
+                <span>Use luminous ribbons instead of the bar meter.</span>
+              </div>
+              <label class="settings-toggle" for="flowingWaveformToggle">
+                <input id="flowingWaveformToggle" type="checkbox" role="switch" aria-label="Use flowing waveform">
+                <span aria-hidden="true"></span>
+              </label>
+            </div>
+            <p class="settings-note">The waveform reacts to playback and keeps the same low-distraction palette as the player.</p>
+          </article>
+        </section>
+
       </div>
 
       <div class="page-dots" aria-label="App pages">
@@ -397,9 +437,10 @@
         <button type="button" aria-label="Playlist page"></button>
         <button type="button" aria-label="Recorder page"></button>
         <button type="button" aria-label="Guide page"></button>
+        <button type="button" aria-label="Settings page"></button>
       </div>
     </main>
 
-        <script src="script.js?v=voice-set-speed-slider-20260710-v4"></script>
+        <script src="script.js?v=flowing-waveform-settings-20260710-v5"></script>
   </body>
 </html>

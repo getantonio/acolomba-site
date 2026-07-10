@@ -69,12 +69,17 @@ const openPlaylistButton = document.querySelector("#openPlaylistButton");
 const openPlayerButton = document.querySelector("#openPlayerButton");
 const openGuideButton = document.querySelector("#openGuideButton");
 const closeGuideButton = document.querySelector("#closeGuideButton");
+const openSettingsButton = document.querySelector("#openSettingsButton");
+const closeSettingsButton = document.querySelector("#closeSettingsButton");
+const flowingWaveformToggle = document.querySelector("#flowingWaveformToggle");
 const consoleMeter = document.querySelector(".console-meter");
+let flowingWaveform = document.querySelector("#flowingWaveform");
 const previewAudio = new Audio();
 const recorderPreviewAudio = new Audio();
 const PLAYLIST_STORAGE_KEY = "sound-a-tude-playlists-v2";
 const VOICE_STORAGE_KEY = "sound-a-tude-voice-v1";
 const PLAYBACK_STORAGE_KEY = "sound-a-tude-playback-v1";
+const WAVEFORM_STYLE_STORAGE_KEY = "sound-a-tude-waveform-style-v1";
 const LEGACY_RECORDER_STORAGE_KEYS = ["sound-a-tude-recorder-v1"];
 const RECORDER_STORAGE_KEY = "sound-a-tude-recorder-v2";
 const RECORDED_VOICE_DB_NAME = "sound-a-tude-recorded-voices";
@@ -917,6 +922,7 @@ let meterBars = [];
 let meterLevels = [];
 let previousMeterEnergy = 0;
 let meterEnergyPulse = 0;
+let waveformStyle = localStorage.getItem(WAVEFORM_STYLE_STORAGE_KEY) === "flowing" ? "flowing" : "bars";
 let activeCueWords = [];
 let activeCueStep = -1;
 let activeCueWord = null;
@@ -2421,6 +2427,55 @@ function audioSampleLevel(sample) {
   return Math.abs(sample);
 }
 
+function applyWaveformStyle() {
+  consoleMeter?.classList.toggle("is-flowing", waveformStyle === "flowing");
+  if (flowingWaveformToggle) flowingWaveformToggle.checked = waveformStyle === "flowing";
+}
+
+function drawFlowingWaveform(time, hasLiveAudio) {
+  if (!flowingWaveform || waveformStyle !== "flowing") return;
+  const rect = flowingWaveform.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  const width = Math.max(1, Math.round(rect.width * dpr));
+  const height = Math.max(1, Math.round(rect.height * dpr));
+  if (flowingWaveform.width !== width || flowingWaveform.height !== height) {
+    flowingWaveform.width = width;
+    flowingWaveform.height = height;
+  }
+  const context = flowingWaveform.getContext("2d");
+  if (!context) return;
+  context.setTransform(dpr, 0, 0, dpr, 0, 0);
+  context.clearRect(0, 0, rect.width, rect.height);
+  const center = rect.height * 0.5;
+  const amplitude = rect.height * (0.10 + meterEnergyPulse * 0.17);
+  const ribbons = [
+    { hue: 205, light: 72, alpha: 0.86, width: 2.1, offset: 0, speed: 1.0 },
+    { hue: 221, light: 62, alpha: 0.44, width: 1.2, offset: 1.4, speed: 0.72 },
+    { hue: 42, light: 76, alpha: 0.56, width: 1.4, offset: 3.1, speed: 0.58 },
+    { hue: 211, light: 58, alpha: 0.30, width: 1.0, offset: 4.6, speed: 0.42 },
+  ];
+  ribbons.forEach((ribbon, ribbonIndex) => {
+    context.beginPath();
+    for (let x = 0; x <= rect.width; x += 3) {
+      const position = x / Math.max(rect.width, 1);
+      const level = meterLevels[Math.min(meterLevels.length - 1, Math.floor(position * meterLevels.length))] || 0.08;
+      const envelope = 0.32 + Math.pow(Math.sin(Math.PI * position), 0.72) * 0.68;
+      const wave = Math.sin(position * 8.4 + time * ribbon.speed + ribbon.offset) * 0.58
+        + Math.sin(position * 19.5 - time * ribbon.speed * 0.66 + ribbon.offset) * 0.18
+        + Math.sin(position * 38 + time * 0.34 + ribbon.offset) * 0.08;
+      const y = center + wave * amplitude * envelope * (0.56 + level * 1.7) + (ribbonIndex - 1.5) * 1.8;
+      if (x === 0) context.moveTo(x, y);
+      else context.lineTo(x, y);
+    }
+    context.strokeStyle = `hsla(${ribbon.hue}, 92%, ${ribbon.light}%, ${ribbon.alpha * (hasLiveAudio ? 1 : 0.68)})`;
+    context.lineWidth = ribbon.width;
+    context.shadowColor = `hsla(${ribbon.hue}, 90%, 72%, 0.45)`;
+    context.shadowBlur = ribbonIndex === 0 ? 9 : 4;
+    context.stroke();
+  });
+  context.shadowBlur = 0;
+}
+
 function renderAudioMeter() {
   if (!consoleMeter) return;
 
@@ -2432,8 +2487,10 @@ function renderAudioMeter() {
       return `<span class="meter-bar" style="${meterBarColorStyle(index)} --level: ${level.toFixed(3)}; --display-level: ${meterDisplayLevel(level, index, 0).toFixed(3)}; --tone: ${position.toFixed(3)}; --mouth-weight: ${meterMouthWeight(index).toFixed(3)}; --tooth-weight: ${meterToothWeight(index, level).toFixed(3)}; --tooth-noise: ${meterToothNoise(index).toFixed(3)}; --tooth-height: ${meterToothHeight(index, level).toFixed(3)}; --tooth-top: ${meterToothTop(index).toFixed(2)}%;"></span>`;
     })
     .join("");
-  consoleMeter.innerHTML = barsMarkup;
+  consoleMeter.innerHTML = `<canvas class="flowing-waveform" id="flowingWaveform" aria-hidden="true"></canvas>${barsMarkup}`;
   meterBars = [...consoleMeter.querySelectorAll(".meter-bar")];
+  flowingWaveform = consoleMeter.querySelector("#flowingWaveform");
+  applyWaveformStyle();
   startMeterAnimation();
 }
 
@@ -2604,6 +2661,7 @@ function updateAudioMeter() {
   });
 
   consoleMeter?.style.setProperty("--meter-intensity", clamp(highestLevel, 0.12, 1).toFixed(3));
+  drawFlowingWaveform(time, hasLiveAudio);
   cueWordIntensity = activeCueWord ? cueWordIntensity * 0.68 : cueWordIntensity * 0.54;
   if (cueWordIntensity < 0.015) cueWordIntensity = 0;
   consoleMeter?.style.setProperty("--word-tip-intensity", cueWordIntensity.toFixed(3));
@@ -3531,6 +3589,14 @@ openPlaylistButton.addEventListener("click", () => goToPage(1));
 openPlayerButton.addEventListener("click", () => goToPage(0));
 openGuideButton?.addEventListener("click", () => goToPage(3));
 closeGuideButton?.addEventListener("click", () => goToPage(0));
+openSettingsButton?.addEventListener("click", () => goToPage(4));
+closeSettingsButton?.addEventListener("click", () => goToPage(0));
+flowingWaveformToggle?.addEventListener("change", () => {
+  waveformStyle = flowingWaveformToggle.checked ? "flowing" : "bars";
+  localStorage.setItem(WAVEFORM_STYLE_STORAGE_KEY, waveformStyle);
+  applyWaveformStyle();
+  drawFlowingWaveform(performance.now() / 1000, Boolean(analyser && !audio.paused && !audio.ended));
+});
 pageDots.forEach((dot, index) => {
   dot.addEventListener("click", () => goToPage(index));
 });
