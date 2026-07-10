@@ -921,6 +921,7 @@ let meterBars = [];
 let meterLevels = [];
 let previousMeterEnergy = 0;
 let meterEnergyPulse = 0;
+let waveformEmission = 0;
 let waveformStyle = localStorage.getItem(WAVEFORM_STYLE_STORAGE_KEY) === "flowing" ? "flowing" : "bars";
 let activeCueWords = [];
 let activeCueStep = -1;
@@ -2448,10 +2449,16 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
   const centerY = rect.height * 0.5;
   const maxRadius = Math.hypot(rect.width, rect.height) * 0.95;
   const ribbonCount = 24;
-  const energy = hasLiveAudio ? clamp((liveEnergy - 0.0007) * 280, 0, 1) : 0;
-  const emission = clamp(energy * 0.72 + meterEnergyPulse * 0.92, 0, 1);
+  const volumeFactor = clamp((audio.volume || 0) * 2.2, 0.08, 1);
+  const energy = hasLiveAudio ? clamp((liveEnergy - 0.0022) * 90, 0, 1) : 0;
+  const targetEmission = hasLiveAudio
+    ? clamp((energy * 0.72 + meterEnergyPulse * 0.42) * volumeFactor, 0, 1)
+    : 0;
+  const smoothing = targetEmission > waveformEmission ? 0.06 : 0.12;
+  waveformEmission += (targetEmission - waveformEmission) * smoothing;
+  const emission = clamp(waveformEmission, 0, 1);
   const activity = 0.42 + emission * 1.8;
-  const activeRadius = maxRadius * clamp(0.12 + emission * 1.12, 0.12, 1);
+  const activeRadius = maxRadius * clamp(0.12 + emission * 0.88, 0.12, 1);
 
   context.save();
   context.globalCompositeOperation = "lighter";

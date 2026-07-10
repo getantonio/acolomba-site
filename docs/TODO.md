@@ -246,3 +246,4 @@ Last updated: 2026-07-10
 - 2026-07-10 [Done] Simplified the player voice control to icon-only and consolidated guide, settings, and playlist navigation into a footer icon row.
 - 2026-07-10 [Done] Reworked the flowing waveform into a center-emission, radial ribbon field with layered blue/gold strands and fine filaments.
 - 2026-07-10 [Done] Changed flowing mode to idle as a pulsing center glow, then grow and emit the radial ribbons outward only when audio energy is present.
+- 2026-07-10 [Done] Damped flowing waveform sensitivity with a higher noise floor, volume-aware scaling, and smoothed outward emission.
