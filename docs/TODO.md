@@ -1,6 +1,10 @@
 # New Job Search TODO
 
-Last updated: 2026-07-09
+Last updated: 2026-07-10
+
+## Active
+
+- 2026-07-10 [Deploying] The dark Sound-a-tude web UI update is complete locally: Sound Effort remains separate, Loop/Conversation and speaker selection now sit in a compact row above a bounded player controller, and the existing waveform, tuning, recorder, navigation, and playback behavior are preserved. GitHub Pages publishing is authorized and awaiting workflow confirmation.
 
 ## Completed
 

@@ -1117,6 +1117,7 @@ function updateVoiceControlMode() {
   const isFixedConversationVoice = currentMode === "conversation";
   voiceSelect.disabled = isFixedConversationVoice;
   voiceSelect.setAttribute("aria-disabled", String(isFixedConversationVoice));
+  voiceSelect.setAttribute("aria-label", isFixedConversationVoice ? "Conversation voices, Mara and Theo" : "Choose voice");
   voiceControl.classList.toggle("is-fixed", isFixedConversationVoice);
 }
 
