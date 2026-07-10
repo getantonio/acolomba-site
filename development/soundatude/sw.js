@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v133-icon-speaker-footer";
+const CACHE_NAME = "sound-a-tude-v134-radiating-ribbon-waveform";
 const APP_SHELL = [
   "./",
   "./index.html",

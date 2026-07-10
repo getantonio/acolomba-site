@@ -2444,33 +2444,58 @@ function drawFlowingWaveform(time, hasLiveAudio) {
   if (!context) return;
   context.setTransform(dpr, 0, 0, dpr, 0, 0);
   context.clearRect(0, 0, rect.width, rect.height);
-  const center = rect.height * 0.5;
-  const amplitude = rect.height * (0.10 + meterEnergyPulse * 0.17);
-  const ribbons = [
-    { hue: 205, light: 72, alpha: 0.86, width: 2.1, offset: 0, speed: 1.0 },
-    { hue: 221, light: 62, alpha: 0.44, width: 1.2, offset: 1.4, speed: 0.72 },
-    { hue: 42, light: 76, alpha: 0.56, width: 1.4, offset: 3.1, speed: 0.58 },
-    { hue: 211, light: 58, alpha: 0.30, width: 1.0, offset: 4.6, speed: 0.42 },
-  ];
-  ribbons.forEach((ribbon, ribbonIndex) => {
-    context.beginPath();
-    for (let x = 0; x <= rect.width; x += 3) {
-      const position = x / Math.max(rect.width, 1);
-      const level = meterLevels[Math.min(meterLevels.length - 1, Math.floor(position * meterLevels.length))] || 0.08;
-      const envelope = 0.32 + Math.pow(Math.sin(Math.PI * position), 0.72) * 0.68;
-      const wave = Math.sin(position * 8.4 + time * ribbon.speed + ribbon.offset) * 0.58
-        + Math.sin(position * 19.5 - time * ribbon.speed * 0.66 + ribbon.offset) * 0.18
-        + Math.sin(position * 38 + time * 0.34 + ribbon.offset) * 0.08;
-      const y = center + wave * amplitude * envelope * (0.56 + level * 1.7) + (ribbonIndex - 1.5) * 1.8;
-      if (x === 0) context.moveTo(x, y);
-      else context.lineTo(x, y);
-    }
-    context.strokeStyle = `hsla(${ribbon.hue}, 92%, ${ribbon.light}%, ${ribbon.alpha * (hasLiveAudio ? 1 : 0.68)})`;
-    context.lineWidth = ribbon.width;
-    context.shadowColor = `hsla(${ribbon.hue}, 90%, 72%, 0.45)`;
-    context.shadowBlur = ribbonIndex === 0 ? 9 : 4;
-    context.stroke();
-  });
+  const centerX = rect.width * 0.68;
+  const centerY = rect.height * 0.5;
+  const maxRadius = Math.hypot(rect.width, rect.height) * 0.95;
+  const ribbonCount = 24;
+  const activity = hasLiveAudio ? (0.72 + meterEnergyPulse * 1.4) : 0.56;
+
+  context.save();
+  context.globalCompositeOperation = "lighter";
+  const centerGlow = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, rect.height * 0.42);
+  centerGlow.addColorStop(0, "rgba(255, 236, 176, 0.98)");
+  centerGlow.addColorStop(0.05, "rgba(104, 197, 255, 0.78)");
+  centerGlow.addColorStop(1, "rgba(20, 94, 190, 0)");
+  context.fillStyle = centerGlow;
+  context.fillRect(0, 0, rect.width, rect.height);
+
+  for (let ribbonIndex = 0; ribbonIndex < ribbonCount; ribbonIndex += 1) {
+    const angle = (ribbonIndex / ribbonCount) * Math.PI * 2 + Math.sin(ribbonIndex * 7.1) * 0.035;
+    const hue = ribbonIndex % 5 === 0 || ribbonIndex % 7 === 0 ? 42 : 207 + (ribbonIndex % 3) * 8;
+    const lightness = hue === 42 ? 78 : 70;
+    const alpha = hue === 42 ? 0.56 : 0.48;
+    const speed = 0.34 + (ribbonIndex % 5) * 0.045;
+    const normalX = -Math.sin(angle);
+    const normalY = Math.cos(angle);
+    const drawRibbon = (offset, lineWidth, opacity, filament = false) => {
+      context.beginPath();
+      for (let radius = 0; radius <= maxRadius; radius += 3) {
+        const progress = radius / maxRadius;
+        const meterIndex = Math.min(meterLevels.length - 1, Math.floor(progress * meterLevels.length));
+        const level = meterLevels[meterIndex] || 0.08;
+        const envelope = Math.pow(Math.sin(Math.min(progress, 1) * Math.PI * 0.78), 0.52);
+        const broadBend = Math.sin(radius * 0.023 + time * speed + ribbonIndex * 1.7) * (5 + radius * 0.035);
+        const fineBend = Math.sin(radius * 0.082 - time * speed * 1.7 + ribbonIndex) * (filament ? 1.8 : 3.2);
+        const audioBend = (level - 0.08) * rect.height * 0.28 * activity * (0.28 + envelope);
+        const bend = (broadBend + fineBend + audioBend) * envelope + offset;
+        const x = centerX + Math.cos(angle) * radius + normalX * bend;
+        const y = centerY + Math.sin(angle) * radius + normalY * bend;
+        if (radius === 0) context.moveTo(x, y);
+        else context.lineTo(x, y);
+      }
+      context.strokeStyle = `hsla(${hue}, 94%, ${lightness}%, ${opacity * (hasLiveAudio ? 1 : 0.72)})`;
+      context.lineWidth = lineWidth;
+      context.shadowColor = `hsla(${hue}, 95%, 72%, ${opacity * 0.82})`;
+      context.shadowBlur = filament ? 3 : 10;
+      context.stroke();
+    };
+
+    drawRibbon(0, 3.2 + (ribbonIndex % 3) * 0.8, alpha * 0.30);
+    drawRibbon(0, 1.05 + (ribbonIndex % 2) * 0.45, alpha, true);
+    drawRibbon(-2.5, 0.55, alpha * 0.52, true);
+    drawRibbon(2.5, 0.55, alpha * 0.52, true);
+  }
+  context.restore();
   context.shadowBlur = 0;
 }
 
