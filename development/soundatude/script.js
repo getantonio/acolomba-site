@@ -2490,7 +2490,6 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
     const hue = ribbonIndex % 5 === 0 || ribbonIndex % 7 === 0 ? 42 : 207 + (ribbonIndex % 3) * 8;
     const lightness = hue === 42 ? 78 : 70;
     const alpha = hue === 42 ? 0.56 : 0.48;
-    const speed = 0.34 + (ribbonIndex % 5) * 0.045;
     const normalX = -Math.sin(angle);
     const normalY = Math.cos(angle);
     const drawRibbon = (offset, lineWidth, opacity, filament = false) => {
@@ -2500,8 +2499,8 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
         const meterIndex = Math.min(meterLevels.length - 1, Math.floor(progress * meterLevels.length));
         const level = meterLevels[meterIndex] || 0.08;
         const envelope = 0.42 + Math.pow(Math.sin(Math.min(progress, 1) * Math.PI), 0.52) * 0.58;
-        const broadBend = Math.sin(radius * 0.023 + time * speed + ribbonIndex * 1.7) * (4 + radius * 0.035);
-        const fineBend = Math.sin(radius * 0.082 - time * speed * 1.7 + ribbonIndex) * (filament ? 1.8 : 3.2);
+        const broadBend = Math.sin(radius * 0.023 + ribbonIndex * 1.7) * (4 + radius * 0.035);
+        const fineBend = Math.sin(radius * 0.082 + ribbonIndex) * (filament ? 1.8 : 3.2);
         const outwardWave = Math.sin(radius * 0.018 - time * 0.58 + ribbonIndex * 0.7) * (2 + radius * 0.018);
         const audioBend = (level - 0.08) * rect.height * 0.28 * activity * (0.28 + envelope);
         const bend = (broadBend + fineBend + outwardWave + audioBend) * envelope + offset;
