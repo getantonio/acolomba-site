@@ -374,7 +374,7 @@ input[type="range"]:focus-visible {
 }
 
 .player-control-row {
-  width: 136px;
+  width: 52px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: center;
