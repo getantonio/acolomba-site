@@ -2449,12 +2449,12 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
   const centerY = rect.height * 0.5;
   const maxRadius = Math.hypot(rect.width, rect.height) * 0.95;
   const ribbonCount = 24;
-  const volumeFactor = clamp((audio.volume || 0) * 2.2, 0.08, 1);
-  const energy = hasLiveAudio ? clamp((liveEnergy - 0.0022) * 90, 0, 1) : 0;
+  const volumeFactor = clamp((audio.volume || 0) * 1.5, 0.03, 1);
+  const energy = hasLiveAudio ? clamp((liveEnergy - 0.0045) * 60, 0, 1) : 0;
   const targetEmission = hasLiveAudio
-    ? clamp((energy * 0.72 + meterEnergyPulse * 0.42) * volumeFactor, 0, 1)
+    ? clamp((energy * 0.55 + meterEnergyPulse * 0.18) * volumeFactor, 0, 1)
     : 0;
-  const smoothing = targetEmission > waveformEmission ? 0.06 : 0.12;
+  const smoothing = targetEmission > waveformEmission ? 0.04 : 0.14;
   waveformEmission += (targetEmission - waveformEmission) * smoothing;
   const emission = clamp(waveformEmission, 0, 1);
   const activity = 0.42 + emission * 1.8;
