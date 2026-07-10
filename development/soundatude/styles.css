@@ -1292,161 +1292,6 @@ input[type="range"]:focus-visible {
   outline-offset: 3px;
 }
 
-.playback-tuning {
-  width: min(100%, 292px);
-  display: grid;
-  grid-template-columns: 1fr;
-  align-items: center;
-  justify-items: center;
-  gap: 8px;
-  align-self: center;
-}
-
-.tuning-summary-row {
-  width: min(100%, 292px);
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 0 8px;
-}
-
-.tuning-control {
-  width: min(100%, 292px);
-  min-height: 44px;
-  display: grid;
-  grid-template-columns: 44px minmax(0, 156px) 44px;
-  grid-template-areas: "down slider up";
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 0;
-  color: var(--muted);
-  font-size: 0.64rem;
-  font-weight: 740;
-}
-
-.tuning-readout span,
-.pitch-status span {
-  text-transform: none;
-}
-
-.tuning-readout {
-  min-height: 18px;
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 10px;
-  justify-self: center;
-  color: oklch(72% 0.026 92 / 0.88);
-}
-
-.tuning-control .tuning-step:first-of-type {
-  grid-area: down;
-}
-
-.tuning-control .tuning-step:last-of-type {
-  grid-area: up;
-}
-
-.speed-range-shell {
-  grid-area: slider;
-  width: 100%;
-  height: 44px;
-  position: relative;
-  display: grid;
-  align-items: center;
-}
-
-.speed-range-shell input {
-  width: 100%;
-  height: 44px;
-  margin: 0;
-  appearance: none;
-  -webkit-appearance: none;
-  background: transparent;
-  cursor: pointer;
-  touch-action: pan-y;
-}
-
-.speed-range-shell input::-webkit-slider-runnable-track {
-  height: 6px;
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    oklch(64% 0.047 219 / 0.86) 0 var(--speed-progress, 50%),
-    var(--volume-track) var(--speed-progress, 50%) 100%
-  );
-}
-
-.speed-range-shell input::-webkit-slider-thumb {
-  width: 15px;
-  height: 15px;
-  margin-top: -5px;
-  appearance: none;
-  -webkit-appearance: none;
-  border: 1px solid oklch(22% 0.024 226 / 0.86);
-  border-radius: 50%;
-  background: var(--volume-thumb);
-  box-shadow:
-    inset 0 1px 0 oklch(100% 0 0 / 0.035),
-    0 7px 16px oklch(0% 0 0 / 0.2);
-}
-
-.speed-range-shell input::-moz-range-track {
-  height: 6px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--volume-fill), var(--volume-track));
-}
-
-.speed-range-shell input::-moz-range-thumb {
-  width: 13px;
-  height: 13px;
-  border: 1px solid oklch(22% 0.024 226 / 0.86);
-  border-radius: 50%;
-  background: var(--volume-thumb);
-}
-
-.speed-one-tick {
-  position: absolute;
-  z-index: 1;
-  left: 50%;
-  top: 50%;
-  width: 2px;
-  height: 10px;
-  border-radius: 999px;
-  background: oklch(72% 0.026 92 / 0.54);
-  box-shadow: 0 1px 0 oklch(100% 0 0 / 0.32);
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-}
-
-.tuning-readout output {
-  min-width: 0;
-  color: oklch(82% 0.032 89 / 0.86);
-  font-size: 0.84rem;
-  text-align: center;
-}
-
-.pitch-status {
-  min-height: 44px;
-  display: grid;
-  align-content: center;
-  justify-items: end;
-  gap: 1px;
-  color: oklch(72% 0.026 92 / 0.84);
-  font-size: 0.62rem;
-  font-weight: 740;
-  line-height: 1;
-}
-
-.pitch-status strong {
-  color: oklch(82% 0.032 89 / 0.88);
-  font-size: 0.82rem;
-  font-weight: 760;
-}
-
 .transport-controls {
   width: min(100%, 292px);
   display: grid;
@@ -2192,18 +2037,12 @@ input[type="range"]:focus-visible {
     font-size: clamp(1.16rem, 3.8svh, 1.48rem);
   }
 
-  .volume-control,
-  .tuning-control,
-  .tuning-summary-row {
+  .volume-control {
     min-height: 40px;
   }
 
   .volume-control {
     margin-top: 0;
-  }
-
-  .playback-tuning {
-    gap: 6px;
   }
 
   .transport-controls {
@@ -2287,9 +2126,7 @@ input[type="range"]:focus-visible {
     font-size: 1.12rem;
   }
 
-  .volume-control,
-  .tuning-control,
-  .tuning-summary-row {
+  .volume-control {
     min-height: 36px;
   }
 
@@ -2417,12 +2254,6 @@ input[type="range"]:focus-visible {
     height: 44px;
   }
 
-  .playback-tuning {
-    width: min(100%, 292px);
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-
   .volume-control {
     width: min(100%, 292px);
     min-height: 40px;
@@ -2492,16 +2323,6 @@ input[type="range"]:focus-visible {
   .volume-control .tuning-step {
     width: 44px;
     height: 44px;
-  }
-
-  .tuning-control {
-    grid-template-columns: 44px minmax(0, 1fr) 44px;
-    gap: 10px;
-    padding: 0;
-  }
-
-  .pitch-status {
-    justify-self: end;
   }
 
   .guide-sheet {
