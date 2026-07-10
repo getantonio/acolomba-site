@@ -4,6 +4,7 @@ Last updated: 2026-07-10
 
 ## Active
 
+- 2026-07-10 [Done] Tightened the Sound-a-tude card-to-controls spacing and removed the flowing waveform’s time-based ribbon drift so its radial bands remain static while audio shapes them; published live.
 - 2026-07-10 [Done] Slimmed and centered the Sound-a-tude five-icon footer, matching its dark gradient, border, and shadow to the player controller frame; published live.
 - 2026-07-10 [Done] Added an optional flowing waveform renderer and a Settings page toggle for switching between the existing bar meter and luminous waveform ribbons; the choice persists locally.
 - 2026-07-10 [Done] Published the ten marked voices and restored one Sound Effort-style speed slider with pitch locked steady.

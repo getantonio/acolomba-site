@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v142-footer-refine";
+const CACHE_NAME = "sound-a-tude-v143-spacing-static-ribbons";
 const APP_SHELL = [
   "./",
   "./index.html",

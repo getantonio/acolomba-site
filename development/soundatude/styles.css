@@ -307,7 +307,7 @@ input[type="range"]:focus-visible {
   justify-items: center;
   gap: 8px;
   align-self: center;
-  margin-top: auto;
+  margin-top: clamp(24px, 5svh, 60px);
 }
 
 .player-options-row {
