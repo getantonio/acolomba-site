@@ -5,6 +5,7 @@ Last updated: 2026-07-09
 ## Completed
 
 - 2026-07-09 [Done] Removed the gray paper background from resume pages and rebuilt the affected PDF downloads.
+- 2026-07-09 [Done] Removed the gray paper background from Bio, Contact, and Projects pages.
 - 2026-07-09 [Done] Added `www.acolomba.com` below the email address in resume headers and rebuilt resume downloads.
 - Removed redundant root-level resume downloads and old compatibility pages after moving downloadable resume files under `docs/`; updated site links to the remaining clean paths.
 - Removed "Senior Retoucher" and "Photo Retouching Lead" from the Retouching Resume best-fit roles and rebuilt the PDF download.
