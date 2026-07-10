@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v129-voice-set-no-speed";
+const CACHE_NAME = "sound-a-tude-v130-voice-set-speed-slider";
 const APP_SHELL = [
   "./",
   "./index.html",

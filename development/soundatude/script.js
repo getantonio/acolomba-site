@@ -45,6 +45,10 @@ const useRecordedVoiceButton = document.querySelector("#useRecordedVoiceButton")
 const volumeDownButton = document.querySelector("#volumeDownButton");
 const volumeControl = document.querySelector("#volumeControl");
 const volumeUpButton = document.querySelector("#volumeUpButton");
+const speedDownButton = document.querySelector("#speedDownButton");
+const speedControl = document.querySelector("#speedControl");
+const speedValue = document.querySelector("#speedValue");
+const speedUpButton = document.querySelector("#speedUpButton");
 const shuffleButton = document.querySelector("#shuffleButton");
 const repeatModeButton = document.querySelector("#repeatModeButton");
 const repeatModeLabel = document.querySelector("#repeatModeLabel");
@@ -70,6 +74,7 @@ const previewAudio = new Audio();
 const recorderPreviewAudio = new Audio();
 const PLAYLIST_STORAGE_KEY = "sound-a-tude-playlists-v2";
 const VOICE_STORAGE_KEY = "sound-a-tude-voice-v1";
+const PLAYBACK_STORAGE_KEY = "sound-a-tude-playback-v1";
 const LEGACY_RECORDER_STORAGE_KEYS = ["sound-a-tude-recorder-v1"];
 const RECORDER_STORAGE_KEY = "sound-a-tude-recorder-v2";
 const RECORDED_VOICE_DB_NAME = "sound-a-tude-recorded-voices";
@@ -1938,7 +1943,7 @@ async function playCurrentBrowserRecording() {
   previewAudio.pause();
   recorderPreviewAudio.src = file;
   recorderPreviewAudio.volume = recordedVoiceOutputVolume();
-  applyPlaybackTuningToMedia(recorderPreviewAudio);
+  applyPlaybackTuningToMedia(recorderPreviewAudio, playbackRateFromSpeedSlider());
 
   try {
     await recorderPreviewAudio.play();
@@ -2191,19 +2196,65 @@ function setPreservesPitch(media) {
   media.webkitPreservesPitch = true;
 }
 
-function applyPlaybackTuningToMedia(media) {
-  media.playbackRate = 1;
+function playbackRateFromSpeedSlider() {
+  const sliderValue = clamp(Number(speedControl.value) || 0, -100, 100);
+  return sliderValue < 0
+    ? 1 + sliderValue * 0.005
+    : 1 + sliderValue * 0.0075;
+}
+
+function speedSliderValueFromPlaybackRate(speed) {
+  const normalizedSpeed = speed > 10 ? speed / 100 : speed;
+  const clampedSpeed = clamp(normalizedSpeed || 1, 0.5, 1.75);
+  const sliderValue = clampedSpeed < 1
+    ? (clampedSpeed - 1) / 0.005
+    : (clampedSpeed - 1) / 0.0075;
+  return Math.round(sliderValue / 5) * 5;
+}
+
+function savePlaybackTuning() {
+  const speed = playbackRateFromSpeedSlider();
+  localStorage.setItem(PLAYBACK_STORAGE_KEY, JSON.stringify({ speed: Math.round(speed * 100) }));
+}
+
+function applyPlaybackTuningToMedia(media, speed) {
+  media.playbackRate = speed;
   setPreservesPitch(media);
 }
 
-function updatePlaybackTuning() {
-  applyPlaybackTuningToMedia(audio);
-  applyPlaybackTuningToMedia(previewAudio);
-  applyPlaybackTuningToMedia(recorderPreviewAudio);
+function updatePlaybackTuning({ save = true } = {}) {
+  const speed = playbackRateFromSpeedSlider();
+  const speedProgress = ((Number(speedControl.value) + 100) / 200) * 100;
+  speedControl.style.setProperty("--speed-progress", `${speedProgress}%`);
+  applyPlaybackTuningToMedia(audio, speed);
+  applyPlaybackTuningToMedia(previewAudio, speed);
+  applyPlaybackTuningToMedia(recorderPreviewAudio, speed);
+  speedValue.textContent = `${speed.toFixed(2)}x`;
   updateWaveformHue();
+
+  if (save) savePlaybackTuning();
 }
 
-updatePlaybackTuning();
+function loadPlaybackTuning() {
+  speedControl.value = "0";
+  try {
+    const savedTuning = JSON.parse(localStorage.getItem(PLAYBACK_STORAGE_KEY));
+    if (savedTuning && typeof savedTuning.speed === "number") {
+      speedControl.value = String(speedSliderValueFromPlaybackRate(savedTuning.speed));
+    }
+  } catch {
+    localStorage.removeItem(PLAYBACK_STORAGE_KEY);
+  }
+}
+
+function adjustSpeed(delta) {
+  const nextSpeed = clamp(playbackRateFromSpeedSlider() + delta / 100, 0.5, 1.75);
+  speedControl.value = String(speedSliderValueFromPlaybackRate(nextSpeed));
+  updatePlaybackTuning();
+}
+
+loadPlaybackTuning();
+updatePlaybackTuning({ save: false });
 
 function hypnoticMeterLevel(index, time = 0, intensity = 0) {
   const position = index / Math.max(METER_BAR_COUNT - 1, 1);
@@ -3492,6 +3543,8 @@ createPlaylistButton.addEventListener("click", createPlaylist);
 fileLoader.addEventListener("change", () => loadFiles(fileLoader.files));
 selectAllButton.addEventListener("click", selectAllPhrases);
 randomSelectionButton.addEventListener("click", selectRandomPhrases);
+speedDownButton.addEventListener("click", () => adjustSpeed(-5));
+speedUpButton.addEventListener("click", () => adjustSpeed(5));
 playlistEditor.addEventListener("click", (event) => {
   const sectionAdd = event.target.closest("[data-add-group]");
   if (sectionAdd) {
@@ -3568,12 +3621,14 @@ conversationSeek?.addEventListener("keydown", (event) => {
   seekConversationTo(nextTime);
   updateConversationProgress();
 });
+speedControl.addEventListener("input", updatePlaybackTuning);
+speedControl.addEventListener("change", updatePlaybackTuning);
 audio.addEventListener("loadedmetadata", () => {
-  updatePlaybackTuning();
+  updatePlaybackTuning({ save: false });
   updateConversationProgress();
 });
-previewAudio.addEventListener("loadedmetadata", updatePlaybackTuning);
-recorderPreviewAudio.addEventListener("loadedmetadata", updatePlaybackTuning);
+previewAudio.addEventListener("loadedmetadata", () => updatePlaybackTuning({ save: false }));
+recorderPreviewAudio.addEventListener("loadedmetadata", () => updatePlaybackTuning({ save: false }));
 audio.addEventListener("timeupdate", updateConversationProgress);
 audio.addEventListener("play", () => {
   primeAudioMeter();
