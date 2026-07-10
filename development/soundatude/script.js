@@ -47,7 +47,6 @@ const volumeControl = document.querySelector("#volumeControl");
 const volumeUpButton = document.querySelector("#volumeUpButton");
 const speedDownButton = document.querySelector("#speedDownButton");
 const speedControl = document.querySelector("#speedControl");
-const speedValue = document.querySelector("#speedValue");
 const speedUpButton = document.querySelector("#speedUpButton");
 const shuffleButton = document.querySelector("#shuffleButton");
 const repeatModeButton = document.querySelector("#repeatModeButton");
@@ -2235,7 +2234,6 @@ function updatePlaybackTuning({ save = true } = {}) {
   applyPlaybackTuningToMedia(audio, speed);
   applyPlaybackTuningToMedia(previewAudio, speed);
   applyPlaybackTuningToMedia(recorderPreviewAudio, speed);
-  speedValue.textContent = `${speed.toFixed(2)}x`;
   updateWaveformHue();
 
   if (save) savePlaybackTuning();

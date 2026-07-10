@@ -242,3 +242,4 @@ Last updated: 2026-07-10
 - Build a LinkedIn search list of Ripple recruiters, hiring managers, and second-degree connections.
 - Prepare a weekly application tracker.
 - Draft cover notes for the top 5 roles after Antonio selects targets.
+- 2026-07-10 [Done] Removed only the circled Speed/Pitch readout row while preserving the speed slider and steady-pitch playback behavior.

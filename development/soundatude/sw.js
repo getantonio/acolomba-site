@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v131-flowing-waveform-settings";
+const CACHE_NAME = "sound-a-tude-v132-remove-speed-readout";
 const APP_SHELL = [
   "./",
   "./index.html",
