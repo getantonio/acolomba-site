@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v140-static-radial-ribbon-flow";
+const CACHE_NAME = "sound-a-tude-v141-sound-effort-footer";
 const APP_SHELL = [
   "./",
   "./index.html",

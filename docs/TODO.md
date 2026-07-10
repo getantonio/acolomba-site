@@ -251,3 +251,4 @@ Last updated: 2026-07-10
 - 2026-07-10 [Done] Anchored the player footer to the bottom edge so Guide, Settings, and Playlist icons remain visible on short screens.
 - 2026-07-10 [Done] Kept emitted ribbons traveling across the full waveform window with a persistent low-level sine trail that re-energizes on the next audio burst.
 - 2026-07-10 [Done] Removed the rotational drift from ribbon bodies while preserving outward sine travel and audio re-energizing.
+- 2026-07-10 [Done] Replaced the three-icon footer with the five-icon Sound Effort-style navigation pill: Player, Playlist, Record, Guide, and Settings.
