@@ -4,6 +4,7 @@ Last updated: 2026-07-10
 
 ## Active
 
+- 2026-07-10 [Done] Slimmed and centered the Sound-a-tude five-icon footer, matching its dark gradient, border, and shadow to the player controller frame; published live.
 - 2026-07-10 [Done] Added an optional flowing waveform renderer and a Settings page toggle for switching between the existing bar meter and luminous waveform ribbons; the choice persists locally.
 - 2026-07-10 [Done] Published the ten marked voices and restored one Sound Effort-style speed slider with pitch locked steady.
 - 2026-07-10 [Done] Refined and published the dark Sound-a-tude web player only: removed the stacked speaker-picker focus treatment after voice changes, replaced the Lip and clickable Pitch controls with one playback-speed slider, and locked pitch steady at every speed.
