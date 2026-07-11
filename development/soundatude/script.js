@@ -2463,7 +2463,7 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
   const emission = clamp(waveformEmission, 0, 1);
   if (targetEmission > 0.08) waveformHasStarted = true;
   waveformTrailEnergy = waveformHasStarted
-    ? Math.max(waveformTrailEnergy * 0.996, emission * 0.92, 0.035)
+    ? Math.max(waveformTrailEnergy * 0.9992, emission * 0.92, 0.08)
     : 0;
   const trailEnergy = clamp(waveformTrailEnergy, 0, 1);
   const trailOpacity = clamp(0.14 + trailEnergy * 0.86, 0.14, 1);
