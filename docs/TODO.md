@@ -4,6 +4,7 @@ Last updated: 2026-07-10
 
 ## Active
 
+- 2026-07-10 [Done] Made flowing waveform audio visibly originate at the center and travel outward, with deliberately varied per-ribbon lag and pulse speed for an organic cascade; published live.
 - 2026-07-10 [Done] Made the Sound-a-tude five-icon footer persist across Player, Playlist, Recorder, Guide, and Settings with identical fixed spacing; published live.
 - 2026-07-10 [Done] Synced the persistent footer’s active icon and accessibility state to the current page.
 - 2026-07-10 [Done] Added independent per-ribbon delay, smoothing, and phase variation for a more organic flowing waveform.
