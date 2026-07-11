@@ -2624,3 +2624,67 @@ input[type="range"]:focus-visible {
     padding: 9px;
   }
 }
+
+/* Fixed app frame: every page reserves the same visual clearance for the footer. */
+:root {
+  --sat-shell-top: clamp(8px, 1.35svh, 12px);
+  --sat-footer-height: clamp(52px, 8.8svh, 64px);
+  --sat-footer-bottom: max(10px, env(safe-area-inset-bottom));
+  --sat-footer-gap: 48px;
+  --sat-frame-height: calc(100svh - var(--sat-shell-top) - var(--sat-footer-height) - var(--sat-footer-bottom) - var(--sat-footer-gap));
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+.app-shell {
+  height: 100svh;
+  min-height: 100svh;
+  grid-template-rows: var(--sat-frame-height);
+  align-content: start;
+  align-items: start;
+  justify-items: center;
+  gap: 0;
+  padding: var(--sat-shell-top) 14px 0;
+  overflow: hidden;
+}
+
+.page-rail {
+  height: var(--sat-frame-height);
+  min-height: 0;
+}
+
+.app-page,
+.player,
+.playlist-page,
+.recorder-page,
+.guide-page,
+.settings-page {
+  height: 100%;
+  min-height: 0;
+}
+
+.player,
+.playlist-page,
+.recorder-page,
+.guide-page,
+.settings-page {
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.player::-webkit-scrollbar,
+.playlist-page::-webkit-scrollbar,
+.recorder-page::-webkit-scrollbar,
+.guide-page::-webkit-scrollbar,
+.settings-page::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.player-footer {
+  bottom: var(--sat-footer-bottom);
+}
