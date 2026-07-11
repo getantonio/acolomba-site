@@ -929,6 +929,9 @@ let waveformTrailEnergy = 0;
 let waveformHasStarted = false;
 const waveformRibbonEnergy = Array.from({ length: 24 }, () => 0);
 const waveformRibbonFront = Array.from({ length: 24 }, () => -0.12);
+let waveformLastFrameTime = 0;
+let waveformContinuousSound = 0;
+let waveformQuietTime = 0;
 let waveformStyle = localStorage.getItem(WAVEFORM_STYLE_STORAGE_KEY) === "flowing" ? "flowing" : "bars";
 let activeCueWords = [];
 let activeCueStep = -1;
@@ -2461,6 +2464,18 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
   const targetEmission = hasLiveAudio
     ? clamp((energy * 0.55 + meterEnergyPulse * 0.18) * volumeFactor, 0, 1)
     : 0;
+  const deltaTime = waveformLastFrameTime ? Math.min(Math.max(time - waveformLastFrameTime, 0), 0.05) : 0;
+  waveformLastFrameTime = time;
+  if (targetEmission > 0.035) {
+    waveformQuietTime = 0;
+    waveformContinuousSound = Math.min(waveformContinuousSound + deltaTime, 4.8);
+  } else {
+    waveformQuietTime += deltaTime;
+    if (waveformQuietTime > 0.18) {
+      waveformContinuousSound = 0;
+      waveformRibbonFront.fill(-0.12);
+    }
+  }
   const smoothing = targetEmission > waveformEmission ? 0.04 : 0.14;
   waveformEmission += (targetEmission - waveformEmission) * smoothing;
   const emission = clamp(waveformEmission, 0, 1);
@@ -2471,6 +2486,7 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
   const trailEnergy = clamp(waveformTrailEnergy, 0, 1);
   const trailOpacity = clamp(0.14 + trailEnergy * 0.86, 0.14, 1);
   const activity = 0.28 + emission * 1.8 + trailEnergy * 0.48;
+  const strandGrowth = Math.pow(clamp(waveformContinuousSound / 4.8, 0, 1), 0.72);
 
   context.save();
   context.globalCompositeOperation = "lighter";
@@ -2500,6 +2516,7 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
     const ribbonSmoothing = 0.022 + ((Math.sin(ribbonIndex * 6.31) + 1) * 0.5) * 0.070;
     waveformRibbonEnergy[ribbonIndex] += (emission - waveformRibbonEnergy[ribbonIndex]) * ribbonSmoothing;
     const ribbonDrive = clamp(waveformRibbonEnergy[ribbonIndex] * 1.45 + trailEnergy * 0.32, 0.08, 1);
+    const ribbonReach = maxRadius * clamp(0.12 + strandGrowth * 0.88 + Math.sin(ribbonIndex * 2.61) * 0.035, 0.10, 1);
     const frontSpeed = (hasLiveAudio ? 0.014 : 0.003) + ((Math.cos(ribbonIndex * 3.17) + 1) * 0.5) * 0.008;
     waveformRibbonFront[ribbonIndex] += frontSpeed * (0.55 + ribbonDrive * 0.75);
     if (waveformRibbonFront[ribbonIndex] > 1.14) waveformRibbonFront[ribbonIndex] = -0.12;
@@ -2511,7 +2528,7 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
     const normalY = Math.cos(angle);
     const drawRibbon = (offset, lineWidth, opacity, filament = false) => {
       context.beginPath();
-      for (let radius = 0; radius <= maxRadius; radius += 2) {
+      for (let radius = 0; radius <= ribbonReach; radius += 2) {
         const progress = radius / Math.max(maxRadius, 1);
         const meterIndex = Math.min(
           meterLevels.length - 1,

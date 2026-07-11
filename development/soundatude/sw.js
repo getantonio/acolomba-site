@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v156-fluid-ribbons-frame";
+const CACHE_NAME = "sound-a-tude-v157-growing-strands";
 const APP_SHELL = [
   "./",
   "./index.html",
