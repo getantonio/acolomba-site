@@ -2491,8 +2491,8 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
     const angle = (ribbonIndex / ribbonCount) * Math.PI * 2 + Math.sin(ribbonIndex * 7.1) * 0.035;
     const ribbonDelay = Math.round(Math.sin(ribbonIndex * 9.17) * 5 + Math.cos(ribbonIndex * 2.41) * 3);
     const hue = ribbonIndex % 5 === 0 || ribbonIndex % 7 === 0 ? 42 : 207 + (ribbonIndex % 3) * 8;
-    const lightness = hue === 42 ? 78 : 70;
-    const alpha = hue === 42 ? 0.56 : 0.48;
+    const lightness = hue === 42 ? 86 : 82;
+    const alpha = hue === 42 ? 0.78 : 0.72;
     const normalX = -Math.sin(angle);
     const normalY = Math.cos(angle);
     const drawRibbon = (offset, lineWidth, opacity, filament = false) => {
@@ -2522,11 +2522,11 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
       context.stroke();
     };
 
-    drawRibbon(0, 6.2 + (ribbonIndex % 3) * 1.2, alpha * 0.16);
-    drawRibbon(0, 3.8 + (ribbonIndex % 3) * 0.8, alpha * 0.34);
-    drawRibbon(0, 1.35 + (ribbonIndex % 2) * 0.55, alpha, true);
-    drawRibbon(-3, 0.7, alpha * 0.52, true);
-    drawRibbon(3, 0.7, alpha * 0.52, true);
+    drawRibbon(0, 11 + (ribbonIndex % 3) * 2, alpha * 0.28);
+    drawRibbon(0, 7 + (ribbonIndex % 3) * 1.2, alpha * 0.58);
+    drawRibbon(0, 2.4 + (ribbonIndex % 2) * 0.8, alpha, true);
+    drawRibbon(-4.5, 1.05, alpha * 0.62, true);
+    drawRibbon(4.5, 1.05, alpha * 0.62, true);
   }
   context.restore();
   context.shadowBlur = 0;
