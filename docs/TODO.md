@@ -4,6 +4,7 @@ Last updated: 2026-07-10
 
 ## Active
 
+- 2026-07-10 [Done] Replaced the abrupt waveform reset with a fade back to the lone breathing center pulse, and added a slow alternating 360-degree ribbon sweep during audio; published live.
 - 2026-07-10 [Done] Detached flowing waveform strands from the central glow, giving every ribbon its own offset start point, growth path, and response identity; published live.
 - 2026-07-10 [Done] Removed the distracting bottom U-frame and retained the clean shared footer spacing for a quieter, professional page finish; published live.
 - 2026-07-10 [Done] Made flowing waveform ribbons begin as short center strands, grow over sustained sound, and restart from the center after a pause; published live.

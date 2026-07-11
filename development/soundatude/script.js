@@ -932,6 +932,7 @@ const waveformRibbonFront = Array.from({ length: 24 }, () => -0.12);
 let waveformLastFrameTime = 0;
 let waveformContinuousSound = 0;
 let waveformQuietTime = 0;
+let waveformRibbonVisibility = 0;
 let waveformStyle = localStorage.getItem(WAVEFORM_STYLE_STORAGE_KEY) === "flowing" ? "flowing" : "bars";
 let activeCueWords = [];
 let activeCueStep = -1;
@@ -2471,11 +2472,12 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
     waveformContinuousSound = Math.min(waveformContinuousSound + deltaTime, 4.8);
   } else {
     waveformQuietTime += deltaTime;
-    if (waveformQuietTime > 0.18) {
-      waveformContinuousSound = 0;
-      waveformRibbonFront.fill(-0.12);
-    }
+    waveformContinuousSound = Math.max(0, waveformContinuousSound - deltaTime * 1.5);
   }
+  const targetRibbonVisibility = targetEmission > 0.035 ? 1 : 0;
+  waveformRibbonVisibility += (targetRibbonVisibility - waveformRibbonVisibility)
+    * (targetRibbonVisibility ? 0.055 : 0.024);
+  if (waveformRibbonVisibility < 0.012 && waveformQuietTime > 0.8) waveformRibbonFront.fill(-0.12);
   const smoothing = targetEmission > waveformEmission ? 0.04 : 0.14;
   waveformEmission += (targetEmission - waveformEmission) * smoothing;
   const emission = clamp(waveformEmission, 0, 1);
@@ -2487,6 +2489,7 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
   const trailOpacity = clamp(0.14 + trailEnergy * 0.86, 0.14, 1);
   const activity = 0.28 + emission * 1.8 + trailEnergy * 0.48;
   const strandGrowth = Math.pow(clamp(waveformContinuousSound / 4.8, 0, 1), 0.72);
+  const rotationAngle = Math.sin(time * 0.14) * Math.PI * 2;
 
   context.save();
   context.globalCompositeOperation = "lighter";
@@ -2509,8 +2512,8 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
     return;
   }
 
-  for (let ribbonIndex = 0; ribbonIndex < ribbonCount; ribbonIndex += 1) {
-    const angle = (ribbonIndex / ribbonCount) * Math.PI * 2 + Math.sin(ribbonIndex * 7.1) * 0.035;
+  for (let ribbonIndex = 0; ribbonIndex < ribbonCount && waveformRibbonVisibility > 0.012; ribbonIndex += 1) {
+    const angle = (ribbonIndex / ribbonCount) * Math.PI * 2 + Math.sin(ribbonIndex * 7.1) * 0.035 + rotationAngle;
     const ribbonDelay = Math.round(Math.sin(ribbonIndex * 9.17) * 5 + Math.cos(ribbonIndex * 2.41) * 3);
     const ribbonPhase = Math.sin(ribbonIndex * 4.73) * Math.PI;
     const ribbonSmoothing = 0.022 + ((Math.sin(ribbonIndex * 6.31) + 1) * 0.5) * 0.070;
@@ -2552,9 +2555,9 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
         if (radius === ribbonOrigin) context.moveTo(x, y);
         else context.lineTo(x, y);
       }
-      context.strokeStyle = `hsla(${hue}, 94%, ${lightness}%, ${opacity * trailOpacity})`;
+      context.strokeStyle = `hsla(${hue}, 94%, ${lightness}%, ${opacity * trailOpacity * waveformRibbonVisibility})`;
       context.lineWidth = lineWidth;
-      context.shadowColor = `hsla(${hue}, 95%, 72%, ${opacity * 0.82})`;
+      context.shadowColor = `hsla(${hue}, 95%, 72%, ${opacity * 0.82 * waveformRibbonVisibility})`;
       context.shadowBlur = filament ? 3 : 10;
       context.stroke();
     };
