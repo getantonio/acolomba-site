@@ -2688,18 +2688,3 @@ body {
 .player-footer {
   bottom: var(--sat-footer-bottom);
 }
-
-.app-page::after {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: min(100%, 338px);
-  height: 20px;
-  border: 1px solid oklch(29% 0.034 226 / 0.72);
-  border-top: 0;
-  border-radius: 0 0 20px 20px;
-  box-shadow: 0 12px 24px oklch(0% 0 0 / 0.14);
-  content: "";
-  pointer-events: none;
-  transform: translateX(-50%);
-}

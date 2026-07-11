@@ -4,6 +4,7 @@ Last updated: 2026-07-10
 
 ## Active
 
+- 2026-07-10 [Done] Removed the distracting bottom U-frame and retained the clean shared footer spacing for a quieter, professional page finish; published live.
 - 2026-07-10 [Done] Made flowing waveform ribbons begin as short center strands, grow over sustained sound, and restart from the center after a pause; published live.
 - 2026-07-10 [Done] Smoothed the flowing waveform into longer, rounded curves and added a consistent bottom frame edge above the shared footer on every Sound-a-tude page; published live.
 - 2026-07-10 [Done] Matched Sound-a-tude to the Sound Effort fixed app-frame model so every page reserves the same 48px clearance above the shared footer; published live.

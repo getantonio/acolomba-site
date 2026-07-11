@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v157-growing-strands";
+const CACHE_NAME = "sound-a-tude-v158-clean-page-frame";
 const APP_SHELL = [
   "./",
   "./index.html",
