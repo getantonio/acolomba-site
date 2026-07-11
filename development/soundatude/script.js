@@ -72,6 +72,7 @@ const openGuideButton = document.querySelector("#openGuideButton");
 const closeGuideButton = document.querySelector("#closeGuideButton");
 const openSettingsButton = document.querySelector("#openSettingsButton");
 const closeSettingsButton = document.querySelector("#closeSettingsButton");
+const footerNavButtons = [openPlayerFooterButton, openPlaylistButton, openRecorderFooterButton, openGuideButton, openSettingsButton];
 const flowingWaveformToggle = document.querySelector("#flowingWaveformToggle");
 const consoleMeter = document.querySelector(".console-meter");
 let flowingWaveform = document.querySelector("#flowingWaveform");
@@ -926,6 +927,7 @@ let meterEnergyPulse = 0;
 let waveformEmission = 0;
 let waveformTrailEnergy = 0;
 let waveformHasStarted = false;
+const waveformRibbonEnergy = Array.from({ length: 24 }, () => 0);
 let waveformStyle = localStorage.getItem(WAVEFORM_STYLE_STORAGE_KEY) === "flowing" ? "flowing" : "bars";
 let activeCueWords = [];
 let activeCueStep = -1;
@@ -2490,6 +2492,10 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
   for (let ribbonIndex = 0; ribbonIndex < ribbonCount; ribbonIndex += 1) {
     const angle = (ribbonIndex / ribbonCount) * Math.PI * 2 + Math.sin(ribbonIndex * 7.1) * 0.035;
     const ribbonDelay = Math.round(Math.sin(ribbonIndex * 9.17) * 5 + Math.cos(ribbonIndex * 2.41) * 3);
+    const ribbonPhase = Math.sin(ribbonIndex * 4.73) * Math.PI;
+    const ribbonSmoothing = 0.012 + (ribbonIndex % 5) * 0.004;
+    waveformRibbonEnergy[ribbonIndex] += (emission - waveformRibbonEnergy[ribbonIndex]) * ribbonSmoothing;
+    const ribbonDrive = clamp(waveformRibbonEnergy[ribbonIndex] * 1.45 + trailEnergy * 0.32, 0.08, 1);
     const hue = ribbonIndex % 5 === 0 || ribbonIndex % 7 === 0 ? 42 : 207 + (ribbonIndex % 3) * 8;
     const lightness = hue === 42 ? 86 : 82;
     const alpha = hue === 42 ? 0.78 : 0.72;
@@ -2508,8 +2514,9 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
         const broadBend = Math.sin(radius * 0.023 + ribbonIndex * 1.7) * (4 + radius * 0.035);
         const fineBend = Math.sin(radius * 0.082 + ribbonIndex) * (filament ? 1.8 : 3.2);
         const outwardWave = Math.sin(radius * 0.018 + ribbonIndex * 0.7) * (2 + radius * 0.018);
-        const audioBend = (level - 0.08) * rect.height * 0.28 * activity * (0.28 + envelope);
-        const bend = (broadBend + fineBend + outwardWave + audioBend) * envelope + offset;
+        const organicBend = Math.sin(time * (0.52 + (ribbonIndex % 4) * 0.07) + ribbonPhase + radius * 0.006) * (1.2 + radius * 0.012) * ribbonDrive;
+        const audioBend = (level - 0.08) * rect.height * 0.34 * activity * ribbonDrive * (0.28 + envelope);
+        const bend = (broadBend + fineBend + outwardWave + organicBend + audioBend) * envelope + offset;
         const x = centerX + Math.cos(angle) * radius + normalX * bend;
         const y = centerY + Math.sin(angle) * radius + normalY * bend;
         if (radius === 0) context.moveTo(x, y);
@@ -2781,6 +2788,12 @@ function goToPage(pageIndex) {
   pageRail.style.setProperty("--page-drag-offset", "0px");
   pageRail.style.setProperty("--page-index", activePageIndex);
   updatePageDots();
+  footerNavButtons.forEach((button, index) => {
+    if (!button) return;
+    const isActive = index === activePageIndex;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-current", isActive ? "page" : "false");
+  });
 }
 
 function isPageSwipeIgnored(target) {

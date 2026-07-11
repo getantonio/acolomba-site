@@ -464,7 +464,7 @@ input[type="range"]:focus-visible {
 }
 
 .player-footer {
-  position: absolute;
+  position: fixed;
   left: 50%;
   bottom: clamp(28px, 7svh, 58px);
   width: min(100%, 324px);
@@ -483,6 +483,7 @@ input[type="range"]:focus-visible {
     inset 0 1px 0 oklch(100% 0 0 / 0.028),
     0 16px 30px oklch(0% 0 0 / 0.20);
   transform: translateX(-50%);
+  z-index: 20;
 }
 
 .player-footer .footer-switch {

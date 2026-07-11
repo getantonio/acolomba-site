@@ -4,6 +4,9 @@ Last updated: 2026-07-10
 
 ## Active
 
+- 2026-07-10 [Done] Made the Sound-a-tude five-icon footer persist across Player, Playlist, Recorder, Guide, and Settings with identical fixed spacing; published live.
+- 2026-07-10 [Done] Synced the persistent footer’s active icon and accessibility state to the current page.
+- 2026-07-10 [Done] Added independent per-ribbon delay, smoothing, and phase variation for a more organic flowing waveform.
 - 2026-07-10 [Done] Kept activated waveform ribbons continuously alive with a stronger idle trail floor and slower decay, allowing subtle motion through silence instead of appearing to stop; published live.
 - 2026-07-10 [Done] Increased the Sound-a-tude waveform ribbons substantially in thickness, brightness, opacity, and glow while preserving their static radial layout; published live.
 - 2026-07-10 [Done] Balanced the lower footer spacing against the upper card spacing and enriched the static radial waveform with thicker cores, blurred under-bands, and per-ribbon response offsets; published live.

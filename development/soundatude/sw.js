@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v147-persistent-wave";
+const CACHE_NAME = "sound-a-tude-v150-organic-ribbons";
 const APP_SHELL = [
   "./",
   "./index.html",
