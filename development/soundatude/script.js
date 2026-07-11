@@ -2516,7 +2516,11 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
     const ribbonSmoothing = 0.022 + ((Math.sin(ribbonIndex * 6.31) + 1) * 0.5) * 0.070;
     waveformRibbonEnergy[ribbonIndex] += (emission - waveformRibbonEnergy[ribbonIndex]) * ribbonSmoothing;
     const ribbonDrive = clamp(waveformRibbonEnergy[ribbonIndex] * 1.45 + trailEnergy * 0.32, 0.08, 1);
-    const ribbonReach = maxRadius * clamp(0.12 + strandGrowth * 0.88 + Math.sin(ribbonIndex * 2.61) * 0.035, 0.10, 1);
+    const ribbonOrigin = rect.height * (0.20 + Math.sin(ribbonIndex * 5.19) * 0.045);
+    const ribbonReach = Math.max(
+      ribbonOrigin + rect.height * 0.10,
+      maxRadius * clamp(0.12 + strandGrowth * 0.88 + Math.sin(ribbonIndex * 2.61) * 0.035, 0.10, 1)
+    );
     const frontSpeed = (hasLiveAudio ? 0.014 : 0.003) + ((Math.cos(ribbonIndex * 3.17) + 1) * 0.5) * 0.008;
     waveformRibbonFront[ribbonIndex] += frontSpeed * (0.55 + ribbonDrive * 0.75);
     if (waveformRibbonFront[ribbonIndex] > 1.14) waveformRibbonFront[ribbonIndex] = -0.12;
@@ -2528,7 +2532,7 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
     const normalY = Math.cos(angle);
     const drawRibbon = (offset, lineWidth, opacity, filament = false) => {
       context.beginPath();
-      for (let radius = 0; radius <= ribbonReach; radius += 2) {
+      for (let radius = ribbonOrigin; radius <= ribbonReach; radius += 2) {
         const progress = radius / Math.max(maxRadius, 1);
         const meterIndex = Math.min(
           meterLevels.length - 1,
@@ -2545,7 +2549,7 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
         const bend = (broadBend + fineBend + outwardWave + organicBend + audioBend) * envelope + offset;
         const x = centerX + Math.cos(angle) * radius + normalX * bend;
         const y = centerY + Math.sin(angle) * radius + normalY * bend;
-        if (radius === 0) context.moveTo(x, y);
+        if (radius === ribbonOrigin) context.moveTo(x, y);
         else context.lineTo(x, y);
       }
       context.strokeStyle = `hsla(${hue}, 94%, ${lightness}%, ${opacity * trailOpacity})`;
