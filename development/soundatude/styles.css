@@ -2688,3 +2688,22 @@ body {
 .player-footer {
   bottom: var(--sat-footer-bottom);
 }
+
+/* Sheet pages use the entire fixed frame, ending at the same footer clearance as the player. */
+.guide-sheet,
+.settings-sheet,
+.voice-recorder-sheet {
+  height: 100%;
+  max-height: none;
+  align-self: stretch;
+}
+
+.voice-recorder-sheet {
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.voice-recorder-sheet::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
