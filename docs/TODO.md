@@ -4,6 +4,7 @@ Last updated: 2026-07-10
 
 ## Active
 
+- 2026-07-10 [Done] Smoothed the flowing waveform into longer, rounded curves and added a consistent bottom frame edge above the shared footer on every Sound-a-tude page; published live.
 - 2026-07-10 [Done] Matched Sound-a-tude to the Sound Effort fixed app-frame model so every page reserves the same 48px clearance above the shared footer; published live.
 - 2026-07-10 [Done] Set Sound-a-tude’s default player volume to 50 percent; published live.
 - 2026-07-10 [Done] Made the flowing waveform’s center light continuously expand and contract through silence, with audio only adding intensity; published live.

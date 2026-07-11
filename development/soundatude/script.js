@@ -2474,6 +2474,8 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
 
   context.save();
   context.globalCompositeOperation = "lighter";
+  context.lineCap = "round";
+  context.lineJoin = "round";
   const breath = 0.5 + Math.sin(time * 1.15) * 0.5;
   const pulse = 0.62 + breath * 0.34 + emission * 0.24;
   const glowRadius = rect.height * (0.09 + breath * 0.13 + emission * 0.24);
@@ -2509,7 +2511,7 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
     const normalY = Math.cos(angle);
     const drawRibbon = (offset, lineWidth, opacity, filament = false) => {
       context.beginPath();
-      for (let radius = 0; radius <= maxRadius; radius += 3) {
+      for (let radius = 0; radius <= maxRadius; radius += 2) {
         const progress = radius / Math.max(maxRadius, 1);
         const meterIndex = Math.min(
           meterLevels.length - 1,
@@ -2517,10 +2519,10 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
         );
         const level = meterLevels[meterIndex] || 0.08;
         const envelope = 0.42 + Math.pow(Math.sin(Math.min(progress, 1) * Math.PI), 0.52) * 0.58;
-        const broadBend = Math.sin(radius * 0.023 + ribbonIndex * 1.7) * (4 + radius * 0.035);
-        const fineBend = Math.sin(radius * 0.082 + ribbonIndex) * (filament ? 1.8 : 3.2);
-        const outwardWave = Math.sin(radius * 0.018 + ribbonIndex * 0.7) * (2 + radius * 0.018);
-        const organicBend = Math.sin(time * (0.52 + (ribbonIndex % 4) * 0.07) + ribbonPhase + radius * 0.006) * (1.2 + radius * 0.012) * ribbonDrive;
+        const broadBend = Math.sin(radius * 0.010 + ribbonIndex * 1.7) * (6 + radius * 0.040);
+        const fineBend = Math.sin(radius * 0.034 + ribbonIndex * 0.8) * (filament ? 0.75 : 1.45);
+        const outwardWave = Math.sin(radius * 0.009 + ribbonIndex * 0.7) * (2.4 + radius * 0.020);
+        const organicBend = Math.sin(time * (0.30 + (ribbonIndex % 4) * 0.045) + ribbonPhase + radius * 0.003) * (2 + radius * 0.016) * ribbonDrive;
         const outwardPulse = Math.exp(-Math.pow((progress - ribbonFront) / 0.16, 2));
         const audioBend = (level - 0.08) * rect.height * 0.34 * activity * ribbonDrive * (0.20 + outwardPulse * 1.65) * (0.28 + envelope);
         const bend = (broadBend + fineBend + outwardWave + organicBend + audioBend) * envelope + offset;
