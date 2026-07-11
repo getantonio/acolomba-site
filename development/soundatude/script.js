@@ -2474,12 +2474,13 @@ function drawFlowingWaveform(time, hasLiveAudio, liveEnergy = 0) {
 
   context.save();
   context.globalCompositeOperation = "lighter";
-  const pulse = 0.78 + Math.sin(time * 2.1) * 0.12 + emission * 0.22;
-  const glowRadius = rect.height * (0.11 + emission * 0.24);
+  const breath = 0.5 + Math.sin(time * 1.15) * 0.5;
+  const pulse = 0.62 + breath * 0.34 + emission * 0.24;
+  const glowRadius = rect.height * (0.09 + breath * 0.13 + emission * 0.24);
   const centerGlow = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, glowRadius);
-  centerGlow.addColorStop(0, `rgba(255, 240, 190, ${0.72 * pulse})`);
+  centerGlow.addColorStop(0, `rgba(255, 240, 190, ${0.70 * pulse})`);
   centerGlow.addColorStop(0.08, `rgba(115, 207, 255, ${0.62 * pulse})`);
-  centerGlow.addColorStop(0.42, `rgba(38, 133, 237, ${0.20 * pulse})`);
+  centerGlow.addColorStop(0.42, `rgba(38, 133, 237, ${(0.18 + breath * 0.14 + emission * 0.12)})`);
   centerGlow.addColorStop(1, "rgba(20, 94, 190, 0)");
   context.fillStyle = centerGlow;
   context.fillRect(0, 0, rect.width, rect.height);

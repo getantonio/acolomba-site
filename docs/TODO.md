@@ -4,6 +4,8 @@ Last updated: 2026-07-10
 
 ## Active
 
+- 2026-07-10 [Done] Set Sound-a-tude’s default player volume to 50 percent; published live.
+- 2026-07-10 [Done] Made the flowing waveform’s center light continuously expand and contract through silence, with audio only adding intensity; published live.
 - 2026-07-10 [Done] Moved the Sound-a-tude footer out of the transformed page rail so it remains visible on every app page at the same fixed spacing; published live.
 - 2026-07-10 [Done] Made flowing waveform audio visibly originate at the center and travel outward, with deliberately varied per-ribbon lag and pulse speed for an organic cascade; published live.
 - 2026-07-10 [Done] Made the Sound-a-tude five-icon footer persist across Player, Playlist, Recorder, Guide, and Settings with identical fixed spacing; published live.

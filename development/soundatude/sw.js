@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v152-global-footer";
+const CACHE_NAME = "sound-a-tude-v154-breathing-volume";
 const APP_SHELL = [
   "./",
   "./index.html",
