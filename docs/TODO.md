@@ -31,6 +31,7 @@ Last updated: 2026-07-10
 
 ## Completed
 
+- 2026-07-12 [Done] Added the Agentic Pipeline video to the home and Projects pages, served directly through GitHub Pages from `assets/video/`.
 - 2026-07-09 [Done] Removed the gray paper background from resume pages and rebuilt the affected PDF downloads.
 - 2026-07-09 [Done] Removed the gray paper background from Bio, Contact, and Projects pages.
 - 2026-07-09 [Done] Added `www.acolomba.com` below the email address in resume headers and rebuilt resume downloads.

@@ -165,6 +165,35 @@
       opacity: 0.42;
     }
 
+    .featured-work {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+      gap: 28px;
+      align-items: start;
+      padding: 24px 0 30px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .featured-work h2 {
+      margin: 0;
+      color: var(--blue);
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.05;
+    }
+
+    .featured-work p {
+      max-width: 34ch;
+      margin: 12px 0 0;
+      font-size: 17px;
+      line-height: 1.42;
+    }
+
+    .featured-work video {
+      display: block;
+      width: 100%;
+      background: var(--ink);
+    }
+
     footer {
       padding-top: 20px;
       border-top: 1px solid var(--rule);
@@ -190,6 +219,10 @@
       .hero {
         display: block;
         padding: 38px 0 48px;
+      }
+
+      .featured-work {
+        grid-template-columns: 1fr;
       }
 
       .summary,
@@ -246,6 +279,17 @@
           <a href="projects.html">Projects</a>
         </div>
       </aside>
+    </section>
+
+    <section class="featured-work" aria-labelledby="agentic-pipeline-title">
+      <div>
+        <h2 id="agentic-pipeline-title">Agentic Pipeline</h2>
+        <p>A visual walkthrough of an AI-assisted production workflow, from an initial prompt through coordinated media steps.</p>
+      </div>
+      <video controls playsinline preload="metadata" poster="assets/video/agentic-pipeline-poster.jpg">
+        <source src="assets/video/agentic-pipeline.mp4" type="video/mp4">
+        Your browser does not support embedded video.
+      </video>
     </section>
 
     <footer>Available for management, operations, admin, production coordination, technical support, AI content and AI agent workflows.</footer>

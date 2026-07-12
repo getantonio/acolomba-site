@@ -162,6 +162,13 @@
       line-height: 1.5;
     }
 
+    .project-media {
+      display: block;
+      width: min(100%, 520px);
+      margin-top: 18px;
+      background: var(--ink);
+    }
+
     @media (max-width: 760px) {
       main {
         width: min(100% - 30px, 920px);
@@ -239,6 +246,10 @@
             <li>Organizing repeatable workflows for research, writing, image generation, and site updates.</li>
             <li>Testing tools, documenting steps, and turning rough ideas into workable processes.</li>
           </ul>
+          <video class="project-media" controls playsinline preload="metadata" poster="assets/video/agentic-pipeline-poster.jpg">
+            <source src="assets/video/agentic-pipeline.mp4" type="video/mp4">
+            Your browser does not support embedded video.
+          </video>
         </div>
       </article>
 
