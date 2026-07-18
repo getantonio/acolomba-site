@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v161-sinewave-full-frame";
+const CACHE_NAME = "sound-a-tude-v162-dark-default-media";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -9,7 +9,14 @@ const APP_SHELL = [
   "./script.js",
   "./manifest.webmanifest",
   "./icons/icon.svg",
-  "./assets/images/marketing/iphone-player.png"
+  "./assets/images/marketing/iphone-player.png",
+  "./assets/images/marketing/iphone-player-dark.png",
+  "./assets/images/marketing/iphone-player-light.png",
+  "./assets/images/marketing/iphone-mix.png",
+  "./assets/images/marketing/iphone-recorder.png",
+  "./assets/images/marketing/iphone-guide.png",
+  "./assets/images/marketing/iphone-settings.png",
+  "./assets/images/marketing/iphone-voices.png"
 ];
 
 self.addEventListener("install", (event) => {

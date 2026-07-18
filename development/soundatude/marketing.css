@@ -371,7 +371,7 @@ li {
   width: min(1160px, calc(100% - (2 * var(--page-pad))));
   margin: clamp(30px, 5vw, 72px) auto 0;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   border-block: 1px solid var(--line);
 }
 
