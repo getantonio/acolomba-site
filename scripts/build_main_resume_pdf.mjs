@@ -60,7 +60,7 @@ try {
 
       header {
         grid-template-columns: minmax(0, 69%) 155px !important;
-        margin: 0 0 16px !important;
+        margin: 0 0 28px !important;
         gap: 28px !important;
       }
 
@@ -82,7 +82,7 @@ try {
 
       .summary {
         max-width: none !important;
-        margin: 0 0 15px 190px !important;
+        margin: 0 0 23px 190px !important;
         font-size: 15px !important;
         line-height: 1.34 !important;
       }
@@ -90,7 +90,7 @@ try {
       section {
         grid-template-columns: 170px minmax(0, 1fr) !important;
         column-gap: 26px !important;
-        margin-top: 13px !important;
+        margin-top: 21px !important;
         padding-top: 0 !important;
         border-top: 0 !important;
         break-inside: auto !important;
@@ -108,7 +108,7 @@ try {
         column-gap: 14px !important;
         justify-content: start !important;
         align-items: baseline !important;
-        margin: 10px 0 3px !important;
+        margin: 14px 0 3px !important;
         font-size: 15px !important;
         line-height: 1.12 !important;
       }
@@ -132,7 +132,7 @@ try {
       }
 
       .education-list {
-        gap: 5px !important;
+        gap: 8px !important;
       }
 
       .school {
