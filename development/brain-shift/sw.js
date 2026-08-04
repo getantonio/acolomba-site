@@ -1,66 +1,36 @@
-const CACHE_NAME = "brain-shift-v1-dark-default-media";
-const APP_SHELL = [
-  "./",
-  "./index.html",
-  "./marketing.html",
-  "./privacy.html",
-  "./styles.css",
-  "./marketing.css",
-  "./script.js",
-  "./manifest.webmanifest",
-  "./icons/icon.svg",
-  "./assets/images/marketing/iphone-player.png",
-  "./assets/images/marketing/iphone-player-dark.png",
-  "./assets/images/marketing/iphone-player-light.png",
-  "./assets/images/marketing/iphone-mix.png",
-  "./assets/images/marketing/iphone-recorder.png",
-  "./assets/images/marketing/iphone-guide.png",
-  "./assets/images/marketing/iphone-settings.png",
-  "./assets/images/marketing/iphone-voices.png"
-];
+const APP_STORE_URL = "https://apps.apple.com/app/brain-shift/id6787929828";
 
-self.addEventListener("install", (event) => {
+const isBrainShiftCache = (cacheName) => (
+  cacheName.startsWith("brain-shift") || cacheName.startsWith("sound-a-tude")
+);
+
+self.addEventListener("install", () => {
   self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL))
-  );
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => Promise.all(
-      cacheNames
-        .filter((cacheName) => cacheName !== CACHE_NAME)
-        .map((cacheName) => caches.delete(cacheName))
-    )).then(() => self.clients.claim())
+    caches.keys()
+      .then((cacheNames) => Promise.all(
+        cacheNames
+          .filter(isBrainShiftCache)
+          .map((cacheName) => caches.delete(cacheName))
+      ))
+      .then(() => self.clients.claim())
+      .then(() => self.registration.unregister())
   );
 });
 
 self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
+  if (event.request.mode !== "navigate") return;
 
-  if (event.request.headers.has("range")) {
-    return;
-  }
-
-  if (event.request.mode === "navigate") {
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put("./", copy));
-          return response;
-        })
-        .catch(() => caches.match(event.request).then((cachedResponse) => (
-          cachedResponse || caches.match("./")
-        )))
-    );
-    return;
-  }
-
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => (
-      cachedResponse || fetch(event.request)
-    ))
+  const url = new URL(event.request.url);
+  const isPlayerEntry = (
+    url.pathname.endsWith("/development/brain-shift/") ||
+    url.pathname.endsWith("/development/brain-shift/index.html")
   );
+
+  if (isPlayerEntry) {
+    event.respondWith(Response.redirect(APP_STORE_URL, 302));
+  }
 });

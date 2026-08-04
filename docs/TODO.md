@@ -1,9 +1,10 @@
 # New Job Search TODO
 
-Last updated: 2026-08-03
+Last updated: 2026-08-04
 
 ## Active
 
+- 2026-08-04 [In Progress] Remove the public Brain Shift web-player entry points and connect the Projects and Portfolio links to the native App Store product page.
 - 2026-08-03 [Done] Rebalanced the Main Resume PDF spacing to match the Retouching Resume and removed the oversized blank area at the bottom of the page.
 - 2026-07-11 [Done] Extended Sound-a-tude’s sheet pages down to the shared footer clearance and strengthened the rotating ribbons into a visible traveling sine-wave flow; published live.
 - 2026-07-10 [Done] Replaced the abrupt waveform reset with a fade back to the lone breathing center pulse, and added a slow alternating 360-degree ribbon sweep during audio; published live.

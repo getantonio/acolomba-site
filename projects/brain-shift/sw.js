@@ -1,26 +1,39 @@
-const CACHE_NAME = "brain-shift-project-redirect-v1";
+const APP_STORE_URL = "https://apps.apple.com/app/brain-shift/id6787929828";
 
-self.addEventListener("install", (event) => {
+const isBrainShiftCache = (cacheName) => (
+  cacheName.startsWith("brain-shift") || cacheName.startsWith("sound-a-tude")
+);
+
+self.addEventListener("install", () => {
   self.skipWaiting();
-  event.waitUntil(caches.open(CACHE_NAME));
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys()
-      .then((cacheNames) => Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName))))
+      .then((cacheNames) => Promise.all(
+        cacheNames
+          .filter(isBrainShiftCache)
+          .map((cacheName) => caches.delete(cacheName))
+      ))
       .then(() => self.clients.claim())
+      .then(() => self.registration.unregister())
   );
 });
 
 self.addEventListener("fetch", (event) => {
-  if (event.request.mode === "navigate") {
-    const url = new URL(event.request.url);
-    const suffix = url.pathname.endsWith("/marketing.html")
-      ? "marketing.html"
-      : url.pathname.endsWith("/privacy.html")
-        ? "privacy.html"
-        : "";
-    event.respondWith(Response.redirect(`/development/brain-shift/${suffix}${url.search}${url.hash}`, 302));
+  if (event.request.mode !== "navigate") return;
+
+  const url = new URL(event.request.url);
+  if (url.pathname.endsWith("/privacy.html")) {
+    event.respondWith(Response.redirect(`/development/brain-shift/privacy.html${url.search}`, 302));
+    return;
   }
+
+  if (url.pathname.endsWith("/marketing.html")) {
+    event.respondWith(Response.redirect(`/development/brain-shift/marketing.html${url.search}`, 302));
+    return;
+  }
+
+  event.respondWith(Response.redirect(APP_STORE_URL, 302));
 });
