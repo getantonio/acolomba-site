@@ -1,6 +1,6 @@
 {
-  "name": "Sound-a-tude",
-  "short_name": "Sound-a-tude",
+  "name": "Brain Shift",
+  "short_name": "Brain Shift",
   "description": "A simple background audio loop player for mindset resets.",
   "start_url": "./",
   "scope": "./",

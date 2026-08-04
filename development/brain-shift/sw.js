@@ -1,4 +1,4 @@
-const CACHE_NAME = "sound-a-tude-v162-dark-default-media";
+const CACHE_NAME = "brain-shift-v1-dark-default-media";
 const APP_SHELL = [
   "./",
   "./index.html",
