@@ -1,15 +1,15 @@
 const allowedOrigins = new Set([
-  "http://acolomba.site",
-  "https://acolomba.site",
-  "http://www.acolomba.site",
-  "https://www.acolomba.site",
+  "http://acolomba.com",
+  "https://acolomba.com",
+  "http://www.acolomba.com",
+  "https://www.acolomba.com",
 ]);
 
 function setCors(req, res) {
   const origin = req.headers.origin;
   res.setHeader(
     "Access-Control-Allow-Origin",
-    allowedOrigins.has(origin) ? origin : "https://acolomba.site"
+    allowedOrigins.has(origin) ? origin : "https://acolomba.com"
   );
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -55,7 +55,7 @@ export default async function handler(req, res) {
   }
 
   const text = [
-    "acolomba.site message",
+    "acolomba.com message",
     "",
     `Name: ${name}`,
     `${replyMethod}: ${replyTo}`,

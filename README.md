@@ -1,6 +1,6 @@
 # Antonio Colomba Site
 
-This is the single source repository for `acolomba.site`.
+This is the single source repository for `acolomba.com`.
 
 GitHub Pages serves this repository from the root of `main`, so the live site files live at the repo root:
 
@@ -19,18 +19,19 @@ GitHub Pages serves this repository from the root of `main`, so the live site fi
 
 Project notes, drafts, setup docs, and helper scripts live in `docs/`, `scripts/`, `workers/`, and `telegram-endpoint/`.
 
-## Domain Redirect
+## Custom Domain
 
-`acolomba.com` uses Namecheap URL Redirect records to forward traffic to `https://acolomba.site/`.
-
-In Namecheap Advanced DNS for `acolomba.com`, add or update:
+GitHub Pages serves the site directly at `https://acolomba.com/`. The repository's `CNAME` file sets the canonical domain, and Namecheap DNS points the apex and `www` host to GitHub Pages:
 
 | Type | Host | Value |
 | --- | --- | --- |
-| URL Redirect Record | `@` | `https://acolomba.site/` |
-| URL Redirect Record | `www` | `https://acolomba.site/` |
+| A Record | `@` | `185.199.108.153` |
+| A Record | `@` | `185.199.109.153` |
+| A Record | `@` | `185.199.110.153` |
+| A Record | `@` | `185.199.111.153` |
+| CNAME Record | `www` | `getantonio.github.io` |
 
-Namecheap URL forwarding currently covers HTTP traffic. Direct HTTPS requests to `https://acolomba.com` or `https://www.acolomba.com` require a certificate-backed redirect service if that path needs to work too.
+GitHub Pages provides HTTPS for the canonical domain and redirects `www.acolomba.com` to it.
 
 ## Publish Workflow
 
@@ -38,14 +39,16 @@ Use normal Git from this repo:
 
 ```bash
 git status
-git add -A
+git add -- <changed paths>
+git diff --cached --check
+git diff --cached
 git commit -m "Describe the site change"
 git push origin main
 ```
 
 No separate deploy repository or publish-copy step is needed.
 
-After site updates, push `main` to `origin` so `acolomba.site` receives the change through GitHub Pages. If push is rejected with "fetch first", run `git fetch origin main`, rebase or otherwise integrate `origin/main`, then push again after confirming the site changes are still present.
+After site updates, push `main` to `origin` so `acolomba.com` receives the change through GitHub Pages. If push is rejected with "fetch first", run `git fetch origin main`, rebase or otherwise integrate `origin/main`, then push again after confirming the site changes are still present.
 
 ## Rebuild Resume Downloads
 

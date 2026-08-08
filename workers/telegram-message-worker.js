@@ -1,13 +1,13 @@
 const allowedOrigins = new Set([
-  "http://acolomba.site",
-  "https://acolomba.site",
-  "http://www.acolomba.site",
-  "https://www.acolomba.site",
+  "http://acolomba.com",
+  "https://acolomba.com",
+  "http://www.acolomba.com",
+  "https://www.acolomba.com",
 ]);
 
 function corsHeaders(request) {
   const origin = request.headers.get("Origin");
-  const allowOrigin = allowedOrigins.has(origin) ? origin : "https://acolomba.site";
+  const allowOrigin = allowedOrigins.has(origin) ? origin : "https://acolomba.com";
 
   return {
     "Access-Control-Allow-Origin": allowOrigin,
@@ -123,7 +123,7 @@ export default {
     }
 
     const text = [
-      "acolomba.site message",
+      "acolomba.com message",
       "",
       `Name: ${name}`,
       `${replyMethod}: ${replyTo}`,

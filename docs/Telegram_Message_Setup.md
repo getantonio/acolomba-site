@@ -19,7 +19,7 @@ acolomba
 acolomba_bot
 ```
 
-Telegram bot usernames must end in `bot`, so `acolomba.site` is not valid as a username. If BotFather says `acolomba_bot` is unavailable, use `acolomba_site_bot` as the fallback username.
+Telegram bot usernames must end in `bot`, so a domain such as `acolomba.com` is not valid as a username. If BotFather says `acolomba_bot` is unavailable, use `acolomba_site_bot` as the fallback username.
 
 6. Copy the bot token.
 7. Open the new bot and send it any message, such as `hello`.
@@ -62,7 +62,7 @@ Then push the site again.
 The form is currently wired to:
 
 ```text
-https://antonio-telegram-message.gravel-starflower.workers.dev
+https://antonio-telegram-message.pine-porter.workers.dev
 ```
 
 This was created as a temporary Cloudflare Worker using the clean `@acolomba_bot` token. Claim or redeploy it under Antonio's Cloudflare account for a durable production endpoint.

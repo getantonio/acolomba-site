@@ -1,9 +1,10 @@
 # New Job Search TODO
 
-Last updated: 2026-08-04
+Last updated: 2026-08-08
 
 ## Active
 
+- 2026-08-08 [Now] Replace every user-facing legacy-domain link with `acolomba.com`, update the message endpoint origin settings, audit every deployed HTML page, and publish the verified changes.
 - 2026-08-04 [Done] Removed the public Brain Shift web-player entry points, connected the Projects and Portfolio links to the native App Store product page, retired stale player service workers, and published the update live.
 - 2026-08-03 [Done] Rebalanced the Main Resume PDF spacing to match the Retouching Resume and removed the oversized blank area at the bottom of the page.
 - 2026-07-11 [Done] Extended Sound-a-tude’s sheet pages down to the shared footer clearance and strengthened the rotating ribbons into a visible traveling sine-wave flow; published live.
@@ -73,7 +74,7 @@ Last updated: 2026-08-04
 - Fixed Brave/Chromium viewport background bleed on the static site pages by matching the root document background to the page paper and making the body fill the viewport.
 - Added a full-window dove splash screen to the landing page using the original first Higgsfield dove photo, with a 1.75-second fade-in/fade-out, subtle blur, zoom-in, counterclockwise rotation motion, and a 2-second white fallback if the image is unavailable.
 - Added the NFT Creation Project to the Projects page as a Web3 proof item for creator tools, marketplace operations, visual QA, and product support roles.
-- Configured Namecheap URL Redirect records so `http://acolomba.com/` and `http://www.acolomba.com/` forward to `https://acolomba.site/`.
+- Configured the former Namecheap URL Redirect records from the `.com` hosts to the site's legacy domain.
 - Deployed the Sound-a-tude parity update to GitHub Pages via an explicit Pages workflow, switched the site from legacy branch publishing to workflow publishing, and verified the live project URL shows the new visual selector, conversation seek, recorder page, and avatar image assets.
 - Linked the Token Factory & Exchange project title to the live TokenHub.dev / Token Factory site.
 - Added the public YouTube channel archive to Portfolio and Projects with AntCoArt, GET Antonio, and AntCoFX channel links.
@@ -89,8 +90,8 @@ Last updated: 2026-08-04
 - Refined the OpenRouter UI project copy around OpenRouter LLM API sourcing and generation flows.
 - Reduced Projects page typography weight, title scale, spacing, and link heaviness.
 - Renamed the Projects page AI Workflow Support entry to Agentic Workflow and added OpenRouter UI.
-- Updated the acolomba.site project focus line on the Projects page.
-- Removed the acolomba.site GitHub Pages and Cloudflare Worker bullets from the Projects page.
+- Updated the legacy-domain project focus line on the Projects page.
+- Removed the legacy-domain GitHub Pages and Cloudflare Worker bullets from the Projects page.
 - Removed the remaining Projects page intro note and lead paragraph.
 - Removed the Projects page hero subtitle and changed the heading to Engineering Projects.
 - Updated the Bio page Current Interests throughline to mention fintech and fitting the future together.
@@ -173,8 +174,8 @@ Last updated: 2026-08-04
 - Converted the HTML bio into a simple landing page with nav links for Resume, Bio, and Contact plus local DOCX resume downloads.
 - Split the HTML into a plain landing page plus separate Resume and Bio pages so links open new local pages instead of same-page sections.
 - Added AI content creation, generative media workflows, and Higgsfield as a capability lane in the landing, bio, and resume materials.
-- Published the static landing/resume/bio site to GitHub Pages at `http://acolomba.site/`.
-- Added GitHub Pages DNS records in Namecheap for `acolomba.site` and `www.acolomba.site`.
+- Published the static landing/resume/bio site to GitHub Pages at its former custom domain.
+- Added the original GitHub Pages DNS records in Namecheap for the former apex and `www` hosts.
 - Carried the subtitle `Operations Support | Production Coordination | Customer Support` onto the resume page and downloadable resume.
 - Made site Contact links and visible email addresses open a prefilled email to `getantonio@gmail.com`.
 - Added Telegram contact links using `https://t.me/getantonio`.
@@ -205,7 +206,7 @@ Last updated: 2026-08-04
 
 ## Blocked
 
-- Deploying the updated Telegram Worker for photo/audio uploads is blocked until Wrangler is logged into Antonio's Cloudflare account or an API token is available.
+- 2026-08-08 [Blocked] Deploying the updated Telegram Worker for photo/audio uploads and `acolomba.com` CORS, then verifying the live endpoint, is blocked until Wrangler is logged into Antonio's Cloudflare account or an API token is available.
 - Final resume claims, metrics, and role targeting are blocked until Antonio provides real background details:
   - exact dates for freelance work
   - whether old client names are okay to publish
@@ -224,7 +225,7 @@ Last updated: 2026-08-04
 - 2026-07-03 [Done] Added public YouTube channel links to the Mixed Media Portfolio and Projects page: AntCoArt, GET Antonio, and AntCoFX.
 - 2026-07-03 [Done] Reworked the Portfolio page into smaller clickable ID-card-style media frames with a general mixed-media viewer that can open simple work in a lightbox/popup and larger work on dedicated detail pages.
 - 2026-07-03 [Next] Use the GiftTree Photo Editor posting as a retouching/photo-editor targeting note: remote full-time, $90,000-$120,000, e-commerce/luxury/lifestyle retouching, high-resolution product and lifestyle photography for web, email, social, digital ads, and print.
-- 2026-07-03 [Next] Add certificate-backed HTTPS forwarding for `https://acolomba.com/` and `https://www.acolomba.com/` if direct HTTPS on the `.com` domain needs to work.
+- 2026-08-08 [Done] Confirmed GitHub Pages serves `https://acolomba.com/` directly with HTTPS and redirects `https://www.acolomba.com/` to the canonical apex.
 - 2026-07-02 [Done] Created the first Higgsfield image-to-video sample for retouching comparison 1 and wired `projects/before-after-retouching/video/image-01-ai-kling-720p.mp4` into the AI modified gallery state.
 - 2026-07-02 [Done] Cropped the detected black PDF-edge residue from comparison 10 and regenerated its thumbnails/upscaled variants.
 - 2026-07-02 [Done] Clipped the before/after gallery thumbnail media inside the frame so letterbox bars no longer show around image 01.
@@ -240,7 +241,7 @@ Last updated: 2026-08-04
 - 2026-07-02 [Done] Made the retouching gallery show the after images as the default thumbnail state.
 - 2026-07-02 [Next] Add an `AI-2` retouching gallery state for a more extreme AI version with animation and a product example.
 - 2026-06-30 [Next] Research SUNY school/program options Antonio could enter for Summer 2026 if still feasible or Fall 2026, including loan/aid implications and realistic application timing.
-- Enable HTTPS enforcement in GitHub Pages after GitHub finishes issuing the certificate for `acolomba.site`.
+- 2026-08-08 [Done] Superseded the former-domain certificate task; GitHub Pages now enforces HTTPS on `acolomba.com`.
 - Claim or redeploy the temporary Cloudflare Worker endpoint under Antonio's Cloudflare account so message-box delivery remains durable.
 - 2026-07-02 [Done] Built a second fast general-work resume for customer support, sales, operations, temp, warehouse/inventory support, and admin roles.
 - 2026-07-03 [Done] Built a separate old-work retouching resume page for retouching artist, lead, supervisor, image QA, and visual finishing roles.
