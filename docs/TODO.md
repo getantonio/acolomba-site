@@ -4,7 +4,7 @@ Last updated: 2026-08-08
 
 ## Active
 
-- 2026-08-08 [Now] Replace every user-facing legacy-domain link with `acolomba.com`, update the message endpoint origin settings, audit every deployed HTML page, and publish the verified changes.
+- 2026-08-08 [Done] Replaced all three user-facing legacy-domain links with `acolomba.com`, updated the message endpoint origin source settings, audited all 24 deployed HTML pages, and published the verified GitHub Pages update.
 - 2026-08-04 [Done] Removed the public Brain Shift web-player entry points, connected the Projects and Portfolio links to the native App Store product page, retired stale player service workers, and published the update live.
 - 2026-08-03 [Done] Rebalanced the Main Resume PDF spacing to match the Retouching Resume and removed the oversized blank area at the bottom of the page.
 - 2026-07-11 [Done] Extended Sound-a-tude’s sheet pages down to the shared footer clearance and strengthened the rotating ribbons into a visible traveling sine-wave flow; published live.
