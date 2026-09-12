@@ -3,26 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Antonio Colomba</title>
+  <title>Antonio Colomba — High-end Retoucher</title>
+  <meta name="description" content="Antonio Colomba: high-end retoucher and creative technologist. Retouching, compositing, and color for McCann Erickson, FCB Worldwide, Young & Rubicam. NYC / Remote.">
   <link rel="icon" href="data:,">
   <style>
     :root {
       --paper: #d1d1d1;
       --ink: #202833;
-      --muted: #202833;
-      --blue: #202833;
-      --teal: #202833;
+      --muted: rgba(32, 40, 51, 0.72);
       --rule: rgba(32, 40, 51, 0.34);
+      --card: rgba(255, 255, 255, 0.28);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    html {
-      background: var(--paper);
-      color-scheme: only light;
-    }
+    html { background: var(--paper); color-scheme: only light; }
 
     body {
       position: relative;
@@ -50,249 +45,311 @@
     main {
       position: relative;
       z-index: 1;
-      width: min(100% - 44px, 960px);
+      width: min(100% - 44px, 1060px);
       margin: 0 auto;
       padding: 22px 0 30px;
     }
+
+    a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 4px; }
 
     nav {
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      gap: 24px;
+      gap: 22px;
       padding-bottom: 16px;
       border-bottom: 1px solid var(--rule);
-    }
-
-    .links {
-      display: flex;
-      gap: 20px;
-      color: var(--muted);
       font-size: 15px;
+      color: var(--muted);
     }
 
-    a {
-      color: inherit;
-      text-decoration-thickness: 1px;
-      text-underline-offset: 4px;
-    }
+    nav a { text-decoration: none; }
+    nav a:hover { text-decoration: underline; }
 
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 260px;
-      gap: 40px;
-      align-items: start;
-      padding: 34px 0 44px;
+    .hero { padding: 44px 0 40px; max-width: 900px; }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      font-size: 14px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(38px, 8.2vw, 63px);
-      line-height: 0.9;
-      letter-spacing: 0;
+      font-size: clamp(42px, 8.5vw, 72px);
+      line-height: 0.95;
       text-transform: uppercase;
+      letter-spacing: 0;
     }
 
-    .subtitle {
-      max-width: 760px;
-      margin: 18px 0 0;
-      color: var(--blue);
-      font-size: clamp(20px, 2.25vw, 27px);
+    .tagline {
+      margin: 20px 0 0;
+      font-size: clamp(21px, 2.6vw, 30px);
       font-weight: 700;
-      line-height: 1.12;
+      line-height: 1.15;
     }
 
-    .summary {
-      max-width: 820px;
-      margin: 30px 0 0;
-      font-size: 19px;
-      line-height: 1.42;
-    }
-
-    .side {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      gap: 34px;
-      padding-top: 0;
-    }
-
-    .contact {
+    .agencies {
+      margin: 14px 0 0;
+      max-width: 60ch;
       color: var(--muted);
-      font-size: 16px;
-      line-height: 1.55;
-      text-align: right;
+      font-size: 18px;
     }
 
-    .contact strong {
-      display: block;
+    .cta-row { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-block;
+      padding: 13px 26px;
+      border: 2px solid var(--ink);
       color: var(--ink);
+      font-family: inherit;
       font-size: 17px;
-    }
-
-    .contact a {
-      color: var(--blue);
-      font-weight: 700;
-    }
-
-    .menu {
-      display: grid;
-      gap: 12px;
-      text-align: right;
-    }
-
-    .menu a {
-      display: block;
-      padding: 14px 0;
-      border-top: 1px solid var(--rule);
-      color: var(--blue);
-      font-size: 20px;
       font-weight: 700;
       text-decoration: none;
+      background: transparent;
+      cursor: pointer;
     }
 
-    .menu span {
-      display: block;
-      margin-top: 3px;
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 400;
-    }
+    .btn.solid { background: var(--ink); color: var(--paper); }
+    .btn:hover { opacity: 0.82; }
 
-    .menu .dim-word {
-      color: var(--muted);
-      font-style: normal;
-      opacity: 0.42;
-    }
+    section.block { padding: 40px 0; border-top: 1px solid var(--rule); }
 
-    .featured-work {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
-      gap: 28px;
-      align-items: start;
-      padding: 24px 0 30px;
-      border-top: 1px solid var(--rule);
-    }
-
-    .featured-work h2 {
-      margin: 0;
-      color: var(--blue);
-      font-size: clamp(24px, 3vw, 34px);
+    section.block h2 {
+      margin: 0 0 6px;
+      font-size: clamp(26px, 3.4vw, 38px);
       line-height: 1.05;
     }
 
-    .featured-work p {
-      max-width: 34ch;
-      margin: 12px 0 0;
-      font-size: 17px;
-      line-height: 1.42;
+    .section-note { margin: 0 0 26px; color: var(--muted); font-size: 17px; }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
     }
 
-    .featured-work video {
-      display: block;
-      width: 100%;
-      background: var(--ink);
+    .work-item {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      border: 1px solid var(--rule);
+      background: var(--card);
+      cursor: pointer;
     }
+
+    .work-item .frame {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background: #b9b9b9;
+    }
+
+    .work-item img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .work-item img.before { opacity: 0; transition: opacity 0.25s ease; }
+    .work-item.showing-before img.before { opacity: 1; }
+
+    .state-pill {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      padding: 4px 12px;
+      background: rgba(32, 40, 51, 0.85);
+      color: #f2f2f2;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .work-item figcaption {
+      padding: 10px 12px;
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .more-link { margin-top: 26px; font-size: 18px; font-weight: 700; }
+
+    .about p { max-width: 68ch; margin: 0 0 16px; font-size: 19px; line-height: 1.5; }
+    .about p:last-child { margin-bottom: 0; }
+
+    .also-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .also-card {
+      border: 1px solid var(--rule);
+      background: var(--card);
+      padding: 22px;
+    }
+
+    .also-card h3 { margin: 0 0 8px; font-size: 22px; }
+    .also-card p { margin: 0 0 14px; color: var(--muted); font-size: 17px; }
+    .also-card a.cta { font-weight: 700; }
+
+    .contact-line { font-size: 20px; }
+    .contact-line a { font-weight: 700; }
 
     footer {
       padding-top: 20px;
       border-top: 1px solid var(--rule);
       color: var(--muted);
       font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    @media (max-width: 760px) {
-      main {
-        width: min(100% - 30px, 960px);
-      }
-
-      nav,
-      .hero {
-        grid-template-columns: 1fr;
-      }
-
-      nav {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .hero {
-        display: block;
-        padding: 38px 0 48px;
-      }
-
-      .featured-work {
-        grid-template-columns: 1fr;
-      }
-
-      .summary,
-      .side {
-        margin-left: 0;
-      }
-
-      .side {
-        min-height: auto;
-        margin-top: 34px;
-        gap: 34px;
-      }
-
-      .contact {
-        text-align: left;
-      }
+    @media (max-width: 860px) {
+      .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
+    @media (max-width: 600px) {
+      main { width: min(100% - 30px, 1060px); }
+      nav { justify-content: flex-start; flex-wrap: wrap; }
+      .also-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
   <main>
     <nav aria-label="Main navigation">
-      <div class="links">
-        <a href="resume.html">Resume</a>
-        <a href="antonio-bio.html">Bio</a>
-        <a href="projects.html">Projects</a>
-        <a href="message.html">Contact</a>
-      </div>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#app">App</a>
+      <a href="#book">Book</a>
+      <a href="message.html">Contact</a>
     </nav>
 
-    <section class="hero">
-      <div>
-        <h1>Antonio<br>Colomba</h1>
-        <p class="subtitle">Operations Support Specialist |<br>Creative &amp; AI Production Coordinator</p>
-        <p class="summary">
-          Creative / media production, retouching support, mark-up's, revision control,
-          digital content management, and agentic media flows.
-          <br><br>
-          Built with a Photography, print, and visual production foundation, now applied
-          to operations support, AI-assisted production and media.
-        </p>
+    <header class="hero">
+      <p class="eyebrow">Retouching · Compositing · Color</p>
+      <h1>Antonio<br>Colomba</h1>
+      <p class="tagline">High-end retoucher &amp; creative technologist.</p>
+      <p class="agencies">Trusted with the pixels at McCann Erickson, FCB Worldwide, Young &amp; Rubicam, and 291 Digital — beauty, fashion, and product.</p>
+      <div class="cta-row">
+        <a class="btn solid" href="#work">See the work</a>
+        <a class="btn" href="message.html">Get in touch</a>
       </div>
+    </header>
 
-      <aside class="side">
-        <p class="contact">
-          <strong>NYC / Remote</strong>
-          (561) 271-1163
-        </p>
+    <section class="block" id="work" aria-labelledby="work-title">
+      <h2 id="work-title">Selected retouching</h2>
+      <p class="section-note">Tap any image to compare before / after.</p>
+      <div class="work-grid">
+        <figure class="work-item" tabindex="0" role="button" aria-label="Compare before and after: swimwear beauty">
+          <div class="frame">
+            <img class="after" src="projects/before-after-retouching/images/image-01-after-thumb.webp" alt="Retouched swimwear beauty photograph" loading="lazy">
+            <img class="before" src="projects/before-after-retouching/images/image-01-before-thumb.webp" alt="" aria-hidden="true" loading="lazy">
+            <span class="state-pill">After</span>
+          </div>
+          <figcaption>Swimwear / beauty</figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="Compare before and after: lingerie editorial">
+          <div class="frame">
+            <img class="after" src="projects/before-after-retouching/images/image-04-after-thumb.webp" alt="Retouched lingerie editorial photograph" loading="lazy">
+            <img class="before" src="projects/before-after-retouching/images/image-04-before-thumb.webp" alt="" aria-hidden="true" loading="lazy">
+            <span class="state-pill">After</span>
+          </div>
+          <figcaption>Lingerie editorial</figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="Compare before and after: beauty portrait">
+          <div class="frame">
+            <img class="after" src="projects/before-after-retouching/images/image-05-after-thumb.webp" alt="Retouched beauty portrait" loading="lazy">
+            <img class="before" src="projects/before-after-retouching/images/image-05-before-thumb.webp" alt="" aria-hidden="true" loading="lazy">
+            <span class="state-pill">After</span>
+          </div>
+          <figcaption>Beauty portrait</figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="Compare before and after: fashion editorial">
+          <div class="frame">
+            <img class="after" src="projects/before-after-retouching/images/image-06-after-thumb.webp" alt="Retouched black and white fashion photograph" loading="lazy">
+            <img class="before" src="projects/before-after-retouching/images/image-06-before-thumb.webp" alt="" aria-hidden="true" loading="lazy">
+            <span class="state-pill">After</span>
+          </div>
+          <figcaption>Fashion editorial</figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="Compare before and after: watch product photograph">
+          <div class="frame">
+            <img class="after" src="projects/before-after-retouching/images/image-08-after-thumb.webp" alt="Retouched luxury watch product photograph" loading="lazy">
+            <img class="before" src="projects/before-after-retouching/images/image-08-before-thumb.webp" alt="" aria-hidden="true" loading="lazy">
+            <span class="state-pill">After</span>
+          </div>
+          <figcaption>Product — timepieces</figcaption>
+        </figure>
+        <figure class="work-item" tabindex="0" role="button" aria-label="Compare before and after: watch lineup">
+          <div class="frame">
+            <img class="after" src="projects/before-after-retouching/images/image-10-after-thumb.webp" alt="Retouched lineup of luxury watches" loading="lazy">
+            <img class="before" src="projects/before-after-retouching/images/image-10-before-thumb.webp" alt="" aria-hidden="true" loading="lazy">
+            <span class="state-pill">After</span>
+          </div>
+          <figcaption>Product — lineup</figcaption>
+        </figure>
+      </div>
+      <p class="more-link"><a href="projects/before-after-retouching/">Full before-and-after gallery →</a></p>
+    </section>
 
-        <div class="menu" aria-label="Page links">
-          <a href="resume.html">Resume <span>General, Retouching, <em class="dim-word">Freelance</em></span></a>
-          <a href="antonio-bio.html">Bio <span>Background, positioning</span></a>
-          <a href="projects.html">Projects</a>
+    <section class="block about" id="about" aria-labelledby="about-title">
+      <h2 id="about-title">About</h2>
+      <p class="section-note">The short version.</p>
+      <p>M.F.A. in Visual Effects Animation (highest distinction), B.F.A. in 3D Character Animation (summa cum laude), commercial photography at the School of Visual Arts. I spent my career retouching for agencies that can&rsquo;t afford a bad pixel — beauty, fashion, and product.</p>
+      <p>Lately I&rsquo;ve been applying the same eye to AI-assisted production workflows. Also available for creative production and operations support.</p>
+    </section>
+
+    <section class="block" aria-labelledby="also-title">
+      <h2 id="also-title">Also</h2>
+      <p class="section-note">Side projects.</p>
+      <div class="also-grid">
+        <div class="also-card" id="app">
+          <h3>Brain Shift</h3>
+          <p>iOS app: audio attitude training. Focused pack conversations and quiet affirmation loops. 3-day free trial.</p>
+          <a class="cta" href="https://apps.apple.com/us/app/brain-shift/id6787929828">Download on the App Store →</a>
         </div>
-      </aside>
-    </section>
-
-    <section class="featured-work" aria-labelledby="agentic-pipeline-title">
-      <div>
-        <h2 id="agentic-pipeline-title">Agentic Pipeline</h2>
-        <p>A visual walkthrough of an AI-assisted production workflow, from an initial prompt through coordinated media steps.</p>
+        <div class="also-card" id="book">
+          <h3>The Brain Shift Method</h3>
+          <p>The book behind the app.</p>
+          <a class="cta" href="https://a.co/d/02rd7JPD">Get the book →</a>
+        </div>
       </div>
-      <video controls playsinline preload="metadata" poster="assets/video/agentic-pipeline-poster.jpg">
-        <source src="assets/video/agentic-pipeline.mp4" type="video/mp4">
-        Your browser does not support embedded video.
-      </video>
     </section>
 
-    <footer>Available for management, operations, admin, production coordination, technical support, AI content and AI agent workflows.</footer>
+    <section class="block" aria-labelledby="contact-title">
+      <h2 id="contact-title">Contact</h2>
+      <p class="contact-line">NYC / Remote · (561) 271-1163 · <a href="mailto:getantonio@gmail.com">getantonio@gmail.com</a></p>
+      <p><a href="message.html">Send a message →</a></p>
+    </section>
+
+    <footer>
+      <span>© 2026 Antonio Colomba</span>
+      <span><a href="resume.html">Resume</a> · <a href="antonio-bio.html">Bio</a> · <a href="projects.html">Projects</a></span>
+    </footer>
   </main>
+
+  <script>
+    document.querySelectorAll('.work-item').forEach(function (item) {
+      var pill = item.querySelector('.state-pill');
+      function toggle() {
+        var showing = item.classList.toggle('showing-before');
+        pill.textContent = showing ? 'Before' : 'After';
+      }
+      item.addEventListener('click', toggle);
+      item.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+    });
+  </script>
 </body>
 </html>
