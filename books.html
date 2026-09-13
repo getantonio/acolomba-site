@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Books — Antonio Colomba</title>
-  <meta name="description" content="Books by Antonio Colomba: The Brain Shift Method (Second Edition), a practical present-tense behavior-practice method. Plus coming-soon puzzle books and coloring books.">
+  <title>Bookstore — Antonio Colomba</title>
+  <meta name="description" content="The complete bookstore of Antonio Colomba: The Brain Shift Method, three Halloween horror story collections for Kindle, puzzle books, coloring books, flash cards, and deluxe editions.">
   <link rel="canonical" href="https://acolomba.com/books.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Antonio Colomba">
-  <meta property="og:title" content="Books — Antonio Colomba">
-  <meta property="og:description" content="The Brain Shift Method (Second Edition) — a practical present-tense behavior-practice method. Puzzle books and coloring books coming soon.">
+  <meta property="og:title" content="Bookstore — Antonio Colomba">
+  <meta property="og:description" content="Every book by Antonio Colomba in one place: The Brain Shift Method, horror collections, puzzle books, coloring books, flash cards, and deluxe editions.">
   <meta property="og:url" content="https://acolomba.com/books.html">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Books — Antonio Colomba">
-  <meta name="twitter:description" content="The Brain Shift Method (Second Edition) — a practical present-tense behavior-practice method. Puzzle books and coloring books coming soon.">
+  <meta name="twitter:title" content="Bookstore — Antonio Colomba">
+  <meta name="twitter:description" content="Every book by Antonio Colomba in one place: The Brain Shift Method, horror collections, puzzle books, coloring books, flash cards, and deluxe editions.">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -150,7 +150,10 @@
     .book-feature .subtitle { margin: 0 0 16px; color: var(--muted); font-size: 18px; font-style: italic; }
 
     .book-feature p { margin: 0 0 14px; max-width: 66ch; font-size: 18px; }
-    .book-feature p:last-of-type { margin-bottom: 0; }
+
+    .feature-body { display: flex; gap: 28px; align-items: flex-start; }
+    .feature-body img { width: 220px; height: auto; flex: 0 0 auto; border: 1px solid var(--rule); background: #fff; }
+    .feature-body .feature-text { min-width: 0; }
 
     .status {
       display: inline-block;
@@ -162,30 +165,61 @@
       letter-spacing: 0.04em;
     }
 
-    .soon-grid {
+    .book-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
     }
 
-    .soon-card {
+    .book-card {
       border: 1px solid var(--rule);
       background: var(--card);
-      padding: 24px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
     }
 
-    .soon-card .kicker {
-      margin: 0 0 10px;
-      font-size: 13px;
+    .book-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--rule);
+      margin-bottom: 14px;
+      background: #fff;
+    }
+
+    .book-card .kicker {
+      margin: 0 0 8px;
+      font-size: 12px;
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--muted);
     }
 
-    .soon-card h3 { margin: 0 0 10px; font-size: 24px; }
-    .soon-card p { margin: 0 0 12px; color: var(--muted); font-size: 17px; }
-    .soon-card ul { margin: 0; padding-left: 20px; color: var(--muted); font-size: 17px; }
-    .soon-card li { margin-bottom: 4px; }
+    .book-card h3 { margin: 0 0 6px; font-size: 22px; line-height: 1.15; }
+
+    .book-card .subtitle {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 16px;
+      font-style: italic;
+    }
+
+    .book-card p.desc { margin: 0 0 12px; color: var(--muted); font-size: 16px; flex: 1; }
+
+    .book-meta { margin: 0 0 14px; font-size: 15px; font-weight: 700; }
+
+    .buy {
+      display: inline-block;
+      padding: 10px 18px;
+      border: 2px solid var(--ink);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+
+    .buy.soon { opacity: 0.55; }
 
     footer {
       padding-top: 20px;
@@ -198,11 +232,17 @@
       flex-wrap: wrap;
     }
 
+    @media (max-width: 900px) {
+      .book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
     @media (max-width: 600px) {
       main { width: min(100% - 30px, 1060px); }
       nav { justify-content: flex-start; flex-wrap: wrap; }
-      .soon-grid { grid-template-columns: 1fr; }
+      .book-grid { grid-template-columns: 1fr; }
       .book-feature { padding: 22px; }
+      .feature-body { flex-direction: column; }
+      .feature-body img { width: 180px; }
     }
   </style>
 </head>
@@ -215,56 +255,260 @@
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">Books</p>
+      <p class="eyebrow">Bookstore</p>
       <h1>Books by<br>Antonio Colomba</h1>
-      <p class="tagline">The method, the puzzles, and the coloring pages.</p>
-      <p class="lede">One book out now (second edition on its way), with two new lines — puzzle books and coloring books — rolling out through the fall.</p>
+      <p class="tagline">The method, the horror, the puzzles, and the coloring pages.</p>
+      <p class="lede">Every book in one place — the mindset method, three Halloween story collections for Kindle, puzzle books, coloring books, flash cards, and deluxe editions. New titles are in Amazon review and will be linked here the moment they're live.</p>
     </header>
 
     <section class="block" aria-labelledby="featured-title">
       <h2 id="featured-title">Featured</h2>
       <p class="section-note">The book behind the Brain Shift app.</p>
       <div class="book-feature">
-        <p class="kicker">Second edition · Available soon on Amazon</p>
-        <h3>The Brain Shift Method</h3>
-        <p class="subtitle">Seven languages for rehearsing a better response</p>
-        <p>Most of the behavior you want to change is not a single bad decision. It is a loop: a trigger, a response, a quick payoff, and a cost that arrives late. The Brain Shift Method is a practical, self-directed system for doing something about it — define the loop in four lines, compress it into thirteen anchor words, and write fifty present-tense statements.</p>
-        <p>This second edition expands the method into seven languages of change — I am, I feel, I do, I love, I speak, I see, I know — so you can approach the same behavior from every angle that matters. No streaks. No scores. No device watching you. Just paper, attention, and repetition: fourteen cycles to a practiced response that meets the loop sooner.</p>
-        <span class="status">Second edition now in review — Kindle &amp; paperback available soon on Amazon</span>
+        <p class="kicker">Second edition · Mindset</p>
+        <div class="feature-body">
+          <img src="assets/books/brain-shift-method.jpg" alt="The Brain Shift Method, Second Edition — book cover" width="220">
+          <div class="feature-text">
+            <h3>The Brain Shift Method</h3>
+            <p class="subtitle">Seven languages for rehearsing a better response</p>
+            <p>Most of the behavior you want to change is not a single bad decision. It is a loop: a trigger, a response, a quick payoff, and a cost that arrives late. The Brain Shift Method is a practical, self-directed system for doing something about it — define the loop in four lines, compress it into thirteen anchor words, and write fifty present-tense statements.</p>
+            <p>This second edition expands the method into seven languages of change — I am, I feel, I do, I love, I speak, I see, I know — so you can approach the same behavior from every angle that matters. No streaks. No scores. No device watching you. Just paper, attention, and repetition: fourteen cycles to a practiced response that meets the loop sooner.</p>
+            <p class="book-meta">$12.99 Kindle · Paperback coming soon</p>
+            <span class="status">Second edition now in review — available soon on Amazon</span>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="block" aria-labelledby="soon-title">
-      <h2 id="soon-title">Coming soon</h2>
-      <p class="section-note">Two new lines rolling out through the fall.</p>
-      <div class="soon-grid">
-        <div class="soon-card">
-          <p class="kicker">Puzzle books</p>
-          <h3>Antonio Colomba Puzzle Books</h3>
-          <p>A growing shelf of mixed puzzle books and single-type collections — sudoku, KenKen, kakuro, mazes, word puzzles, and more.</p>
-          <ul>
-            <li><strong>Puzzle Party</strong> — first title publishing now (ages 6–10)</li>
-            <li>The Big Book of Puzzles</li>
-            <li>Large-Print Sudoku for Seniors</li>
-            <li>Word Search for Adults</li>
-            <li>KenKen Logic Puzzles for Adults</li>
-            <li>Kakuro Puzzles for Adults</li>
-          </ul>
+    <section class="block" aria-labelledby="horror-title">
+      <h2 id="horror-title">Horror — Kindle Editions</h2>
+      <p class="section-note">Three Halloween collections. Thirteen stories each. Read one a night through October.</p>
+      <div class="book-grid">
+        <div class="book-card">
+          <img src="assets/books/horror-adult.jpg" alt="Trick or Treat: 13 Horror Stories for Halloween Night — cover" loading="lazy">
+          <p class="kicker">Kindle ebook</p>
+          <h3>Trick or Treat: 13 Horror Stories for Halloween Night</h3>
+          <p class="subtitle">Thirteen tales to read after dark</p>
+          <p class="desc">Thirteen original horror stories — haunted houses, folk horror, small-town dread, ghost stories, and one brush with the cosmic. Dread-forward, not gore for shock's sake.</p>
+          <p class="book-meta">$3.99 · Kindle ebook</p>
+          <span class="buy soon">Available on Amazon soon</span>
         </div>
-        <div class="soon-card">
-          <p class="kicker">Coloring books</p>
-          <h3>Coloring books</h3>
-          <p>Eight titles on the way, from friendly animals to autumn whimsy to intricate adult mandalas.</p>
-          <ul>
-            <li>Wild Animals Coloring Book</li>
-            <li>Safari Friends Coloring Book</li>
-            <li>Farm Friends Coloring Book</li>
-            <li>Botanical Mandalas — An Adult Coloring Garden</li>
-            <li>Haunted Halls</li>
-            <li>Pumpkins &amp; Autumn Whimsy</li>
-            <li>Skeletons &amp; Creatures</li>
-            <li>The Witching Hour</li>
-          </ul>
+        <div class="book-card">
+          <img src="assets/books/horror-teens.jpg" alt="Trick or Treat: 13 Horror Stories for Teens — cover" loading="lazy">
+          <p class="kicker">Kindle ebook</p>
+          <h3>Trick or Treat: 13 Horror Stories for Teens</h3>
+          <p class="subtitle">Thirteen tales for the bravest readers in the room</p>
+          <p class="desc">Thirteen original horror stories for teenage readers — closing shifts, viral dares, basement shows, Saturday detention. Every protagonist is 14 to 18, every story complete, with at least one moment that will make you check the locks.</p>
+          <p class="book-meta">$3.99 · Kindle ebook</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/horror-kids.jpg" alt="Trick or Treat: 13 Spooky Halloween Stories for Kids — cover" loading="lazy">
+          <p class="kicker">Kindle ebook · Ages 7–12</p>
+          <h3>Trick or Treat: 13 Spooky Halloween Stories for Kids</h3>
+          <p class="subtitle">Thirteen spooky stories. Zero nightmares.</p>
+          <p class="desc">Thirteen Goosebumps-style Halloween adventures for ages 7–12 — a talking pumpkin, a gummy bear that grows when you say "yummy," a midnight skeleton parade. Real spooky moments, safe endings where the kid wins.</p>
+          <p class="book-meta">$3.99 · Kindle ebook</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="puzzle-title">
+      <h2 id="puzzle-title">Puzzle Books</h2>
+      <p class="section-note">From kids' first sudoku to serious brain training. Every puzzle machine-verified, full solutions in the back.</p>
+      <div class="book-grid">
+        <div class="book-card">
+          <img src="assets/books/puzzle-party.jpg" alt="Puzzle Party — cover" loading="lazy">
+          <p class="kicker">Paperback · Ages 6–10</p>
+          <h3>Puzzle Party</h3>
+          <p class="subtitle">Sudoku · Number Logic · Kakuro · Mazes · Words &amp; More</p>
+          <p class="desc">90 kid-friendly puzzles — mini sudoku, Number Logic, kakuro, crosswords, word searches, mazes, and more, 10 of each — with simple how-to pages and full solutions. Perfect for road trips, rainy days, and clever kids.</p>
+          <p class="book-meta">$9.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/big-book-of-puzzles.jpg" alt="The Big Book of Puzzles — cover" loading="lazy">
+          <p class="kicker">Paperback</p>
+          <h3>The Big Book of Puzzles</h3>
+          <p class="subtitle">90 Brain-Teasing Puzzles · Sudoku · Crosswords · Word Searches · Number Logic · Kakuro · Mazes &amp; More</p>
+          <p class="desc">Nine puzzle types, ninety puzzles, zero boredom — the ultimate variety pack for puzzle lovers, one puzzle per page in a big easy-on-the-eyes format. Ideal for daily brain exercise, travel, and gifts.</p>
+          <p class="book-meta">$9.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/large-print-sudoku.jpg" alt="Large Print Sudoku for Seniors — cover" loading="lazy">
+          <p class="kicker">Paperback · Large print</p>
+          <h3>Large Print Sudoku for Seniors</h3>
+          <p class="subtitle">100 Easy-to-Read Puzzles for Sharp Minds</p>
+          <p class="desc">100 sudoku printed one-per-page with extra-large grids and big, bold numbers — no squinting needed. 50 easy, 35 medium, 15 hard, every puzzle computer-verified. A thoughtful gift for parents and grandparents.</p>
+          <p class="book-meta">$9.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/word-search.jpg" alt="Word Search for Adults — cover" loading="lazy">
+          <p class="kicker">Paperback · Large print</p>
+          <h3>Word Search for Adults</h3>
+          <p class="subtitle">100 Large Print Puzzles Across 100 Fun Themes</p>
+          <p class="desc">100 large-print word searches, each on its own theme — Italian cooking, classic rock, national parks, old Hollywood. Big readable letters, ten hidden words per puzzle, full solutions with highlighted answers.</p>
+          <p class="book-meta">$9.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/number-logic.jpg" alt="Number Logic Puzzles for Adults — cover" loading="lazy">
+          <p class="kicker">Paperback · Brain training</p>
+          <h3>Number Logic Puzzles for Adults</h3>
+          <p class="subtitle">100 Brain-Training Math Puzzles</p>
+          <p class="desc">100 Number Logic puzzles — the arithmetic-meets-logic game where every cage's numbers must combine to its target. From quick 4×4 warm-ups to deep 6×6 thinkers, every puzzle computer-verified for a unique solution.</p>
+          <p class="book-meta">$12.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/kakuro.jpg" alt="Kakuro Puzzles for Adults — cover" loading="lazy">
+          <p class="kicker">Paperback · Brain training</p>
+          <h3>Kakuro Puzzles for Adults</h3>
+          <p class="subtitle">100 Addictive Cross-Sum Logic Puzzles</p>
+          <p class="desc">100 cross-sum puzzles: fill the white cells with digits 1–9 so every run adds up to its clue — no repeats. From gentle 7×7 grids to serious 9×9 challenges. If sudoku feels too easy, kakuro is your next obsession.</p>
+          <p class="book-meta">$12.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="coloring-title">
+      <h2 id="coloring-title">Coloring Books</h2>
+      <p class="section-note">Eight titles, from friendly animals to autumn whimsy to intricate adult mandalas.</p>
+      <div class="book-grid">
+        <div class="book-card">
+          <img src="assets/books/wild-animals.jpg" alt="Wild Animals Coloring Book — cover" loading="lazy">
+          <p class="kicker">Paperback · Ages 4–8</p>
+          <h3>Wild Animals Coloring Book</h3>
+          <p class="subtitle">70 Fun Animal Designs to Color</p>
+          <p class="desc">70 wild animal designs — lions, elephants, cheetahs, gorillas — each on its own 8.5" × 11" page with bold, kid-friendly outlines. Perfect for road trips, rainy days, and classrooms.</p>
+          <p class="book-meta">$9.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/safari-friends.jpg" alt="Safari Friends Coloring Book — cover" loading="lazy">
+          <p class="kicker">Paperback · Ages 4–8</p>
+          <h3>Safari Friends Coloring Book</h3>
+          <p class="subtitle">29 Safari Animals to Color</p>
+          <p class="desc">29 safari animals drawn with bold, simple outlines perfect for little hands. A fun-sized book for travel, quiet time, and gifts for kids who love animals.</p>
+          <p class="book-meta">$6.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/farm-friends.jpg" alt="Farm Friends Coloring Book — cover" loading="lazy">
+          <p class="kicker">Paperback · Ages 3–7</p>
+          <h3>Farm Friends Coloring Book</h3>
+          <p class="subtitle">46 Farm Animals to Color — Cows, Horses, Pigs &amp; More</p>
+          <p class="desc">46 friendly farm animals on big, cheerful 8.5" × 11" pages made for young colorists. A barnyard of fun for rainy days, classrooms, and little farmers everywhere.</p>
+          <p class="book-meta">$7.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/botanical-mandalas.jpg" alt="Botanical Mandalas — An Adult Coloring Garden — cover" loading="lazy">
+          <p class="kicker">Paperback · Adults</p>
+          <h3>Botanical Mandalas</h3>
+          <p class="subtitle">An Adult Coloring Garden — 50 Intricate Flower &amp; Leaf Mandalas</p>
+          <p class="desc">50 intricate flower-and-leaf mandalas, each printed single-sided in a generous 8.5" × 8.5" square format — color with markers or gel pens without bleed-through. Every design a small meditation.</p>
+          <p class="book-meta">$9.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/haunted-halls.jpg" alt="Haunted Halls — cover" loading="lazy">
+          <p class="kicker">Paperback · Adults</p>
+          <h3>Haunted Halls</h3>
+          <p class="subtitle">An Adult Coloring Book of Spooky Mansions &amp; Friendly Phantoms</p>
+          <p class="desc">19 spooky scenes — creaky mansions, shadowy corridors, phantoms of the friendlier sort — each printed single-sided. A slim seasonal treat at a treat-sized price.</p>
+          <p class="book-meta">$5.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/pumpkins-whimsy.jpg" alt="Pumpkins &amp; Autumn Whimsy — cover" loading="lazy">
+          <p class="kicker">Paperback · Adults</p>
+          <h3>Pumpkins &amp; Autumn Whimsy</h3>
+          <p class="subtitle">An Adult Coloring Book of Harvest Magic &amp; Cozy Fall Nights</p>
+          <p class="desc">19 pumpkin-packed designs — grinning jack-o'-lanterns, cozy harvest scenes, whimsical autumn magic — each printed single-sided. Made for crisp October afternoons.</p>
+          <p class="book-meta">$5.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/skeletons-creatures.jpg" alt="Skeletons &amp; Creatures of the Night — cover" loading="lazy">
+          <p class="kicker">Paperback · Adults</p>
+          <h3>Skeletons &amp; Creatures of the Night</h3>
+          <p class="subtitle">A Halloween Coloring Book for Grown-Ups</p>
+          <p class="desc">17 eerily fun designs — dancing skeletons, graveyard ghouls, midnight beasts — each printed single-sided. For grown-ups who like their October with a little backbone.</p>
+          <p class="book-meta">$5.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/witching-hour.jpg" alt="The Witching Hour — cover" loading="lazy">
+          <p class="kicker">Paperback · Adults</p>
+          <h3>The Witching Hour</h3>
+          <p class="subtitle">An Adult Coloring Book of Witches, Potions &amp; Gothic Charm</p>
+          <p class="desc">17 bewitching designs — witches, black cats, bubbling potions, haunted villages — each printed single-sided. Light a candle and color your way through midnight.</p>
+          <p class="book-meta">$5.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="flashcards-title">
+      <h2 id="flashcards-title">Flash Cards</h2>
+      <p class="section-note">Full-color cut-out card books for early readers. Cut out, play, learn.</p>
+      <div class="book-grid">
+        <div class="book-card">
+          <img src="assets/books/abc-flash-cards.jpg" alt="ABC Flash Cards for Toddlers — cover" loading="lazy">
+          <p class="kicker">Paperback · Premium color · Ages 2–5</p>
+          <h3>ABC Flash Cards for Toddlers</h3>
+          <p class="subtitle">44 Full-Color Cut-Out Cards — Alphabet, Numbers and Shapes</p>
+          <p class="desc">44 full-color cut-out cards covering the alphabet, numbers, and shapes — made for preschool, pre-K, and kindergarten. Cut out &amp; learn!</p>
+          <p class="book-meta">$9.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/sight-words.jpg" alt="Sight Words Flash Cards for Early Readers — cover" loading="lazy">
+          <p class="kicker">Paperback · Premium color · Ages 4–6</p>
+          <h3>Sight Words Flash Cards for Early Readers</h3>
+          <p class="subtitle">44 Full-Color Cut-Out Cards — Dolch Pre-Primer Words</p>
+          <p class="desc">44 full-color cut-out cards covering Dolch pre-primer sight words for pre-K, kindergarten, and 1st grade. Read it, trace it, know it!</p>
+          <p class="book-meta">$9.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/sight-words-deluxe.jpg" alt="Sight Words Flash Cards: Deluxe Expanded Edition — cover" loading="lazy">
+          <p class="kicker">Paperback · Premium color</p>
+          <h3>Sight Words Flash Cards: Deluxe Expanded Edition</h3>
+          <p class="subtitle">133 Color-and-Cut Cards — The Complete Dolch List</p>
+          <p class="desc">The complete Dolch set — 133 color-and-cut cards across pre-primer, primer, and first grade, organized in three levels. The full early-reading journey in one volume.</p>
+          <p class="book-meta">$19.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="deluxe-title">
+      <h2 id="deluxe-title">Deluxe Editions</h2>
+      <p class="section-note">The biggest, most luxurious volumes in the line.</p>
+      <div class="book-grid">
+        <div class="book-card">
+          <img src="assets/books/big-book-deluxe.jpg" alt="The Big Book of Puzzles: Deluxe Edition — cover" loading="lazy">
+          <p class="kicker">Paperback · Deluxe</p>
+          <h3>The Big Book of Puzzles: Deluxe Edition</h3>
+          <p class="subtitle">126 Brain-Teasing Puzzles, Premium Collection</p>
+          <p class="desc">The biggest, most luxurious puzzle book in the line — 126 all-new puzzles across nine classic types, 14 of each, in a gold-on-dark deluxe treatment. Zero repeats.</p>
+          <p class="book-meta">$17.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/books/botanical-mandalas-deluxe.jpg" alt="Botanical Mandalas: Deluxe Edition — cover" loading="lazy">
+          <p class="kicker">Paperback · Deluxe · Adults</p>
+          <h3>Botanical Mandalas: Deluxe Edition</h3>
+          <p class="subtitle">An Adult Coloring Garden — 80 Intricate Flower &amp; Leaf Mandalas to Color</p>
+          <p class="desc">All 50 original flower-and-leaf mandalas plus 30 brand-new designs exclusive to this volume — 80 intricate mandalas, each printed single-sided in the 8.5" × 8.5" square format.</p>
+          <p class="book-meta">$19.99 · Paperback</p>
+          <span class="buy soon">Available on Amazon soon</span>
         </div>
       </div>
     </section>
