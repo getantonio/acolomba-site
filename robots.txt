@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://acolomba.com/sitemap.xml
