@@ -1,0 +1,124 @@
+/* Shared game styles for the Free Fun & Games hub. Neutral palette that sits
+   comfortably on both brain-shift.com and acolomba.com. All classes g- prefixed. */
+.g-wrap { max-width: 720px; margin: 0 auto; padding: 8px 0 40px; }
+.g-kicker { font-size: 13px; letter-spacing: .18em; text-transform: uppercase; opacity: .65; margin: 18px 0 6px; }
+.g-title { font-size: clamp(30px, 6vw, 44px); margin: 0 0 8px; line-height: 1.05; }
+.g-lede { font-size: 17px; opacity: .85; margin: 0 0 18px; max-width: 60ch; }
+
+/* date navigation + streak */
+.g-datenav { display: flex; align-items: center; gap: 10px; margin: 14px 0 18px; flex-wrap: wrap; }
+.g-datenav button { width: 40px; height: 40px; font-size: 22px; line-height: 1; border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.18); background: rgba(255,255,255,.7); cursor: pointer; color: inherit; }
+.g-datenav button:disabled { opacity: .35; cursor: default; }
+.g-datenav input[type="date"] { font: inherit; padding: 8px 10px; border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.18); background: rgba(255,255,255,.7); color: inherit; }
+.g-streak { font-weight: 700; font-size: 15px; }
+
+/* generic buttons */
+.g-btn { font: inherit; font-size: 16px; font-weight: 700; padding: 10px 18px; border-radius: 12px;
+  border: none; background: #2456c8; color: #fff; cursor: pointer; }
+.g-btn:hover { filter: brightness(1.08); }
+.g-btn.ghost { background: transparent; color: inherit; border: 1px solid rgba(0,0,0,.25); font-weight: 600; }
+.g-btn.small { font-size: 14px; padding: 7px 12px; border-radius: 9px; }
+.g-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 14px 0; }
+
+/* win banner */
+.g-win { display: none; border-radius: 14px; padding: 16px 18px; margin: 16px 0;
+  background: #e7f6e7; border: 2px solid #2e8b57; color: #14532d; font-weight: 600; }
+.g-win.show { display: block; }
+
+/* ---------- Sudoku ---------- */
+.g-sudoku { display: grid; grid-template-columns: repeat(9, 1fr); gap: 0; max-width: 450px;
+  margin: 0 auto; border: 3px solid #1f2937; border-radius: 6px; overflow: hidden; background: #fff; }
+.g-scell { aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+  font-size: clamp(17px, 4.6vw, 26px); font-weight: 600; color: #1f2937; background: #fff;
+  border: 1px solid #cbd5e1; cursor: pointer; user-select: none; padding: 0; font-family: inherit; }
+.g-scell.given { color: #111827; font-weight: 800; background: #f1f5f9; cursor: default; }
+.g-scell.sel { background: #dbeafe; }
+.g-scell.peer { background: #eff6ff; }
+.g-scell.same { background: #bfdbfe; }
+.g-scell.err { color: #dc2626; }
+.g-scell.note { font-size: 11px; line-height: 1.15; }
+.g-scell.bl { border-left: 2px solid #1f2937; } .g-scell.bt { border-top: 2px solid #1f2937; }
+.g-pad { display: grid; grid-template-columns: repeat(9, 1fr); gap: 6px; max-width: 450px; margin: 14px auto 0; }
+.g-pad button { aspect-ratio: 1.15; font-size: clamp(16px, 4.4vw, 22px); font-weight: 700; border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.2); background: rgba(255,255,255,.75); cursor: pointer; color: inherit; }
+.g-pad button.on { background: #2456c8; color: #fff; border-color: #2456c8; }
+.g-ptools { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+
+/* ---------- Crossword ---------- */
+.g-xw { display: grid; gap: 0; max-width: 430px; margin: 0 auto 18px; border: 2px solid #1f2937;
+  background: #1f2937; border-radius: 6px; overflow: hidden; }
+.g-xwcell { position: relative; aspect-ratio: 1; background: #fff; }
+.g-xwcell.block { background: #1f2937; }
+.g-xwcell input { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; text-align: center;
+  font-size: clamp(14px, 4vw, 20px); font-weight: 700; text-transform: uppercase; background: transparent;
+  color: #1f2937; padding: 0; font-family: inherit; }
+.g-xwcell input:focus { outline: 2px solid #2456c8; outline-offset: -2px; background: #fff7d6; }
+.g-xwcell.active input { background: #fff3bf; }
+.g-xwcell .num { position: absolute; top: 1px; left: 3px; font-size: 9px; color: #6b7280; pointer-events: none; z-index: 1; }
+.g-xwcell .bad { background: #fecaca !important; }
+.g-clues { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 6px; }
+@media (max-width: 560px) { .g-clues { grid-template-columns: 1fr; } }
+.g-clues h3 { margin: 0 0 6px; font-size: 16px; }
+.g-clues ol { margin: 0; padding-left: 22px; font-size: 14.5px; }
+.g-clues li { margin: 3px 0; cursor: pointer; border-radius: 6px; padding: 1px 4px; }
+.g-clues li:hover { background: rgba(36,86,200,.12); }
+.g-clues li.cur { background: #fff3bf; font-weight: 700; }
+
+/* ---------- Scramble ---------- */
+.g-scr-word { border: 1px solid rgba(0,0,0,.15); border-radius: 14px; padding: 14px;
+  margin: 12px 0; background: rgba(255,255,255,.55); }
+.g-tiles { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 10px; }
+.g-tile { min-width: 38px; height: 44px; display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 800; background: #1f2937; color: #fff; border-radius: 8px; padding: 0 6px; }
+.g-scr-word input { font: inherit; font-size: 20px; letter-spacing: .2em; text-transform: uppercase;
+  padding: 8px 10px; border-radius: 10px; border: 2px solid rgba(0,0,0,.2); width: 12em; max-width: 100%;
+  background: rgba(255,255,255,.8); color: inherit; }
+.g-scr-word.done input { border-color: #2e8b57; background: #e7f6e7; }
+.g-scr-word.done .g-tile { background: #2e8b57; }
+.g-hint { font-size: 13px; opacity: .7; margin-top: 6px; }
+
+/* ---------- Solitaire ---------- */
+.g-sol { --cw: min(13.2vw, 88px); user-select: none; -webkit-user-select: none; }
+.g-sol .g-card { touch-action: none; }
+.g-sol-top { display: grid; grid-template-columns: repeat(7, var(--cw)); gap: calc(var(--cw)*0.08);
+  justify-content: center; margin-bottom: 18px; }
+.g-pile { width: var(--cw); height: calc(var(--cw)*1.42); border-radius: 8px; position: relative; }
+.g-pile.slot { border: 2px dashed rgba(0,0,0,.25); }
+.g-pile.slot.found { border-style: solid; }
+.g-card { position: absolute; width: var(--cw); height: calc(var(--cw)*1.42); border-radius: 8px;
+  background: #fff; border: 1px solid #94a3b8; box-shadow: 0 1px 3px rgba(0,0,0,.25);
+  display: flex; flex-direction: column; justify-content: space-between; padding: 4px 5px;
+  font-weight: 700; cursor: pointer; }
+.g-card .c-top { font-size: calc(var(--cw)*0.24); line-height: 1; text-align: left; }
+.g-card .c-bot { font-size: calc(var(--cw)*0.24); line-height: 1; text-align: left; transform: rotate(180deg); }
+.g-card .c-mid { font-size: calc(var(--cw)*0.42); text-align: center; line-height: 1; }
+.g-card.red { color: #dc2626; } .g-card.black { color: #1f2937; }
+.g-card.back { background: repeating-linear-gradient(45deg, #2456c8, #2456c8 6px, #1d44a0 6px, #1d44a0 12px); cursor: pointer; }
+.g-card.sel { outline: 3px solid #f59e0b; outline-offset: -1px; }
+.g-card.drag { opacity: .92; box-shadow: 0 8px 20px rgba(0,0,0,.35); z-index: 50; pointer-events: none; }
+.g-sol-tableau { display: grid; grid-template-columns: repeat(7, var(--cw)); gap: calc(var(--cw)*0.08); justify-content: center; }
+.g-sol-stats { display: flex; gap: 16px; justify-content: center; margin: 12px 0; font-size: 14px; opacity: .8; }
+
+/* ---------- Hub cards ---------- */
+.g-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 22px 0; }
+.g-cardlink { display: block; border: 1px solid rgba(0,0,0,.15); border-radius: 16px; padding: 20px;
+  background: rgba(255,255,255,.55); text-decoration: none; color: inherit; }
+.g-cardlink:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.12); }
+.g-cardlink .ico { font-size: 34px; }
+.g-cardlink h2 { margin: 8px 0 6px; font-size: 21px; }
+.g-cardlink p { margin: 0 0 10px; font-size: 15px; opacity: .8; }
+.g-cardlink .go { font-weight: 700; color: #2456c8; }
+.g-cardlink .streakline { font-size: 13px; font-weight: 700; margin-top: 6px; min-height: 1.2em; }
+
+/* ---------- Promo cards (bookstore + Brain Shift) ---------- */
+.g-promos { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; margin: 34px 0 10px; }
+.g-cta { border-radius: 16px; padding: 22px; text-align: center;
+  background: #1f2937; color: #f9fafb; }
+.g-cta h2 { margin: 0 0 8px; font-size: 22px; color: #fff; }
+.g-cta p { margin: 0 0 14px; opacity: .85; font-size: 15.5px; }
+.g-cta a.g-btn { display: inline-block; text-decoration: none; background: #f59e0b; color: #1f2937; }
+.g-cta-brain { background: linear-gradient(135deg, #0e3a3b, #14666a); }
+.g-cta-brain a.g-btn { background: #7ef0e0; color: #083233; }
+.g-cta .g-sub { display: block; margin-top: 10px; font-size: 14px; opacity: .8; color: inherit; }

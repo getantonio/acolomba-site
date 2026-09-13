@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daily Sudoku — Free New Puzzle Every Day</title>
+  <meta name="description" content="Play a free daily sudoku: a fresh easy–medium puzzle every day with notes mode, mistake highlighting, and streaks. No sign-up.">
+  <link rel="canonical" href="https://acolomba.com/games/daily-sudoku.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Daily Sudoku — Free New Puzzle Every Day">
+  <meta property="og:description" content="Play a free daily sudoku: a fresh easy–medium puzzle every day with notes mode, mistake highlighting, and streaks. No sign-up.">
+  <meta property="og:url" content="https://acolomba.com/games/daily-sudoku.html">
+  <meta property="og:image" content="https://acolomba.com/assets/splash/dove-splash-1.jpg">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --paper: #d1d1d1;
+      --ink: #202833;
+      --muted: rgba(32, 40, 51, 0.72);
+      --rule: rgba(32, 40, 51, 0.34);
+      --card: rgba(255, 255, 255, 0.28);
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--paper); color-scheme: only light; }
+    body {
+      position: relative; margin: 0; min-height: 100vh;
+      background: var(--paper); color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px; line-height: 1.5;
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: 0;
+      background-image: url("/assets/splash/dove-splash-1.jpg");
+      background-position: center; background-size: cover;
+      opacity: 0.05; pointer-events: none;
+    }
+    main { position: relative; z-index: 1; width: min(100% - 44px, 1060px); margin: 0 auto; padding: 22px 0 30px; }
+    a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+    nav { display: flex; justify-content: flex-end; align-items: center; gap: 22px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--rule); font-size: 15px; color: var(--muted); }
+    nav a { text-decoration: none; }
+    nav a:hover { text-decoration: underline; }
+    nav a[aria-current="page"] { font-weight: 700; color: var(--ink); }
+    footer { padding-top: 20px; border-top: 1px solid var(--rule); color: var(--muted);
+      font-size: 15px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    @media (max-width: 600px) { main { width: min(100% - 30px, 1060px); } nav { justify-content: flex-start; flex-wrap: wrap; } }
+  </style>
+  <link rel="stylesheet" href="assets/games.css">
+</head>
+<body>
+<nav aria-label="Main navigation">
+      <a href="../index.html">Home</a>
+      <a href="../books.html">Books</a>
+      <a href="../games.html" aria-current="page">Games</a>
+      <a href="../message.html">Contact</a>
+    </nav>
+<main>
+<div class="g-wrap">
+<p class="g-kicker">Free Fun &amp; Games</p>
+<h1 class="g-title">Daily Sudoku</h1>
+<p class="g-lede">A fresh easy&ndash;medium sudoku every day. Fill the grid so every row, column, and 3&times;3 box holds the digits 1&ndash;9.</p>
+<div class="g-datenav">
+  <button data-g-prev aria-label="Previous day">&lsaquo;</button>
+  <input type="date" data-g-date aria-label="Choose a day">
+  <button data-g-next aria-label="Next day">&rsaquo;</button>
+  <span class="g-streak" data-g-streak></span>
+</div>
+<div class="g-row" style="justify-content:center;gap:24px;">
+  <span>&#x23F1; <strong id="g-timer">0:00</strong></span><span id="g-mistakes" style="color:#dc2626;font-weight:700;"></span>
+</div>
+<div class="g-sudoku" id="g-grid" role="grid" aria-label="Sudoku grid"></div>
+<div class="g-pad" id="g-pad" aria-label="Number pad"></div>
+<div class="g-ptools">
+  <button class="g-btn small ghost" id="g-erase">Erase</button>
+  <button class="g-btn small ghost" id="g-notemode" aria-pressed="false">&#x270F;&#xFE0F; Notes</button>
+  <button class="g-btn small ghost" id="g-restart">Restart</button>
+</div>
+<div class="g-win" id="g-win" role="status"></div>
+<p class="g-hint">Tip: tap a square, then a number &mdash; or just type. Toggle Notes to pencil in candidates.</p>
+<div class="g-promos">
+  <div class="g-cta">
+    <h2>&#x1F9E9; Love puzzles?</h2>
+    <p>Take the fun offline &mdash; puzzle books packed with 90+ fresh puzzles: crosswords, sudoku, word searches, and more.</p>
+    <a class="g-btn" href="https://acolomba.com/books.html">Browse the bookstore</a>
+  </div>
+  <div class="g-cta g-cta-brain">
+    <h2>&#x1F9E0; Train your brain daily</h2>
+    <p>Games are just the warm-up. Take the free 14-day Brain Shift challenge and retrain the voice in your head.</p>
+    <a class="g-btn" href="https://brain-shift.com/challenge.html">Take the 14-day challenge</a>
+    <a class="g-sub" href="https://apps.apple.com/app/brain-shift/id6787929828">Or get the Brain Shift iOS app &rarr;</a>
+  </div>
+</div>
+</div>
+</main>
+<footer>
+      <span>&copy; 2026 Antonio Colomba</span>
+      <span><a href="https://acolomba.com/books.html">Bookstore</a> · <a href="https://acolomba.com/games.html">Free games</a></span>
+    </footer>
+  <script src="assets/common.js"></script>
+  <script src="assets/sudoku.js"></script>
+
+</body>
+</html>
