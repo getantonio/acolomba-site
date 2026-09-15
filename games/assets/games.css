@@ -122,3 +122,7 @@
 .g-cta-brain { background: linear-gradient(135deg, #0e3a3b, #14666a); }
 .g-cta-brain a.g-btn { background: #7ef0e0; color: #083233; }
 .g-cta .g-sub { display: block; margin-top: 10px; font-size: 14px; opacity: .8; color: inherit; }
+.g-howto { border: 1px solid rgba(0,0,0,.14); border-radius: 12px; padding: 12px 16px; margin: 20px 0; background: rgba(0,0,0,.025); }
+.g-howto summary { cursor: pointer; font-size: 15px; }
+.g-howto ol { margin: 10px 0 4px; padding-left: 22px; font-size: 14px; line-height: 1.55; }
+.g-howto li { margin: 6px 0; }
