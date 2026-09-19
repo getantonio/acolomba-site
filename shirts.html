@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shirt Shop — Antonio Colomba</title>
+  <meta name="description" content="Faith-based and mindset apparel by Antonio Colomba, printed on demand. First drops: the 'It Is Finished' faith tee and the Brain Shift tee.">
+  <link rel="canonical" href="https://acolomba.com/shirts.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Antonio Colomba">
+  <meta property="og:title" content="Shirt Shop — Antonio Colomba">
+  <meta property="og:description" content="Faith-based and mindset apparel by Antonio Colomba, printed on demand.">
+  <meta property="og:url" content="https://acolomba.com/shirts.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Shirt Shop — Antonio Colomba">
+  <meta name="twitter:description" content="Faith-based and mindset apparel by Antonio Colomba, printed on demand.">
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --paper: #d1d1d1;
+      --ink: #202833;
+      --muted: rgba(32, 40, 51, 0.72);
+      --rule: rgba(32, 40, 51, 0.34);
+      --card: rgba(255, 255, 255, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: var(--paper); color-scheme: only light; }
+
+    body {
+      position: relative;
+      margin: 0;
+      min-height: 100vh;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image: url("assets/splash/dove-splash-1.jpg");
+      background-position: center;
+      background-size: cover;
+      opacity: 0.05;
+      pointer-events: none;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      width: min(100% - 44px, 1060px);
+      margin: 0 auto;
+      padding: 22px 0 30px;
+    }
+
+    a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+
+    nav {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 22px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--rule);
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    nav a { text-decoration: none; }
+    nav a:hover { text-decoration: underline; }
+    nav a[aria-current="page"] { color: var(--ink); font-weight: 700; }
+
+    .hero { padding: 44px 0 40px; max-width: 900px; }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      font-size: 14px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(42px, 8.5vw, 72px);
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .tagline {
+      margin: 20px 0 0;
+      font-size: clamp(21px, 2.6vw, 30px);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    .lede { margin: 14px 0 0; max-width: 62ch; color: var(--muted); font-size: 18px; }
+
+    section.block { padding: 40px 0; border-top: 1px solid var(--rule); }
+
+    section.block h2 {
+      margin: 0 0 6px;
+      font-size: clamp(26px, 3.4vw, 38px);
+      line-height: 1.05;
+    }
+
+    .section-note { margin: 0 0 26px; color: var(--muted); font-size: 17px; }
+
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .book-card {
+      border: 1px solid var(--rule);
+      background: var(--card);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .book-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--rule);
+      margin-bottom: 14px;
+      background: #fff;
+    }
+
+    .book-card .ph {
+      border: 1px solid var(--rule);
+      margin-bottom: 14px;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+    }
+
+    .book-card .ph svg { width: 100%; height: 100%; display: block; }
+
+    .book-card .kicker {
+      margin: 0 0 8px;
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .book-card h3 { margin: 0 0 6px; font-size: 22px; line-height: 1.15; }
+
+    .book-card .subtitle {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 16px;
+      font-style: italic;
+    }
+
+    .book-card p.desc { margin: 0 0 12px; color: var(--muted); font-size: 16px; flex: 1; }
+
+    .book-meta { margin: 0 0 14px; font-size: 15px; font-weight: 700; }
+
+    .buy {
+      display: inline-block;
+      padding: 10px 18px;
+      border: 2px solid var(--ink);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+
+    .buy.soon { opacity: 0.55; }
+    a.buy { background: var(--ink); color: #fff; text-decoration: none; }
+    a.buy:hover { opacity: 0.85; }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .how-cell {
+      border: 1px solid var(--rule);
+      background: var(--card);
+      padding: 20px;
+    }
+
+    .how-cell h3 { margin: 0 0 8px; font-size: 20px; }
+    .how-cell p { margin: 0; color: var(--muted); font-size: 16px; }
+
+    footer {
+      padding-top: 20px;
+      border-top: 1px solid var(--rule);
+      color: var(--muted);
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .how-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      main { width: min(100% - 30px, 1060px); }
+      nav { justify-content: flex-start; flex-wrap: wrap; }
+      .book-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="books.html">Books</a>
+      <a href="shirts.html" aria-current="page">Shirts</a>
+      <a href="message.html">Contact</a>
+    </nav>
+
+    <header class="hero">
+      <p class="eyebrow">Shirt Shop</p>
+      <h1>SHIFTED</h1>
+      <p class="tagline">Faith-based and mindset apparel, printed on demand.</p>
+      <p class="lede">Wear what you believe. Every design is original art by Antonio Colomba, printed one at a time on quality tees — no inventory, no warehouses, no compromise. The first drops are live below; new capsules land every season.</p>
+    </header>
+
+    <section class="block" aria-labelledby="drops-title">
+      <h2 id="drops-title">First drops</h2>
+      <p class="section-note">The opening line. Checkout opens soon — pricing to be announced.</p>
+      <div class="book-grid">
+        <div class="book-card">
+          <img src="assets/shirts/it-is-finished.png" alt="It Is Finished — John 19:30, faith tee design" loading="lazy">
+          <p class="kicker">Faith · First drop</p>
+          <h3>It Is Finished — John 19:30</h3>
+          <p class="subtitle">The finished work, worn daily</p>
+          <p class="desc">The words from the cross, set in original illustrated art. A statement of grace for the one who wears it and the ones who read it.</p>
+          <p class="book-meta">Price TBD · Front print</p>
+          <!-- TODO: point at Spring listing URL when live -->
+          <span class="buy soon">Coming soon</span>
+        </div>
+        <div class="book-card">
+          <img src="assets/shirts/brain-shift-front.png" alt="Brain Shift tee — front print preview" loading="lazy">
+          <p class="kicker">Mindset · First drop</p>
+          <h3>Brain Shift</h3>
+          <p class="subtitle">Reverse the negative. Loop the positive.</p>
+          <p class="desc">The official tee of the Brain Shift Method. Front carries the Brain Shift app logo; the back carries the two-color BRAIN SHIFT wordmark with the method's core line.</p>
+          <p class="book-meta">Price TBD · Front + back print</p>
+          <!-- TODO: point at Spring listing URL when live -->
+          <span class="buy soon">Coming soon</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="soon-title">
+      <h2 id="soon-title">Coming soon</h2>
+      <p class="section-note">New capsules in production. Follow the drop schedule — limited runs, no reprints.</p>
+      <div class="book-grid">
+        <div class="book-card">
+          <div class="ph" aria-hidden="true">
+            <svg viewBox="0 0 400 400" role="img">
+              <defs>
+                <radialGradient id="faithGlow" cx="50%" cy="42%" r="65%">
+                  <stop offset="0%" stop-color="#2b3444"/>
+                  <stop offset="100%" stop-color="#11151c"/>
+                </radialGradient>
+              </defs>
+              <rect width="400" height="400" fill="url(#faithGlow)"/>
+              <g stroke="#c9a86a" stroke-width="6" stroke-linecap="round" opacity="0.9">
+                <line x1="200" y1="110" x2="200" y2="300"/>
+                <line x1="140" y1="175" x2="260" y2="175"/>
+              </g>
+              <circle cx="200" cy="205" r="130" fill="none" stroke="#c9a86a" stroke-width="1.5" opacity="0.35"/>
+            </svg>
+          </div>
+          <p class="kicker">In production</p>
+          <h3>Faith capsule</h3>
+          <p class="subtitle">Scripture, illustrated</p>
+          <p class="desc">Three to four illustrated faith designs in production — verse-driven art on garment-dyed tees. The evergreen core of the shop.</p>
+          <p class="book-meta">Price TBD</p>
+          <!-- TODO: point at Spring listing URL when live -->
+          <span class="buy soon">Coming soon</span>
+        </div>
+        <div class="book-card">
+          <div class="ph" aria-hidden="true">
+            <svg viewBox="0 0 400 400" role="img">
+              <defs>
+                <radialGradient id="mindGlow" cx="50%" cy="60%" r="70%">
+                  <stop offset="0%" stop-color="#3a2f1e"/>
+                  <stop offset="100%" stop-color="#12100b"/>
+                </radialGradient>
+              </defs>
+              <rect width="400" height="400" fill="url(#mindGlow)"/>
+              <g fill="none" stroke="#e0b56a" opacity="0.9">
+                <path d="M80 290 A 120 120 0 0 1 320 290" stroke-width="6"/>
+                <path d="M115 290 A 85 85 0 0 1 285 290" stroke-width="2.5" opacity="0.6"/>
+                <path d="M150 290 A 50 50 0 0 1 250 290" stroke-width="2.5" opacity="0.4"/>
+              </g>
+              <circle cx="200" cy="205" r="26" fill="#e0b56a" opacity="0.9"/>
+            </svg>
+          </div>
+          <p class="kicker">In production</p>
+          <h3>Mindset capsule</h3>
+          <p class="subtitle">From the Brain Shift Shorts</p>
+          <p class="desc">Designs drawn straight from the Brain Shift YouTube Shorts — the affirmations and attitude lines the audience already knows by heart.</p>
+          <p class="book-meta">Price TBD</p>
+          <!-- TODO: point at Spring listing URL when live -->
+          <span class="buy soon">Coming soon</span>
+        </div>
+        <div class="book-card">
+          <div class="ph" aria-hidden="true">
+            <svg viewBox="0 0 400 400" role="img">
+              <defs>
+                <radialGradient id="halGlow" cx="50%" cy="40%" r="65%">
+                  <stop offset="0%" stop-color="#241a2e"/>
+                  <stop offset="100%" stop-color="#0f0b14"/>
+                </radialGradient>
+              </defs>
+              <rect width="400" height="400" fill="url(#halGlow)"/>
+              <path d="M258 90 A 78 78 0 1 0 258 270 A 62 62 0 1 1 258 90 Z" fill="#d8c98a" opacity="0.85"/>
+              <g fill="#d8c98a" opacity="0.7">
+                <circle cx="110" cy="110" r="4"/>
+                <circle cx="150" cy="300" r="3"/>
+                <circle cx="310" cy="320" r="4"/>
+                <circle cx="330" cy="150" r="3"/>
+                <circle cx="90" cy="220" r="3"/>
+              </g>
+            </svg>
+          </div>
+          <p class="kicker">Limited · October</p>
+          <h3>Halloween capsule</h3>
+          <p class="subtitle">Two to three spooky designs</p>
+          <p class="desc">A tight seasonal drop — witches, skeletons, and cute-spooky classics. Live for October only, then gone.</p>
+          <p class="book-meta">Price TBD</p>
+          <!-- TODO: point at Spring listing URL when live -->
+          <span class="buy soon">Coming soon</span>
+        </div>
+        <div class="book-card">
+          <div class="ph" aria-hidden="true">
+            <svg viewBox="0 0 400 400" role="img">
+              <defs>
+                <radialGradient id="xmasGlow" cx="50%" cy="35%" r="65%">
+                  <stop offset="0%" stop-color="#1d2a24"/>
+                  <stop offset="100%" stop-color="#0b100d"/>
+                </radialGradient>
+              </defs>
+              <rect width="400" height="400" fill="url(#xmasGlow)"/>
+              <g fill="none" stroke="#d8c98a" opacity="0.85">
+                <path d="M200 250 L150 250 L200 170 L250 250 Z" stroke-width="4"/>
+                <path d="M200 205 L168 205 L200 140 L232 205 Z" stroke-width="3" opacity="0.7"/>
+                <line x1="200" y1="250" x2="200" y2="285" stroke-width="4"/>
+              </g>
+              <g fill="#f0e2b0">
+                <path d="M200 92 l7 17 18 1 -14 12 5 17 -16 -10 -16 10 5 -17 -14 -12 18 -1 Z" opacity="0.95"/>
+              </g>
+            </svg>
+          </div>
+          <p class="kicker">Limited · December</p>
+          <h3>Christmas capsule</h3>
+          <p class="subtitle">Faith designs for the season</p>
+          <p class="desc">Faith-based Christmas designs — the season's biggest gifting moment, in the shop's own lane. Arriving for December.</p>
+          <p class="book-meta">Price TBD</p>
+          <!-- TODO: point at Spring listing URL when live -->
+          <span class="buy soon">Coming soon</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="how-title">
+      <h2 id="how-title">How it works</h2>
+      <p class="section-note">Print on demand, done right.</p>
+      <div class="how-grid">
+        <div class="how-cell">
+          <h3>Printed on demand</h3>
+          <p>Your shirt is printed only after you order it — fresh ink, every time.</p>
+        </div>
+        <div class="how-cell">
+          <h3>Ships in ~1–2 weeks</h3>
+          <p>Printed and shipped to your door by the print partner. Tracking included.</p>
+        </div>
+        <div class="how-cell">
+          <h3>No inventory</h3>
+          <p>Nothing sits in a warehouse. No waste, no overstock — just the shirt you asked for.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>© 2026 Antonio Colomba</span>
+      <span><a href="index.html">Home</a> · <a href="antonio-bio.html">Bio</a> · <a href="projects.html">Projects</a></span>
+          <span class="social-links"><a href="https://www.youtube.com/@brainshift00" target="_blank" rel="noopener">YouTube</a> &middot; <a href="https://www.instagram.com/liontigerbull13/" target="_blank" rel="noopener">Instagram</a> &middot; <a href="https://x.com/brainshift00" target="_blank" rel="noopener">X</a></span>
+    </footer>
+  </main>
+</body>
+</html>
