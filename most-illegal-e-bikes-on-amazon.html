@@ -42,7 +42,7 @@
       .bike-rank { font-size: 1.05rem; padding: 7px 20px; top: -17px; z-index: 2; }
       .ghost-rank { position: absolute; top: 6px; right: 18px; font-size: 4.4rem; font-weight: 900; line-height: 1; color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.13); pointer-events: none; user-select: none; }
       .ghost-rank::after { content: counter(bikerank, decimal-leading-zero); }
-      .bike-photo { grid-row: 1 / span 30; align-self: stretch; position: relative; border-radius: 12px; overflow: hidden; background: linear-gradient(135deg, rgba(47,123,255,0.28), rgba(255,122,26,0.24)); border: 1px solid rgba(255,255,255,0.12); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 160px; }
+      .bike-photo { grid-row: 1 / span 30; align-self: center; aspect-ratio: 1/1; position: relative; border-radius: 12px; overflow: hidden; background: linear-gradient(135deg, rgba(47,123,255,0.28), rgba(255,122,26,0.24)); border: 1px solid rgba(255,255,255,0.12); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 160px; }
       .bike-photo .photo-mono { font-size: 2.6rem; font-weight: 900; color: #fff; opacity: 0.55; letter-spacing: -0.02em; }
       .bike-photo .photo-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.5; }
       .bike-photo.has-img { background: rgba(0,0,0,0.3); }
