@@ -38,7 +38,7 @@
       .cta-row { margin-top: 16px; }
       .cta-row a.cta-btn { display: inline-block; background: linear-gradient(135deg,#c81e3a,#ff7a1a); color: #fff !important; font-weight: 800; padding: 13px 30px; border-radius: 10px; text-decoration: none; font-size: 1rem; }
       /* --- Polish pass: photo slots, ghost ranks, badges --- */
-      .bike-card { counter-increment: bikerank; display: grid; grid-template-columns: 250px minmax(0,1fr); gap: 20px 22px; align-items: start; }
+      .bike-card { counter-increment: bikerank; display: grid; grid-template-columns: 250px minmax(0,1fr); gap: 0 22px; align-items: start; }
       .bike-rank { font-size: 1.05rem; padding: 7px 20px; top: -17px; z-index: 2; }
       .ghost-rank { position: absolute; top: 6px; right: 18px; font-size: 4.4rem; font-weight: 900; line-height: 1; color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.13); pointer-events: none; user-select: none; }
       .ghost-rank::after { content: counter(bikerank, decimal-leading-zero); }
@@ -51,7 +51,7 @@
       .spec-chip.hot { font-size: 0.95rem; padding: 7px 16px; box-shadow: 0 0 20px rgba(255,122,26,0.28); }
       @media (max-width: 640px) {
         .bike-card { grid-template-columns: 1fr; }
-        .bike-photo { grid-row: auto; aspect-ratio: 16/9; min-height: 0; }
+        .bike-photo { grid-row: auto; aspect-ratio: 16/9; min-height: 0; margin-bottom: 14px; }
         .ghost-rank { font-size: 3rem; }
         .cta-row a.cta-btn { display: block; text-align: center; }
       }
