@@ -400,5 +400,32 @@
         });
       })();
     </script>
-  </body>
+  <script data-bs-track="1">
+(function () {
+  try {
+    if (navigator.doNotTrack === "1") return;
+    if (!/^https?:$/.test(location.protocol)) return;
+    var SUPABASE_URL = 'https://gcmuymquuoqaqofsrbdq.supabase.co';
+    var ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjbXV5bXF1dW9xYXFvZnNyYmRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNjY3MTIsImV4cCI6MjEwMjg0MjcxMn0.HE3Qqq5YqeCE2HD6lW5oVZNsmRbyNAvhqyl9SFoowog';
+    var payload = JSON.stringify({
+      site: location.hostname,
+      path: location.pathname,
+      referrer: document.referrer || null
+    });
+    fetch(SUPABASE_URL + '/rest/v1/pageviews', {
+      method: 'POST',
+      headers: {
+        'apikey': ANON_KEY,
+        'Authorization': 'Bearer ' + ANON_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: payload,
+      keepalive: true,
+      credentials: 'omit'
+    }).catch(function () {});
+  } catch (e) {}
+})();
+</script>
+</body>
 </html>
