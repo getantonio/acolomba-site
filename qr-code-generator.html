@@ -389,12 +389,13 @@ var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this
         colorLight: bg.value,
         correctLevel: QRCode.CorrectLevel.M
       });
-      // Quiet zone: the spec minimum is 4 modules on every side — no thicker.
+      // Quiet zone: fixed 35px per Antonio (below the 4-module spec minimum,
+      // which would be ~70px at this size — thinner margins can be harder
+      // for some scanners, especially on print).
       // qrcodejs draws edge-to-edge and sets its <img> src asynchronously,
       // so composite the synchronously-drawn canvas ourselves.
       var srcCanvas = preview.querySelector("canvas");
-      var moduleCount = qr._oQRCode.getModuleCount();
-      var margin = Math.ceil(size / moduleCount) * 4;
+      var margin = 35;
       var out = document.createElement("canvas");
       out.width = size + margin * 2;
       out.height = size + margin * 2;
