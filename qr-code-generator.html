@@ -417,6 +417,17 @@ var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this
   download.addEventListener("click", function () {
     var img = preview.querySelector("img");
     if (!img || !img.src) return;
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (isIOS) {
+      // iOS Safari ignores the download attribute: open the PNG in a new tab
+      // where it can be long-pressed -> "Save to Photos" / "Save to Files".
+      var w = window.open("", "_blank");
+      w.document.write('<!doctype html><title>QR code</title><meta name="viewport" content="width=device-width,initial-scale=1">' +
+        '<p style="font-family:sans-serif;">Touch and hold the image, then tap <b>Save to Photos</b>.</p>' +
+        '<img src="' + img.src + '" style="max-width:100%;height:auto;">');
+      w.document.close();
+      return;
+    }
     var a = document.createElement("a");
     a.download = "qr-code-" + activeTab.id + "-" + size + "px.png";
     a.href = img.src;
