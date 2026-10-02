@@ -380,7 +380,8 @@ var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this
       return;
     }
     try {
-      new QRCode(preview, {
+      preview.innerHTML = "";
+      var qr = new QRCode(preview, {
         text: payload,
         width: size,
         height: size,
@@ -388,10 +389,12 @@ var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this
         colorLight: bg.value,
         correctLevel: QRCode.CorrectLevel.M
       });
-      // Quiet zone: qrcodejs draws edge-to-edge and sets its <img> src
-      // asynchronously, so composite the synchronously-drawn canvas ourselves.
+      // Quiet zone: the spec minimum is 4 modules on every side — no thicker.
+      // qrcodejs draws edge-to-edge and sets its <img> src asynchronously,
+      // so composite the synchronously-drawn canvas ourselves.
       var srcCanvas = preview.querySelector("canvas");
-      var margin = Math.round(size * 0.15);
+      var moduleCount = qr._oQRCode.getModuleCount();
+      var margin = Math.ceil(size / moduleCount) * 4;
       var out = document.createElement("canvas");
       out.width = size + margin * 2;
       out.height = size + margin * 2;
