@@ -208,6 +208,29 @@
     .also-card p { margin: 0 0 14px; color: var(--muted); font-size: 17px; }
     .also-card a.cta { font-weight: 700; }
 
+    .yt-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .yt-card {
+      border: 1px solid var(--rule);
+      background: var(--card);
+    }
+
+    .yt-card img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .yt-card .yt-body { padding: 22px; }
+    .yt-card h3 { margin: 0 0 8px; font-size: 22px; }
+    .yt-card p { margin: 0 0 14px; color: var(--muted); font-size: 17px; }
+    .yt-card a.cta { font-weight: 700; }
+
     .contact-line { font-size: 20px; }
     .contact-line a { font-weight: 700; }
 
@@ -224,6 +247,7 @@
 
     @media (max-width: 860px) {
       .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .yt-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 600px) {
@@ -346,6 +370,37 @@
           <h3>The Brain Shift Method</h3>
           <p>The book behind the app. Second edition available soon.</p>
           <a class="cta" href="books.html">See the books →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="youtube-title">
+      <h2 id="youtube-title">YouTube</h2>
+      <p class="section-note">Three channels, all Shorts.</p>
+      <div class="yt-grid">
+        <div class="yt-card">
+          <a href="https://www.youtube.com/@brainshift00/shorts" target="_blank" rel="noopener"><img src="images/yt-brainshift00.jpg" alt="BrainShift YouTube Shorts page" loading="lazy"></a>
+          <div class="yt-body">
+            <h3>BrainShift</h3>
+            <p>Mindset, breathing, and brain-fact Shorts from the Brain Shift Method.</p>
+            <a class="cta" href="https://www.youtube.com/@brainshift00/shorts" target="_blank" rel="noopener">Watch on YouTube →</a>
+          </div>
+        </div>
+        <div class="yt-card">
+          <a href="https://www.youtube.com/@ShadowCommand-007/shorts" target="_blank" rel="noopener"><img src="images/yt-shadowcommand.jpg" alt="Shadow Command YouTube Shorts page" loading="lazy"></a>
+          <div class="yt-body">
+            <h3>Shadow Command</h3>
+            <p>Ancient earth, ocean and nature facts, plus history trivia — a smarter doom-scroll.</p>
+            <a class="cta" href="https://www.youtube.com/@ShadowCommand-007/shorts" target="_blank" rel="noopener">Watch on YouTube →</a>
+          </div>
+        </div>
+        <div class="yt-card">
+          <a href="https://www.youtube.com/@whoarethey3/shorts" target="_blank" rel="noopener"><img src="images/yt-whoarethey.jpg" alt="Who Are They? YouTube Shorts page" loading="lazy"></a>
+          <div class="yt-body">
+            <h3>Who Are They?</h3>
+            <p>Famous faces, unexpected stories — who are they, and how did they get here?</p>
+            <a class="cta" href="https://www.youtube.com/@whoarethey3/shorts" target="_blank" rel="noopener">Watch on YouTube →</a>
+          </div>
         </div>
       </div>
     </section>
