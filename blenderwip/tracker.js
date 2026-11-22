@@ -69,11 +69,13 @@
       var doneInPhase = 0;
       if (phase.phase < cur.phase) doneInPhase = phase.lessons;
       else if (phase.phase === cur.phase) doneInPhase = cur.lessonsCompleted;
-      html += '<section class="phase"><h3>Phase ' + phase.phase + " — " + esc(phase.title) + "</h3>";
-      html += '<p class="phase-meta">' + phase.lessons + " lessons · " + doneInPhase + " done</p>";
+      var phaseOpen = phase.phase === cur.phase ? " open" : "";
+      html += '<details class="phase"' + phaseOpen + '><summary><h3>Phase ' + phase.phase + " — " + esc(phase.title) + "</h3>";
+      html += '<span class="phase-meta">' + phase.lessons + " lessons · " + doneInPhase + " done</span></summary>";
       if (phase.blurb) html += '<p class="muted">' + esc(phase.blurb) + "</p>";
       phase.sections.forEach(function (sec) {
-        html += '<h4>Section ' + sec.section + " — " + esc(sec.title) + "</h4>";
+        var secOpen = (phase.phase === cur.phase && sec.section === cur.section) ? " open" : "";
+        html += '<details class="phase-section"' + secOpen + '><summary><h4>Section ' + sec.section + " — " + esc(sec.title) + "</h4></summary>";
         if (sec.lessons) {
           html += '<ol class="lessons">';
           sec.lessons.forEach(function (lesson) {
@@ -85,8 +87,9 @@
         } else {
           html += '<p class="muted">Lesson list coming when this phase starts.</p>';
         }
+        html += "</details>";
       });
-      html += "</section>";
+      html += "</details>";
     });
     document.getElementById("curriculum").innerHTML = html;
   }
