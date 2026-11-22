@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blender Progress Tracker — Antonio Colomba</title>
+  <meta name="description" content="Private progress tracker for Antonio's Blender tutorial curriculum.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --paper: #d1d1d1;
+      --ink: #202833;
+      --muted: rgba(32, 40, 51, 0.72);
+      --rule: rgba(32, 40, 51, 0.34);
+      --card: rgba(255, 255, 255, 0.32);
+      --good: #2e6b34;
+      --warn: #9a5b00;
+      --accent: #202833;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: var(--paper); color-scheme: only light; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    main {
+      width: min(100% - 44px, 960px);
+      margin: 0 auto;
+      padding: 22px 0 52px;
+    }
+
+    a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+
+    h1 { font-size: 32px; line-height: 1.2; margin: 0 0 8px; }
+    h2 { font-size: 24px; margin: 40px 0 12px; padding-top: 24px; border-top: 1px solid var(--rule); }
+    h3 { font-size: 20px; margin: 28px 0 4px; }
+    h4 { font-size: 17px; margin: 18px 0 4px; }
+
+    p { margin: 6px 0; }
+    .muted { color: var(--muted); font-size: 16px; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin: 16px 0;
+    }
+
+    .bar {
+      height: 12px;
+      background: rgba(32, 40, 51, 0.18);
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 10px 0 4px;
+    }
+    .bar > div { height: 100%; background: var(--accent); width: 0; }
+
+    .pace {
+      display: inline-block;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 16px;
+      margin-top: 8px;
+    }
+    .pace.on-track { background: rgba(46, 107, 52, 0.16); color: var(--good); }
+    .pace.behind { background: rgba(154, 91, 0, 0.16); color: var(--warn); }
+
+    ol.lessons { list-style: none; padding: 0; margin: 8px 0 0; }
+    ol.lessons li {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(32, 40, 51, 0.12);
+    }
+    ol.lessons li:last-child { border-bottom: 0; }
+    .lesson-no { min-width: 28px; text-align: right; color: var(--muted); font-size: 16px; }
+    .lesson-title { flex: 1; }
+    .lesson-state { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+    li.done .lesson-title { color: var(--muted); text-decoration: line-through; }
+    li.done .lesson-state { color: var(--good); }
+    li.next { background: rgba(255, 255, 255, 0.35); }
+    li.next .lesson-state { color: var(--accent); }
+    li.upcoming .lesson-state { color: var(--muted); font-weight: 400; }
+
+    .phase { margin-bottom: 8px; }
+    .phase-meta { color: var(--muted); font-size: 16px; margin: 2px 0; }
+
+    .log-entry {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 14px 0;
+    }
+    .log-entry h4 { margin-top: 0; }
+    .log-entry img, .log-entry video {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 10px;
+      background: #000;
+    }
+
+    .error { color: #8f1d1d; font-weight: 700; margin-top: 12px; }
+
+    footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 15px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <main>
+    <!--
+      BLENDER PROGRESS TRACKER — private, unlisted page.
+      Not linked from anywhere on the site; noindex so search engines ignore it.
+      Data lives in ./progress-data.json. To log a day, add one entry to the
+      "log" array (newest first is automatic — entries are sorted by date)
+      and update the "current" pointer. Proof media goes in ./proof/ and is
+      referenced by path, e.g. "/blenderwip/proof/2026-11-22-lesson-01.png".
+
+      Log entry shape:
+      {
+        "date": "2026-11-22",
+        "lessons": [1],
+        "lessonTitles": ["Instructor presentation"],
+        "lastVideoWatched": "Instructor presentation",
+        "progressInVideo": "finished",
+        "proof": { "type": "image", "src": "/blenderwip/proof/2026-11-22-lesson-01.png", "alt": "Blender work from lesson 1" }
+      }
+      For a playblast use "type": "video" with an .mp4/.mov src (optional
+      "poster" image, optional "caption"). "progressInVideo" is free text,
+      e.g. "finished" or "12 of 20 min".
+    -->
+
+    <section id="tracker">
+      <h1>Blender Progress Tracker</h1>
+      <p class="muted">One hour a day, starting 3 PM. Proof for each lesson is a screenshot or a playblast of the Blender work itself.</p>
+
+      <div class="card" id="status-card">
+        <h2 style="margin-top:0; padding-top:0; border-top:0;">Where you are</h2>
+        <p><strong id="status-course"></strong></p>
+        <p id="status-phase" class="muted"></p>
+        <p><strong>Next:</strong> <span id="status-next"></span></p>
+        <div class="bar"><div id="status-bar"></div></div>
+        <p><span id="status-count"></span> · <span id="status-pct"></span></p>
+        <p><span id="status-pace" class="pace on-track"></span></p>
+        <p id="status-sessions" class="muted"></p>
+      </div>
+
+      <p id="load-error" class="error" hidden>Could not load the progress data. Please try again later.</p>
+
+      <h2>Curriculum</h2>
+      <div id="curriculum"></div>
+
+      <h2>Daily log</h2>
+      <div id="log"></div>
+
+      <footer>
+        Daily rhythm: start by 3 PM, finish around 4–5 PM, send proof (a screenshot of a still, or a playblast, of the Blender work for the lesson). Progress is recorded before the next 3 PM check-in.
+      </footer>
+    </section>
+  </main>
+  <script src="./tracker.js"></script>
+</body>
+</html>
