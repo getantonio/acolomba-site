@@ -1,11 +1,15 @@
 /* Blender Progress Tracker — client-side rendering.
    Reads ./progress-data.json and renders the status card, curriculum
-   and daily log. No uploads, no edits — read-only. */
+   and daily log. The upload form posts a still or playblast to the
+   upload endpoint, which files it under the chosen lesson. */
 (function () {
   "use strict";
 
   var tracker = document.getElementById("tracker");
   var loadError = document.getElementById("load-error");
+  var UPLOAD_URL = "https://blender-tracker-upload.vercel.app/api/upload";
+  var currentData = null;
+  var uploadWired = false;
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -125,6 +129,109 @@
     document.getElementById("log").innerHTML = html;
   }
 
+  function findLessonTitle(data, n) {
+    for (var i = 0; i < data.curriculum.length; i++) {
+      var phase = data.curriculum[i];
+      for (var j = 0; j < phase.sections.length; j++) {
+        var sec = phase.sections[j];
+        for (var k = 0; k < (sec.lessons || []).length; k++) {
+          if (sec.lessons[k].n === n) return sec.lessons[k].title;
+        }
+      }
+    }
+    return "";
+  }
+
+  function setUploadStatus(msg, ok) {
+    var el = document.getElementById("upload-status");
+    el.hidden = false;
+    el.textContent = msg;
+    el.className = ok ? "ok" : "err";
+  }
+
+  function setupUpload(data) {
+    var lessonInput = document.getElementById("upload-lesson");
+    var titleEl = document.getElementById("upload-lesson-title");
+    var btn = document.getElementById("upload-btn");
+    var fileInput = document.getElementById("upload-file");
+    if (!lessonInput || !btn) return;
+
+    function refreshTitle() {
+      var n = parseInt(lessonInput.value, 10);
+      var t = isNaN(n) ? "" : findLessonTitle(currentData, n);
+      titleEl.textContent = t ? " — " + t : "";
+    }
+    lessonInput.value = data.current.nextLesson;
+    refreshTitle();
+    if (uploadWired) return;
+    uploadWired = true;
+    lessonInput.addEventListener("change", refreshTitle);
+    btn.addEventListener("click", function () { doUpload(currentData); });
+    fileInput.addEventListener("change", function () {
+      document.getElementById("upload-status").hidden = true;
+    });
+  }
+
+  function doUpload(data) {
+    var fileInput = document.getElementById("upload-file");
+    var lessonInput = document.getElementById("upload-lesson");
+    var btn = document.getElementById("upload-btn");
+    var file = fileInput.files && fileInput.files[0];
+    var lesson = parseInt(lessonInput.value, 10);
+    if (!file) { setUploadStatus("Pick a still or a playblast first.", false); return; }
+    if (!lesson || lesson < 1 || lesson > 305) { setUploadStatus("Lesson number must be between 1 and 305.", false); return; }
+    if (file.size > 4000000) {
+      setUploadStatus("That file is too big to upload here (over ~4 MB). Send the playblast to bud in chat instead.", false);
+      return;
+    }
+    var title = findLessonTitle(data, lesson) || ("Lesson " + lesson);
+    btn.disabled = true;
+    setUploadStatus("Uploading…", true);
+    var reader = new FileReader();
+    reader.onerror = function () {
+      btn.disabled = false;
+      setUploadStatus("Could not read that file. Try again.", false);
+    };
+    reader.onload = function () {
+      var dataUrl = reader.result;
+      var base64 = dataUrl.split(",")[1] || "";
+      var today = new Date();
+      var yyyy = today.getFullYear();
+      var mm = String(today.getMonth() + 1).padStart(2, "0");
+      var dd = String(today.getDate()).padStart(2, "0");
+      fetch(UPLOAD_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename: file.name,
+          contentType: file.type || "",
+          base64: base64,
+          lesson: lesson,
+          lessonTitle: title,
+          date: yyyy + "-" + mm + "-" + dd,
+          lastVideoWatched: title,
+          progressInVideo: "finished",
+        }),
+      })
+        .then(function (res) { return res.json().then(function (j) { return { status: res.status, body: j }; }); })
+        .then(function (r) {
+          btn.disabled = false;
+          if (r.body && r.body.ok) {
+            setUploadStatus("Uploaded — filed under Lesson " + lesson + " — " + title + ".", true);
+            fileInput.value = "";
+            load();
+          } else {
+            setUploadStatus("Upload failed: " + ((r.body && r.body.error) || ("HTTP " + r.status)) + ".", false);
+          }
+        })
+        .catch(function () {
+          btn.disabled = false;
+          setUploadStatus("Upload failed — network error. Try again, or send it to bud in chat.", false);
+        });
+    };
+    reader.readAsDataURL(file);
+  }
+
   function load() {
     fetch("./progress-data.json", { cache: "no-store" })
       .then(function (res) {
@@ -132,9 +239,11 @@
         return res.json();
       })
       .then(function (data) {
+        currentData = data;
         renderStatus(data);
         renderCurriculum(data);
         renderLog(data);
+        setupUpload(data);
       })
       .catch(function () {
         loadError.hidden = false;
