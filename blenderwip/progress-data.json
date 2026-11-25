@@ -1,1 +1,476 @@
-{"current":{"lastVideoWatched":null,"lessonsCompleted":0,"nextLesson":1,"nextLessonTitle":"Instructor presentation","phase":1,"phaseTitle":"Blender 3D for Beginners: Complete Modeling & Texturing guide","progressInVideo":null,"section":1,"sectionTitle":"Introduction","totalLessons":305},"curriculum":[{"blurb":"The foundation. Interface, modeling, modifiers, sculpting, materials, and a full final project.","lessons":74,"phase":1,"sections":[{"lessons":[{"n":1,"title":"Instructor presentation"},{"n":2,"title":"Course presentation"},{"n":3,"title":"Let's talk about Blender"},{"n":4,"title":"Version and requirements"}],"section":1,"title":"Introduction"},{"lessons":[{"n":5,"title":"Interface and workspaces"},{"n":6,"title":"Navigation in the 3D view"},{"n":7,"title":"Overlays and viewport shading"},{"n":8,"title":"Selection, visibility and collections"},{"n":9,"title":"Object creation and deletion"},{"n":10,"title":"Basic transformation"},{"n":11,"title":"The edit mode"},{"n":12,"title":"Selection shortcuts in edit mode"},{"n":13,"title":"Tools in the edit mode"},{"n":14,"title":"Additional tools in edit mode"},{"n":15,"title":"The modifiers"},{"n":16,"title":"Important addons"},{"n":17,"title":"Shortcuts and interface customization"},{"n":18,"title":"The online manual"},{"n":19,"title":"The materials"},{"n":20,"title":"Creating a scene to render our models"}],"section":2,"title":"Fundamentals"},{"lessons":[{"n":21,"title":"Introduction to organic modeling"},{"n":22,"title":"Modeling ceramic crockery"},{"n":23,"title":"Practical exercise 1: Piggy Bank"},{"n":24,"title":"Practical exercise 2: Wizard hat"},{"n":25,"title":"Practical exercise 3: Hamburger"}],"section":3,"title":"Organic modeling"},{"lessons":[{"n":26,"title":"Introduction to Hard surface modeling"},{"n":27,"title":"Boolean operations"},{"n":28,"title":"Modeling with booleans"},{"n":29,"title":"Tips and tricks for Hardsurface"},{"n":30,"title":"Practical exercise 1: Sword with gem"},{"n":31,"title":"Practical exercise 2: Headphones"},{"n":32,"title":"Practical exercise 3: Motorcycle helmet"}],"section":4,"title":"Hard surface modeling"},{"lessons":[{"n":33,"title":"Array modifier and simple deform"},{"n":34,"title":"Array modifier and radial screw"},{"n":35,"title":"Array modifier and curves"},{"n":36,"title":"Screw modifier"},{"n":37,"title":"Shrinkwrap modifier and solidify"},{"n":38,"title":"Wireframe modifier"},{"n":39,"title":"Skin modifier"},{"n":40,"title":"Surface deform modifier"}],"section":5,"title":"Creative modeling with modifiers"},{"lessons":[{"n":41,"title":"Basic aspects"},{"n":42,"title":"The sculpting brushes"},{"n":43,"title":"The masks in the sculpt mode"},{"n":44,"title":"Brush configurations"},{"n":45,"title":"Sculpting methods in Blender"},{"n":46,"title":"Practical approach: Chess horse"},{"n":47,"title":"Blender 4.3 sculpting interface"},{"n":48,"title":"Practical exercise 1: Kitten"},{"n":49,"title":"Practical exercise 2: Anvil"},{"n":50,"title":"Practical exercise 3: Stylized Skull"}],"section":6,"title":"Digital sculpting"},{"lessons":[{"n":51,"title":"The procedural textures"},{"n":52,"title":"The mixing nodes"},{"n":53,"title":"Preparing a consistent lighting"},{"n":54,"title":"The principled BSDF node"},{"n":55,"title":"Creating a professional Hardsurface material"},{"n":56,"title":"Creating a professional Organic material"},{"n":57,"title":"Advanced material examples"},{"n":58,"title":"The compositor"}],"section":7,"title":"Material creation"},{"lessons":[{"n":59,"title":"Analysis and planning"},{"n":60,"title":"Body blocking"},{"n":61,"title":"Clothes blocking"},{"n":62,"title":"Clothes refinement"},{"n":63,"title":"Body refinement"},{"n":64,"title":"Ropes"},{"n":65,"title":"Woven backpack"},{"n":66,"title":"Sleeping bag"},{"n":67,"title":"Staff and lamp"},{"n":68,"title":"Arm rig"},{"n":69,"title":"Stone base"},{"n":70,"title":"Texturing the clothes"},{"n":71,"title":"Texturing the accessories"},{"n":72,"title":"Texturing the skin and eyes"},{"n":73,"title":"Rendering and composite"}],"section":8,"title":"Final project"},{"lessons":[{"n":74,"title":"Final talking and recommendations"}],"section":9,"title":"Epilogue"}],"title":"Blender 3D for Beginners: Complete Modeling & Texturing guide"},{"blurb":"The professional workflow — modeling, materials, animation, advanced concepts.","lessons":38,"phase":2,"sections":[{"section":1,"title":"Welcome to Blender"},{"section":2,"title":"Modeling"},{"section":3,"title":"Materials"},{"section":4,"title":"Animation"},{"section":5,"title":"Advanced Blender Concepts"}],"title":"School of Motion: Blender for 3D Artists"},{"blurb":"A full project build, start to finish — a vehicle, base shape through shading and rendering.","lessons":51,"phase":3,"sections":[{"section":1,"title":"Base Shape"},{"section":2,"title":"Wheels"},{"section":3,"title":"Panel Details"},{"section":4,"title":"Extra Details"},{"section":5,"title":"Shading & Rendering"}],"title":"Blender 3D Hard Surface Modelling"},{"blurb":"The deep dive into organic sculpting.","lessons":125,"phase":4,"sections":[{"section":1,"title":"Introduction"},{"section":2,"title":"Anatomy: The Upper Body"}],"title":"Udemy: 3D Anatomy Sculpting in Blender — Master the Human Figure"},{"blurb":"Practice rounds to lock in the anatomy work.","lessons":17,"phase":5,"sections":[{"section":1,"title":"Introduction (16 exercise lessons)"}],"title":"Udemy: Torso Anatomy Exercises"}],"log":[],"trackingStarted":"2026-11-22"}
+{
+  "current": {
+    "lastVideoWatched": "Introduction to organic modeling",
+    "lessonsCompleted": 21,
+    "nextLesson": 22,
+    "nextLessonTitle": "Modeling ceramic crockery",
+    "phase": 1,
+    "phaseTitle": "Blender 3D for Beginners: Complete Modeling & Texturing guide",
+    "progressInVideo": "finished",
+    "section": 3,
+    "sectionTitle": "Organic modeling",
+    "totalLessons": 305
+  },
+  "curriculum": [
+    {
+      "blurb": "The foundation. Interface, modeling, modifiers, sculpting, materials, and a full final project.",
+      "lessons": 74,
+      "phase": 1,
+      "sections": [
+        {
+          "lessons": [
+            {
+              "n": 1,
+              "title": "Instructor presentation"
+            },
+            {
+              "n": 2,
+              "title": "Course presentation"
+            },
+            {
+              "n": 3,
+              "title": "Let's talk about Blender"
+            },
+            {
+              "n": 4,
+              "title": "Version and requirements"
+            }
+          ],
+          "section": 1,
+          "title": "Introduction"
+        },
+        {
+          "lessons": [
+            {
+              "n": 5,
+              "title": "Interface and workspaces"
+            },
+            {
+              "n": 6,
+              "title": "Navigation in the 3D view"
+            },
+            {
+              "n": 7,
+              "title": "Overlays and viewport shading"
+            },
+            {
+              "n": 8,
+              "title": "Selection, visibility and collections"
+            },
+            {
+              "n": 9,
+              "title": "Object creation and deletion"
+            },
+            {
+              "n": 10,
+              "title": "Basic transformation"
+            },
+            {
+              "n": 11,
+              "title": "The edit mode"
+            },
+            {
+              "n": 12,
+              "title": "Selection shortcuts in edit mode"
+            },
+            {
+              "n": 13,
+              "title": "Tools in the edit mode"
+            },
+            {
+              "n": 14,
+              "title": "Additional tools in edit mode"
+            },
+            {
+              "n": 15,
+              "title": "The modifiers"
+            },
+            {
+              "n": 16,
+              "title": "Important addons"
+            },
+            {
+              "n": 17,
+              "title": "Shortcuts and interface customization"
+            },
+            {
+              "n": 18,
+              "title": "The online manual"
+            },
+            {
+              "n": 19,
+              "title": "The materials"
+            },
+            {
+              "n": 20,
+              "title": "Creating a scene to render our models"
+            }
+          ],
+          "section": 2,
+          "title": "Fundamentals"
+        },
+        {
+          "lessons": [
+            {
+              "n": 21,
+              "title": "Introduction to organic modeling"
+            },
+            {
+              "n": 22,
+              "title": "Modeling ceramic crockery"
+            },
+            {
+              "n": 23,
+              "title": "Practical exercise 1: Piggy Bank"
+            },
+            {
+              "n": 24,
+              "title": "Practical exercise 2: Wizard hat"
+            },
+            {
+              "n": 25,
+              "title": "Practical exercise 3: Hamburger"
+            }
+          ],
+          "section": 3,
+          "title": "Organic modeling"
+        },
+        {
+          "lessons": [
+            {
+              "n": 26,
+              "title": "Introduction to Hard surface modeling"
+            },
+            {
+              "n": 27,
+              "title": "Boolean operations"
+            },
+            {
+              "n": 28,
+              "title": "Modeling with booleans"
+            },
+            {
+              "n": 29,
+              "title": "Tips and tricks for Hardsurface"
+            },
+            {
+              "n": 30,
+              "title": "Practical exercise 1: Sword with gem"
+            },
+            {
+              "n": 31,
+              "title": "Practical exercise 2: Headphones"
+            },
+            {
+              "n": 32,
+              "title": "Practical exercise 3: Motorcycle helmet"
+            }
+          ],
+          "section": 4,
+          "title": "Hard surface modeling"
+        },
+        {
+          "lessons": [
+            {
+              "n": 33,
+              "title": "Array modifier and simple deform"
+            },
+            {
+              "n": 34,
+              "title": "Array modifier and radial screw"
+            },
+            {
+              "n": 35,
+              "title": "Array modifier and curves"
+            },
+            {
+              "n": 36,
+              "title": "Screw modifier"
+            },
+            {
+              "n": 37,
+              "title": "Shrinkwrap modifier and solidify"
+            },
+            {
+              "n": 38,
+              "title": "Wireframe modifier"
+            },
+            {
+              "n": 39,
+              "title": "Skin modifier"
+            },
+            {
+              "n": 40,
+              "title": "Surface deform modifier"
+            }
+          ],
+          "section": 5,
+          "title": "Creative modeling with modifiers"
+        },
+        {
+          "lessons": [
+            {
+              "n": 41,
+              "title": "Basic aspects"
+            },
+            {
+              "n": 42,
+              "title": "The sculpting brushes"
+            },
+            {
+              "n": 43,
+              "title": "The masks in the sculpt mode"
+            },
+            {
+              "n": 44,
+              "title": "Brush configurations"
+            },
+            {
+              "n": 45,
+              "title": "Sculpting methods in Blender"
+            },
+            {
+              "n": 46,
+              "title": "Practical approach: Chess horse"
+            },
+            {
+              "n": 47,
+              "title": "Blender 4.3 sculpting interface"
+            },
+            {
+              "n": 48,
+              "title": "Practical exercise 1: Kitten"
+            },
+            {
+              "n": 49,
+              "title": "Practical exercise 2: Anvil"
+            },
+            {
+              "n": 50,
+              "title": "Practical exercise 3: Stylized Skull"
+            }
+          ],
+          "section": 6,
+          "title": "Digital sculpting"
+        },
+        {
+          "lessons": [
+            {
+              "n": 51,
+              "title": "The procedural textures"
+            },
+            {
+              "n": 52,
+              "title": "The mixing nodes"
+            },
+            {
+              "n": 53,
+              "title": "Preparing a consistent lighting"
+            },
+            {
+              "n": 54,
+              "title": "The principled BSDF node"
+            },
+            {
+              "n": 55,
+              "title": "Creating a professional Hardsurface material"
+            },
+            {
+              "n": 56,
+              "title": "Creating a professional Organic material"
+            },
+            {
+              "n": 57,
+              "title": "Advanced material examples"
+            },
+            {
+              "n": 58,
+              "title": "The compositor"
+            }
+          ],
+          "section": 7,
+          "title": "Material creation"
+        },
+        {
+          "lessons": [
+            {
+              "n": 59,
+              "title": "Analysis and planning"
+            },
+            {
+              "n": 60,
+              "title": "Body blocking"
+            },
+            {
+              "n": 61,
+              "title": "Clothes blocking"
+            },
+            {
+              "n": 62,
+              "title": "Clothes refinement"
+            },
+            {
+              "n": 63,
+              "title": "Body refinement"
+            },
+            {
+              "n": 64,
+              "title": "Ropes"
+            },
+            {
+              "n": 65,
+              "title": "Woven backpack"
+            },
+            {
+              "n": 66,
+              "title": "Sleeping bag"
+            },
+            {
+              "n": 67,
+              "title": "Staff and lamp"
+            },
+            {
+              "n": 68,
+              "title": "Arm rig"
+            },
+            {
+              "n": 69,
+              "title": "Stone base"
+            },
+            {
+              "n": 70,
+              "title": "Texturing the clothes"
+            },
+            {
+              "n": 71,
+              "title": "Texturing the accessories"
+            },
+            {
+              "n": 72,
+              "title": "Texturing the skin and eyes"
+            },
+            {
+              "n": 73,
+              "title": "Rendering and composite"
+            }
+          ],
+          "section": 8,
+          "title": "Final project"
+        },
+        {
+          "lessons": [
+            {
+              "n": 74,
+              "title": "Final talking and recommendations"
+            }
+          ],
+          "section": 9,
+          "title": "Epilogue"
+        }
+      ],
+      "title": "Blender 3D for Beginners: Complete Modeling & Texturing guide"
+    },
+    {
+      "blurb": "The professional workflow — modeling, materials, animation, advanced concepts.",
+      "lessons": 38,
+      "phase": 2,
+      "sections": [
+        {
+          "section": 1,
+          "title": "Welcome to Blender"
+        },
+        {
+          "section": 2,
+          "title": "Modeling"
+        },
+        {
+          "section": 3,
+          "title": "Materials"
+        },
+        {
+          "section": 4,
+          "title": "Animation"
+        },
+        {
+          "section": 5,
+          "title": "Advanced Blender Concepts"
+        }
+      ],
+      "title": "School of Motion: Blender for 3D Artists"
+    },
+    {
+      "blurb": "A full project build, start to finish — a vehicle, base shape through shading and rendering.",
+      "lessons": 51,
+      "phase": 3,
+      "sections": [
+        {
+          "section": 1,
+          "title": "Base Shape"
+        },
+        {
+          "section": 2,
+          "title": "Wheels"
+        },
+        {
+          "section": 3,
+          "title": "Panel Details"
+        },
+        {
+          "section": 4,
+          "title": "Extra Details"
+        },
+        {
+          "section": 5,
+          "title": "Shading & Rendering"
+        }
+      ],
+      "title": "Blender 3D Hard Surface Modelling"
+    },
+    {
+      "blurb": "The deep dive into organic sculpting.",
+      "lessons": 125,
+      "phase": 4,
+      "sections": [
+        {
+          "section": 1,
+          "title": "Introduction"
+        },
+        {
+          "section": 2,
+          "title": "Anatomy: The Upper Body"
+        }
+      ],
+      "title": "Udemy: 3D Anatomy Sculpting in Blender — Master the Human Figure"
+    },
+    {
+      "blurb": "Practice rounds to lock in the anatomy work.",
+      "lessons": 17,
+      "phase": 5,
+      "sections": [
+        {
+          "section": 1,
+          "title": "Introduction (16 exercise lessons)"
+        }
+      ],
+      "title": "Udemy: Torso Anatomy Exercises"
+    }
+  ],
+  "log": [
+    {
+      "date": "2026-11-25",
+      "lessons": [
+        21
+      ],
+      "lessonTitles": [
+        "Introduction to organic modeling"
+      ],
+      "lastVideoWatched": "Introduction to organic modeling",
+      "progressInVideo": "finished",
+      "proof": {
+        "type": "image",
+        "src": "/blenderwip/proof/lesson-021-20261125-20261125140406.png"
+      }
+    }
+  ],
+  "trackingStarted": "2026-11-22"
+}
