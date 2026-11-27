@@ -1,9 +1,9 @@
 {
   "current": {
-    "lastVideoWatched": "Modeling ceramic crockery",
+    "lastVideoWatched": "Practical exercise 1: Piggy Bank",
     "lessonsCompleted": 23,
-    "nextLesson": 23,
-    "nextLessonTitle": "Practical exercise 1: Piggy Bank",
+    "nextLesson": 24,
+    "nextLessonTitle": "Practical exercise 2: Wizard hat",
     "phase": 1,
     "phaseTitle": "Blender 3D for Beginners: Complete Modeling & Texturing guide",
     "progressInVideo": "finished",
@@ -371,7 +371,7 @@
       "title": "Blender 3D for Beginners: Complete Modeling & Texturing guide"
     },
     {
-      "blurb": "The professional workflow — modeling, materials, animation, advanced concepts.",
+      "blurb": "The professional workflow \u2014 modeling, materials, animation, advanced concepts.",
       "lessons": 38,
       "phase": 2,
       "sections": [
@@ -399,7 +399,7 @@
       "title": "School of Motion: Blender for 3D Artists"
     },
     {
-      "blurb": "A full project build, start to finish — a vehicle, base shape through shading and rendering.",
+      "blurb": "A full project build, start to finish \u2014 a vehicle, base shape through shading and rendering.",
       "lessons": 51,
       "phase": 3,
       "sections": [
@@ -440,7 +440,7 @@
           "title": "Anatomy: The Upper Body"
         }
       ],
-      "title": "Udemy: 3D Anatomy Sculpting in Blender — Master the Human Figure"
+      "title": "Udemy: 3D Anatomy Sculpting in Blender \u2014 Master the Human Figure"
     },
     {
       "blurb": "Practice rounds to lock in the anatomy work.",
@@ -457,14 +457,64 @@
   ],
   "log": [
     {
-      "date": "2026-11-25",
-      "lessons": [
-        21
-      ],
+      "date": "2026-11-23",
+      "lastVideoWatched": "The online manual",
       "lessonTitles": [
+        "Instructor presentation",
+        "Course presentation",
+        "Let's talk about Blender",
+        "Version and requirements",
+        "Interface and workspaces",
+        "Navigation in the 3D view",
+        "Overlays and viewport shading",
+        "Selection, visibility and collections",
+        "Object creation and deletion",
+        "Basic transformation",
+        "The edit mode",
+        "Selection shortcuts in edit mode",
+        "Tools in the edit mode",
+        "Additional tools in edit mode",
+        "The modifiers",
+        "Important addons",
+        "Shortcuts and interface customization",
+        "The online manual"
+      ],
+      "lessons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "progressInVideo": null,
+      "proof": null
+    },
+    {
+      "date": "2026-11-25",
+      "lastVideoWatched": "Introduction to organic modeling",
+      "lessonTitles": [
+        "The materials",
+        "Creating a scene to render our models",
         "Introduction to organic modeling"
       ],
-      "lastVideoWatched": "Introduction to organic modeling",
+      "lessons": [
+        19,
+        20,
+        21
+      ],
       "progressInVideo": "finished",
       "proof": {
         "type": "image",
@@ -499,21 +549,6 @@
       "proof": {
         "type": "image",
         "src": "/blenderwip/proof/lesson-023-20261126-20261127021348.png"
-      }
-    },
-    {
-      "date": "2026-11-26",
-      "lessons": [
-        22
-      ],
-      "lessonTitles": [
-        "Modeling ceramic crockery"
-      ],
-      "lastVideoWatched": "Modeling ceramic crockery",
-      "progressInVideo": "finished",
-      "proof": {
-        "type": "image",
-        "src": "/blenderwip/proof/lesson-022-20261126-20261127022119.png"
       }
     }
   ],
