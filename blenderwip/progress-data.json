@@ -1,9 +1,9 @@
 {
   "current": {
-    "lastVideoWatched": "Introduction to organic modeling",
-    "lessonsCompleted": 21,
-    "nextLesson": 22,
-    "nextLessonTitle": "Modeling ceramic crockery",
+    "lastVideoWatched": "Modeling ceramic crockery",
+    "lessonsCompleted": 22,
+    "nextLesson": 23,
+    "nextLessonTitle": "Practical exercise 1: Piggy Bank",
     "phase": 1,
     "phaseTitle": "Blender 3D for Beginners: Complete Modeling & Texturing guide",
     "progressInVideo": "finished",
@@ -469,6 +469,21 @@
       "proof": {
         "type": "image",
         "src": "/blenderwip/proof/lesson-021-20261125-20261125140406.png"
+      }
+    },
+    {
+      "date": "2026-11-26",
+      "lessons": [
+        22
+      ],
+      "lessonTitles": [
+        "Modeling ceramic crockery"
+      ],
+      "lastVideoWatched": "Modeling ceramic crockery",
+      "progressInVideo": "finished",
+      "proof": {
+        "type": "image",
+        "src": "/blenderwip/proof/lesson-022-20261126-20261127021334.png"
       }
     }
   ],
