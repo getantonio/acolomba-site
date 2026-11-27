@@ -1,9 +1,9 @@
 {
   "current": {
-    "lastVideoWatched": "Practical exercise 1: Piggy Bank",
+    "lastVideoWatched": "Modeling ceramic crockery",
     "lessonsCompleted": 23,
-    "nextLesson": 24,
-    "nextLessonTitle": "Practical exercise 2: Wizard hat",
+    "nextLesson": 23,
+    "nextLessonTitle": "Practical exercise 1: Piggy Bank",
     "phase": 1,
     "phaseTitle": "Blender 3D for Beginners: Complete Modeling & Texturing guide",
     "progressInVideo": "finished",
@@ -499,6 +499,21 @@
       "proof": {
         "type": "image",
         "src": "/blenderwip/proof/lesson-023-20261126-20261127021348.png"
+      }
+    },
+    {
+      "date": "2026-11-26",
+      "lessons": [
+        22
+      ],
+      "lessonTitles": [
+        "Modeling ceramic crockery"
+      ],
+      "lastVideoWatched": "Modeling ceramic crockery",
+      "progressInVideo": "finished",
+      "proof": {
+        "type": "image",
+        "src": "/blenderwip/proof/lesson-022-20261126-20261127022119.png"
       }
     }
   ],
