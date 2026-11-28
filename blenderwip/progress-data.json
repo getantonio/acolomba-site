@@ -1,9 +1,9 @@
 {
   "current": {
-    "lastVideoWatched": "Practical exercise 1: Piggy Bank",
-    "lessonsCompleted": 23,
-    "nextLesson": 24,
-    "nextLessonTitle": "Practical exercise 2: Wizard hat",
+    "lastVideoWatched": "Practical exercise 2: Wizard hat",
+    "lessonsCompleted": 24,
+    "nextLesson": 25,
+    "nextLessonTitle": "Practical exercise 3: Hamburger",
     "phase": 1,
     "phaseTitle": "Blender 3D for Beginners: Complete Modeling & Texturing guide",
     "progressInVideo": "finished",
@@ -371,7 +371,7 @@
       "title": "Blender 3D for Beginners: Complete Modeling & Texturing guide"
     },
     {
-      "blurb": "The professional workflow \u2014 modeling, materials, animation, advanced concepts.",
+      "blurb": "The professional workflow — modeling, materials, animation, advanced concepts.",
       "lessons": 38,
       "phase": 2,
       "sections": [
@@ -399,7 +399,7 @@
       "title": "School of Motion: Blender for 3D Artists"
     },
     {
-      "blurb": "A full project build, start to finish \u2014 a vehicle, base shape through shading and rendering.",
+      "blurb": "A full project build, start to finish — a vehicle, base shape through shading and rendering.",
       "lessons": 51,
       "phase": 3,
       "sections": [
@@ -440,7 +440,7 @@
           "title": "Anatomy: The Upper Body"
         }
       ],
-      "title": "Udemy: 3D Anatomy Sculpting in Blender \u2014 Master the Human Figure"
+      "title": "Udemy: 3D Anatomy Sculpting in Blender — Master the Human Figure"
     },
     {
       "blurb": "Practice rounds to lock in the anatomy work.",
@@ -549,6 +549,21 @@
       "proof": {
         "type": "image",
         "src": "/blenderwip/proof/lesson-023-20261126-20261127021348.png"
+      }
+    },
+    {
+      "date": "2026-11-27",
+      "lessons": [
+        24
+      ],
+      "lessonTitles": [
+        "Practical exercise 2: Wizard hat"
+      ],
+      "lastVideoWatched": "Practical exercise 2: Wizard hat",
+      "progressInVideo": "finished",
+      "proof": {
+        "type": "image",
+        "src": "/blenderwip/proof/lesson-024-20261127-20261128031837.png"
       }
     }
   ],
