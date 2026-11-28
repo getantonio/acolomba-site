@@ -1,9 +1,9 @@
 {
   "current": {
-    "lastVideoWatched": "Practical exercise 2: Wizard hat",
+    "lastVideoWatched": "Practical exercise 1: Piggy Bank",
     "lessonsCompleted": 24,
-    "nextLesson": 25,
-    "nextLessonTitle": "Practical exercise 3: Hamburger",
+    "nextLesson": 24,
+    "nextLessonTitle": "Practical exercise 2: Wizard hat",
     "phase": 1,
     "phaseTitle": "Blender 3D for Beginners: Complete Modeling & Texturing guide",
     "progressInVideo": "finished",
@@ -564,6 +564,21 @@
       "proof": {
         "type": "image",
         "src": "/blenderwip/proof/lesson-024-20261127-20261128031837.png"
+      }
+    },
+    {
+      "date": "2026-11-27",
+      "lessons": [
+        23
+      ],
+      "lessonTitles": [
+        "Practical exercise 1: Piggy Bank"
+      ],
+      "lastVideoWatched": "Practical exercise 1: Piggy Bank",
+      "progressInVideo": "finished",
+      "proof": {
+        "type": "image",
+        "src": "/blenderwip/proof/lesson-023-20261127-20261128033924.png"
       }
     }
   ],
